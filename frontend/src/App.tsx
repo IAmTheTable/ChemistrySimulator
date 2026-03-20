@@ -1,6 +1,7 @@
 import StationTabs from "./components/ui/StationTabs";
 import EnvironmentBar from "./components/ui/EnvironmentBar";
 import PeriodicTable from "./components/ui/PeriodicTable";
+import ElementInspector from "./components/ui/ElementInspector";
 
 export default function App() {
   return (
@@ -24,7 +25,7 @@ export default function App() {
         {/* Right panel: element inspector */}
         <div className="w-72 bg-gray-900 border-l border-gray-800 p-3 overflow-y-auto">
           <h2 className="text-sm font-semibold text-gray-400 mb-2">Inspector</h2>
-          <p className="text-xs text-gray-600">Select an element...</p>
+          <ElementInspector />
         </div>
       </div>
 
