@@ -3,6 +3,7 @@ import EnvironmentBar from "./components/ui/EnvironmentBar";
 import PeriodicTable from "./components/ui/PeriodicTable";
 import ElementInspector from "./components/ui/ElementInspector";
 import LabScene from "./components/lab/LabScene";
+import EquipmentPalette from "./components/ui/EquipmentPalette";
 
 export default function App() {
   return (
@@ -16,6 +17,9 @@ export default function App() {
         <div className="w-80 bg-gray-900 border-r border-gray-800 p-3 overflow-y-auto">
           <h2 className="text-sm font-semibold text-gray-400 mb-2">Periodic Table</h2>
           <PeriodicTable />
+          <div className="mt-4">
+            <EquipmentPalette />
+          </div>
         </div>
 
         {/* Center: 3D lab scene */}
