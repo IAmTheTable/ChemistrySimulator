@@ -1,10 +1,11 @@
 import { useRef } from "react";
+import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 
 interface ErlenmeyerFlaskProps {
   position: [number, number, number];
   selected?: boolean;
-  onClick?: (e: THREE.Event) => void;
+  onClick?: (e: ThreeEvent<MouseEvent>) => void;
   fillLevel?: number; // 0–1
   fillColor?: string;
 }
@@ -37,7 +38,7 @@ export default function ErlenmeyerFlask({
   const fillBottomRadius = baseRadius - 0.005;
   const fillY = -bodyHeight / 2 + fillHeight / 2 + 0.005;
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
     onClick?.(e);
   };

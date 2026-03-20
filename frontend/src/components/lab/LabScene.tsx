@@ -1,4 +1,5 @@
 import { Canvas } from "@react-three/fiber";
+import type { ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Grid, Environment } from "@react-three/drei";
 import { useLabStore } from "../../stores/labStore";
 import MainBench from "./stations/MainBench";
@@ -77,7 +78,7 @@ function BenchSurface() {
   const placingEquipment = useLabStore((s) => s.placingEquipment);
   const addBenchItem = useLabStore((s) => s.addBenchItem);
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
     if (!placingEquipment) return;
     e.stopPropagation();
 
