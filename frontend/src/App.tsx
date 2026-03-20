@@ -2,6 +2,7 @@ import StationTabs from "./components/ui/StationTabs";
 import EnvironmentBar from "./components/ui/EnvironmentBar";
 import PeriodicTable from "./components/ui/PeriodicTable";
 import ElementInspector from "./components/ui/ElementInspector";
+import LabScene from "./components/lab/LabScene";
 
 export default function App() {
   return (
@@ -18,8 +19,8 @@ export default function App() {
         </div>
 
         {/* Center: 3D lab scene */}
-        <div className="flex-1 bg-gray-950 flex items-center justify-center">
-          <p className="text-gray-600">3D Lab Scene</p>
+        <div className="flex-1 bg-gray-950">
+          <LabScene />
         </div>
 
         {/* Right panel: element inspector */}
