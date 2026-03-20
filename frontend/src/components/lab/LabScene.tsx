@@ -1,6 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Grid, Environment } from "@react-three/drei";
 import { useLabStore } from "../../stores/labStore";
+import MainBench from "./stations/MainBench";
 
 export default function LabScene() {
   return (
@@ -121,7 +122,7 @@ function StationContent() {
 
   switch (activeStation) {
     case "main-bench":
-      return null; // MainBench component will be added in Task 12
+      return <MainBench />;
     default:
       return null;
   }
