@@ -1,5 +1,6 @@
 import StationTabs from "./components/ui/StationTabs";
 import EnvironmentBar from "./components/ui/EnvironmentBar";
+import PeriodicTable from "./components/ui/PeriodicTable";
 
 export default function App() {
   return (
@@ -12,7 +13,7 @@ export default function App() {
         {/* Left panel: will hold periodic table / inventory */}
         <div className="w-80 bg-gray-900 border-r border-gray-800 p-3 overflow-y-auto">
           <h2 className="text-sm font-semibold text-gray-400 mb-2">Periodic Table</h2>
-          <p className="text-xs text-gray-600">Coming next...</p>
+          <PeriodicTable />
         </div>
 
         {/* Center: 3D lab scene */}
