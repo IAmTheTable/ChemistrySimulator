@@ -31,8 +31,10 @@ export default function App() {
       </div>
 
       {/* Bottom: periodic table + environment bar */}
-      <div className="bg-gray-900 border-t border-gray-800 px-4 py-2">
-        <PeriodicTable />
+      <div className="bg-gray-900 border-t border-gray-800 px-4 py-2 flex justify-center">
+        <div className="max-w-3xl w-full">
+          <PeriodicTable />
+        </div>
       </div>
       <EnvironmentBar />
     </div>
