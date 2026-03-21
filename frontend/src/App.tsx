@@ -1,9 +1,14 @@
+import * as Tabs from "@radix-ui/react-tabs";
 import StationTabs from "./components/ui/StationTabs";
 import EnvironmentBar from "./components/ui/EnvironmentBar";
 import PeriodicTable from "./components/ui/PeriodicTable";
 import ElementInspector from "./components/ui/ElementInspector";
 import LabScene from "./components/lab/LabScene";
 import EquipmentPalette from "./components/ui/EquipmentPalette";
+import SubstanceInventory from "./components/ui/SubstanceInventory";
+import SimulationToggle from "./components/ui/SimulationToggle";
+import ReactionLog from "./components/ui/ReactionLog";
+import ContainerContextMenu from "./components/ui/ContainerContextMenu";
 
 export default function App() {
   return (
@@ -13,9 +18,15 @@ export default function App() {
 
       {/* Main content area */}
       <div className="flex-1 flex min-h-0">
-        {/* Left panel: equipment palette */}
-        <div className="w-48 bg-gray-900 border-r border-gray-800 p-3 overflow-y-auto">
+        {/* Left panel: equipment palette + substance inventory + simulation toggle */}
+        <div className="w-48 bg-gray-900 border-r border-gray-800 p-3 overflow-y-auto space-y-4">
           <EquipmentPalette />
+          <div className="border-t border-gray-800 pt-3">
+            <SubstanceInventory />
+          </div>
+          <div className="border-t border-gray-800 pt-3">
+            <SimulationToggle />
+          </div>
         </div>
 
         {/* Center: 3D lab scene */}
@@ -23,10 +34,33 @@ export default function App() {
           <LabScene />
         </div>
 
-        {/* Right panel: element inspector */}
-        <div className="w-72 bg-gray-900 border-l border-gray-800 p-3 overflow-y-auto">
-          <h2 className="text-sm font-semibold text-gray-400 mb-2">Inspector</h2>
-          <ElementInspector />
+        {/* Right panel: tabbed Inspector | Reactions */}
+        <div className="w-72 bg-gray-900 border-l border-gray-800 overflow-y-auto">
+          <Tabs.Root defaultValue="inspector" className="flex flex-col h-full">
+            <Tabs.List className="flex border-b border-gray-800 shrink-0">
+              <Tabs.Trigger
+                value="inspector"
+                className="flex-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors"
+              >
+                Inspector
+              </Tabs.Trigger>
+              <Tabs.Trigger
+                value="reactions"
+                className="flex-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors"
+              >
+                Reactions
+              </Tabs.Trigger>
+            </Tabs.List>
+
+            <Tabs.Content value="inspector" className="flex-1 p-3 overflow-y-auto">
+              <ElementInspector />
+            </Tabs.Content>
+
+            <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
+              <h2 className="text-sm font-semibold text-gray-400 mb-1">Reaction Log</h2>
+              <ReactionLog />
+            </Tabs.Content>
+          </Tabs.Root>
         </div>
       </div>
 
@@ -37,6 +71,9 @@ export default function App() {
         </div>
       </div>
       <EnvironmentBar />
+
+      {/* DOM-level context menu overlay for 3D lab containers */}
+      <ContainerContextMenu />
     </div>
   );
 }
