@@ -12,12 +12,12 @@ export default function MainBench() {
     if (useLabStore.getState().benchItems.length > 0) return;
 
     const starters: BenchItem[] = [
-      { id: "beaker-1", type: "beaker", position: [-0.6, 0.05, 0.3], contents: [], temperature: 25, activeEffects: [] },
-      { id: "beaker-2", type: "beaker", position: [0.2, 0.05, -0.2], contents: [], temperature: 25, activeEffects: [] },
-      { id: "flask-1", type: "erlenmeyer", position: [0.8, 0.0, 0.4], contents: [], temperature: 25, activeEffects: [] },
-      { id: "tube-1", type: "test-tube", position: [-1.35, 0.37, -1.05], contents: [], temperature: 25, activeEffects: [] },
-      { id: "tube-2", type: "test-tube", position: [-1.25, 0.37, -1.05], contents: [], temperature: 25, activeEffects: [] },
-      { id: "tube-3", type: "test-tube", position: [-1.15, 0.37, -1.05], contents: [], temperature: 25, activeEffects: [] },
+      { id: "beaker-1", type: "beaker", position: [-0.6, 0.20, 0.3], contents: [], temperature: 25, activeEffects: [] },
+      { id: "beaker-2", type: "beaker", position: [0.2, 0.20, -0.2], contents: [], temperature: 25, activeEffects: [] },
+      { id: "flask-1", type: "erlenmeyer", position: [0.8, 0.14, 0.4], contents: [], temperature: 25, activeEffects: [] },
+      { id: "tube-1", type: "test-tube", position: [-1.35, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
+      { id: "tube-2", type: "test-tube", position: [-1.25, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
+      { id: "tube-3", type: "test-tube", position: [-1.15, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
     ];
 
     useLabStore.setState((state) => ({ benchItems: [...state.benchItems, ...starters] }));

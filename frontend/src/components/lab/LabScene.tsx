@@ -85,9 +85,11 @@ function BenchSurface() {
     e.stopPropagation();
 
     const point = e.point;
+    // Y offset so equipment sits ON the bench (top at Y=0.05), not inside it
+    const yOffset: Record<string, number> = { beaker: 0.20, erlenmeyer: 0.14, "test-tube": 0.20 };
     const position: [number, number, number] = [
       Math.round(point.x * 10) / 10,
-      0.05,
+      yOffset[placingEquipment] ?? 0.20,
       Math.round(point.z * 10) / 10,
     ];
 
