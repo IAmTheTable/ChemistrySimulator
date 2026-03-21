@@ -26,6 +26,12 @@ export interface BenchItem {
   activeEffects: string[];
 }
 
+export interface ContextMenuState {
+  itemId: string;
+  x: number;
+  y: number;
+}
+
 interface LabState {
   selectedElement: number | null;
   activeStation: StationId;
@@ -34,6 +40,7 @@ interface LabState {
   placingEquipment: string | null;
   simulationMode: "instant" | "realistic";
   reactionLog: ReactionLogEntry[];
+  contextMenu: ContextMenuState | null;
   environment: {
     temperature: number;
     pressure: number;
@@ -51,6 +58,8 @@ interface LabState {
   addReactionLogEntry: (entry: ReactionLogEntry) => void;
   updateBenchItemContents: (id: string, contents: ContainerSubstance[], temperature?: number) => void;
   setBenchItemEffects: (id: string, effects: string[]) => void;
+  openContextMenu: (state: ContextMenuState) => void;
+  closeContextMenu: () => void;
 }
 
 export const useLabStore = create<LabState>()((set) => ({
@@ -61,6 +70,7 @@ export const useLabStore = create<LabState>()((set) => ({
   placingEquipment: null,
   simulationMode: "instant",
   reactionLog: [],
+  contextMenu: null,
   environment: {
     temperature: 25,
     pressure: 1,
@@ -112,4 +122,6 @@ export const useLabStore = create<LabState>()((set) => ({
         item.id === id ? { ...item, activeEffects: effects } : item
       ),
     })),
+  openContextMenu: (state) => set({ contextMenu: state }),
+  closeContextMenu: () => set({ contextMenu: null }),
 }));

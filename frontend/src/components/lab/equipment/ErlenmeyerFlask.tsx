@@ -6,6 +6,7 @@ interface ErlenmeyerFlaskProps {
   position: [number, number, number];
   selected?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
+  onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
   fillLevel?: number; // 0–1
   fillColor?: string;
 }
@@ -14,6 +15,7 @@ export default function ErlenmeyerFlask({
   position,
   selected = false,
   onClick,
+  onContextMenu,
   fillLevel = 0,
   fillColor = "#ffb74d",
 }: ErlenmeyerFlaskProps) {
@@ -44,7 +46,7 @@ export default function ErlenmeyerFlask({
   };
 
   return (
-    <group ref={groupRef} position={position} onClick={handleClick}>
+    <group ref={groupRef} position={position} onClick={handleClick} onContextMenu={onContextMenu}>
       {/* Conical body — wide at bottom, narrow at top */}
       <mesh castShadow>
         <cylinderGeometry

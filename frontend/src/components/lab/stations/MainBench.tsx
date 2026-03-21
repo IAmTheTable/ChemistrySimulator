@@ -1,3 +1,4 @@
+import type { ThreeEvent } from "@react-three/fiber";
 import { useLabStore } from "../../../stores/labStore";
 import Beaker from "../equipment/Beaker";
 import TestTube from "../equipment/TestTube";
@@ -17,8 +18,6 @@ const STARTER_FLASK = {
 };
 
 // 5 test tubes on the shelf rack at position [-1.2, 0.42, -1.05]
-// Rack mesh is at y=0.42; tubes stand upright ~0.25 tall, so top of rack is y≈0.47
-// Tubes sit on rack surface: base at y=0.47, center at y=0.47+0.125=0.595
 const SHELF_Y = 0.595;
 const RACK_Z = -1.05;
 const STARTER_TEST_TUBES = [
@@ -29,15 +28,27 @@ const STARTER_TEST_TUBES = [
   { id: "starter-tt-5", position: [-0.95, SHELF_Y, RACK_Z] as [number, number, number], fillLevel: 0, fillColor: "#a5d6a7" },
 ];
 
-export default function MainBench() {
+function useItemHandlers(id: string) {
   const selectedBenchItem = useLabStore((s) => s.selectedBenchItem);
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
-  const benchItems = useLabStore((s) => s.benchItems);
+  const openContextMenu = useLabStore((s) => s.openContextMenu);
 
-  const handleSelect = (id: string) => {
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
     selectBenchItem(selectedBenchItem === id ? null : id);
   };
 
+  const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    // nativeEvent carries the DOM MouseEvent with screen coordinates
+    const domEvent = e.nativeEvent;
+    openContextMenu({ itemId: id, x: domEvent.clientX, y: domEvent.clientY });
+  };
+
+  return { isSelected: selectedBenchItem === id, handleClick, handleContextMenu };
+}
+
+export default function MainBench() {
   return (
     <group>
       {/* Bench back wall / shelf */}
@@ -71,41 +82,82 @@ export default function MainBench() {
       </mesh>
 
       {/* ── Starter equipment ── */}
-
       {STARTER_BEAKERS.map((b) => (
-        <Beaker
-          key={b.id}
-          position={b.position}
-          fillLevel={b.fillLevel}
-          fillColor={b.fillColor}
-          selected={selectedBenchItem === b.id}
-          onClick={() => handleSelect(b.id)}
-        />
+        <StarterBeaker key={b.id} {...b} />
       ))}
 
-      <ErlenmeyerFlask
-        position={STARTER_FLASK.position}
-        fillLevel={STARTER_FLASK.fillLevel}
-        fillColor={STARTER_FLASK.fillColor}
-        selected={selectedBenchItem === STARTER_FLASK.id}
-        onClick={() => handleSelect(STARTER_FLASK.id)}
-      />
+      <StarterFlask {...STARTER_FLASK} />
 
       {STARTER_TEST_TUBES.map((tt) => (
-        <TestTube
-          key={tt.id}
-          position={tt.position}
-          fillLevel={tt.fillLevel}
-          fillColor={tt.fillColor}
-          selected={selectedBenchItem === tt.id}
-          onClick={() => handleSelect(tt.id)}
-        />
+        <StarterTestTube key={tt.id} {...tt} />
       ))}
 
       {/* ── Dynamically placed items from store ── */}
+      <DynamicItems />
+    </group>
+  );
+}
+
+function StarterBeaker({ id, position, fillLevel, fillColor }: { id: string; position: [number, number, number]; fillLevel: number; fillColor: string }) {
+  const { isSelected, handleClick, handleContextMenu } = useItemHandlers(id);
+  return (
+    <Beaker
+      position={position}
+      fillLevel={fillLevel}
+      fillColor={fillColor}
+      selected={isSelected}
+      onClick={handleClick}
+      onContextMenu={handleContextMenu}
+    />
+  );
+}
+
+function StarterFlask({ id, position, fillLevel, fillColor }: { id: string; position: [number, number, number]; fillLevel: number; fillColor: string }) {
+  const { isSelected, handleClick, handleContextMenu } = useItemHandlers(id);
+  return (
+    <ErlenmeyerFlask
+      position={position}
+      fillLevel={fillLevel}
+      fillColor={fillColor}
+      selected={isSelected}
+      onClick={handleClick}
+      onContextMenu={handleContextMenu}
+    />
+  );
+}
+
+function StarterTestTube({ id, position, fillLevel, fillColor }: { id: string; position: [number, number, number]; fillLevel: number; fillColor: string }) {
+  const { isSelected, handleClick, handleContextMenu } = useItemHandlers(id);
+  return (
+    <TestTube
+      position={position}
+      fillLevel={fillLevel}
+      fillColor={fillColor}
+      selected={isSelected}
+      onClick={handleClick}
+      onContextMenu={handleContextMenu}
+    />
+  );
+}
+
+function DynamicItems() {
+  const benchItems = useLabStore((s) => s.benchItems);
+  const selectedBenchItem = useLabStore((s) => s.selectedBenchItem);
+  const selectBenchItem = useLabStore((s) => s.selectBenchItem);
+  const openContextMenu = useLabStore((s) => s.openContextMenu);
+
+  return (
+    <>
       {benchItems.map((item) => {
         const isSelected = selectedBenchItem === item.id;
-        const onItemClick = () => handleSelect(item.id);
+        const onItemClick = (e: ThreeEvent<MouseEvent>) => {
+          e.stopPropagation();
+          selectBenchItem(selectedBenchItem === item.id ? null : item.id);
+        };
+        const onContextMenu = (e: ThreeEvent<MouseEvent>) => {
+          e.stopPropagation();
+          openContextMenu({ itemId: item.id, x: e.nativeEvent.clientX, y: e.nativeEvent.clientY });
+        };
 
         switch (item.type) {
           case "beaker":
@@ -115,6 +167,7 @@ export default function MainBench() {
                 position={item.position}
                 selected={isSelected}
                 onClick={onItemClick}
+                onContextMenu={onContextMenu}
               />
             );
           case "erlenmeyer":
@@ -124,6 +177,7 @@ export default function MainBench() {
                 position={item.position}
                 selected={isSelected}
                 onClick={onItemClick}
+                onContextMenu={onContextMenu}
               />
             );
           case "test-tube":
@@ -133,12 +187,13 @@ export default function MainBench() {
                 position={item.position}
                 selected={isSelected}
                 onClick={onItemClick}
+                onContextMenu={onContextMenu}
               />
             );
           default:
             return null;
         }
       })}
-    </group>
+    </>
   );
 }

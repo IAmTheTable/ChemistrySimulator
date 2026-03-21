@@ -6,6 +6,7 @@ interface BeakerProps {
   position: [number, number, number];
   selected?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
+  onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
   fillLevel?: number; // 0–1
   fillColor?: string;
 }
@@ -14,6 +15,7 @@ export default function Beaker({
   position,
   selected = false,
   onClick,
+  onContextMenu,
   fillLevel = 0,
   fillColor = "#4fc3f7",
 }: BeakerProps) {
@@ -39,7 +41,7 @@ export default function Beaker({
   };
 
   return (
-    <group ref={groupRef} position={position} onClick={handleClick}>
+    <group ref={groupRef} position={position} onClick={handleClick} onContextMenu={onContextMenu}>
       {/* Glass body */}
       <mesh castShadow>
         <cylinderGeometry

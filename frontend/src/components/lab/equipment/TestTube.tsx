@@ -6,6 +6,7 @@ interface TestTubeProps {
   position: [number, number, number];
   selected?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
+  onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
   fillLevel?: number; // 0–1
   fillColor?: string;
 }
@@ -14,6 +15,7 @@ export default function TestTube({
   position,
   selected = false,
   onClick,
+  onContextMenu,
   fillLevel = 0,
   fillColor = "#a5d6a7",
 }: TestTubeProps) {
@@ -35,7 +37,7 @@ export default function TestTube({
   };
 
   return (
-    <group ref={groupRef} position={position} onClick={handleClick}>
+    <group ref={groupRef} position={position} onClick={handleClick} onContextMenu={onContextMenu}>
       {/* Glass tube body — open-top cylinder */}
       <mesh castShadow>
         <cylinderGeometry
