@@ -4,6 +4,10 @@
 
 Add 3D molecular structure visualization to the Chemistry Simulator. Users can view any molecule in ball-and-stick, space-filling, wireframe, or orbital mode. The backend uses RDKit to generate 3D conformers and serves atom positions, bond data, and orbital parameters. The frontend renders molecules using custom R3F components in a dedicated structure viewer panel.
 
+## Dependencies
+
+**Backend:** Add `rdkit-pypi>=2024.3.0` to `backend/pyproject.toml` dependencies. RDKit provides molecular parsing, 3D conformer generation, and geometry optimization.
+
 ## Backend: Structure Generation Service
 
 ### RDKit Integration
