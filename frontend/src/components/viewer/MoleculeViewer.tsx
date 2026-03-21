@@ -60,12 +60,16 @@ export default function MoleculeViewer({
       {/* Atom symbol labels */}
       <MoleculeLabels atoms={centeredAtoms} visible={showLabels} />
 
-      {/* Orbitals — rendered when mode is "orbital" and orbitalData is available */}
+      {/* Orbitals — show only valence shell for clarity */}
       {mode === "orbital" && orbitalData && (
         <group>
-          {orbitalData.orbitals.map((orbital, i) => (
-            <OrbitalMesh key={i} orbital={orbital} position={[0, 0, 0]} />
-          ))}
+          {(() => {
+            const maxN = Math.max(...orbitalData.orbitals.map((o) => o.n));
+            const valence = orbitalData.orbitals.filter((o) => o.n === maxN);
+            return valence.map((orbital, i) => (
+              <OrbitalMesh key={i} orbital={orbital} position={[0, 0, 0]} />
+            ));
+          })()}
         </group>
       )}
     </Canvas>

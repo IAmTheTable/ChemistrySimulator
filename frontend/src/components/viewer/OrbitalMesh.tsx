@@ -26,25 +26,31 @@ function SOrbital({ radius, position }: { radius: number; position: [number, num
   );
 }
 
-/** One lobe of a p orbital */
+/** One lobe of a p orbital — elongated along its axis */
 function PLobe({
   pos,
   radius,
   color,
+  axis,
 }: {
   pos: [number, number, number];
   radius: number;
   color: string;
+  axis: string;
 }) {
+  // Stretch the sphere along the lobe axis to make it teardrop-shaped
+  const scale: [number, number, number] =
+    axis === "x" ? [2.2, 0.7, 0.7] : axis === "y" ? [0.7, 2.2, 0.7] : [0.7, 0.7, 2.2];
+
   return (
-    <mesh position={pos}>
+    <mesh position={pos} scale={scale}>
       <sphereGeometry args={[radius, 16, 16]} />
       <meshStandardMaterial color={color} {...MATERIAL_PROPS} />
     </mesh>
   );
 }
 
-/** p orbital: dumbbell — two lobes along EACH occupied axis */
+/** p orbital: dumbbell — two elongated lobes along EACH occupied axis */
 function POrbital({
   orbital,
   position,
@@ -52,8 +58,8 @@ function POrbital({
   orbital: OrbitalInfo;
   position: [number, number, number];
 }) {
-  const lobeRadius = orbital.radius * 0.35;
-  const offset = orbital.radius * 0.4;
+  const lobeRadius = orbital.radius * 0.3;
+  const offset = orbital.radius * 0.5;
   const orientations = orbital.orientations.length > 0 ? orbital.orientations : ["z"];
 
   const axisOffset = (axis: string): [number, number, number] =>
@@ -65,8 +71,8 @@ function POrbital({
         const off = axisOffset(axis);
         return (
           <group key={axis}>
-            <PLobe pos={off} radius={lobeRadius} color={ORBITAL_BLUE} />
-            <PLobe pos={[-off[0], -off[1], -off[2]]} radius={lobeRadius} color={ORBITAL_RED} />
+            <PLobe pos={off} radius={lobeRadius} color={ORBITAL_BLUE} axis={axis} />
+            <PLobe pos={[-off[0], -off[1], -off[2]]} radius={lobeRadius} color={ORBITAL_RED} axis={axis} />
           </group>
         );
       })}
