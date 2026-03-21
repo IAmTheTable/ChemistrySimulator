@@ -39,7 +39,7 @@ export default function App() {
         </div>
 
         {/* Right panel: tabbed Inspector | Reactions */}
-        <div className="w-72 bg-gray-900 border-l border-gray-800 overflow-y-auto">
+        <div className="w-72 bg-gray-900 border-l border-gray-800 overflow-hidden">
           <Tabs.Root value={activeRightTab} onValueChange={setActiveRightTab} className="flex flex-col h-full">
             <Tabs.List className="flex border-b border-gray-800 shrink-0">
               <Tabs.Trigger
@@ -71,7 +71,7 @@ export default function App() {
               <ReactionLog />
             </Tabs.Content>
 
-            <Tabs.Content value="structure" className="flex-1 p-3 overflow-y-auto">
+            <Tabs.Content value="structure" className="flex-1 p-3 flex flex-col min-h-0">
               <StructurePanel />
             </Tabs.Content>
           </Tabs.Root>

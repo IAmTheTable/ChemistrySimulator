@@ -71,7 +71,7 @@ export default function StructurePanel() {
       </label>
 
       {/* 3D Viewer */}
-      <div className="flex-1 min-h-0 bg-gray-950 rounded overflow-hidden">
+      <div className="flex-1 min-h-[200px] bg-gray-950 rounded overflow-hidden">
         <MoleculeViewer
           molecule={moleculeForViewer}
           orbitalData={orbitalData ?? null}
