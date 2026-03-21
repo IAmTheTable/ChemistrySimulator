@@ -4,6 +4,7 @@ import { CATEGORY_COLORS } from "../../types/element";
 
 export default function ElementInspector() {
   const selectedElement = useLabStore((s) => s.selectedElement);
+  const openOrbitalViewer = useLabStore((s) => s.openOrbitalViewer);
   const { data: element, isLoading } = useElement(selectedElement);
 
   if (!selectedElement) {
@@ -24,6 +25,12 @@ export default function ElementInspector() {
         <div className="text-xs text-gray-400">
           #{element.atomic_number} &middot; {element.category}
         </div>
+        <button
+          onClick={() => openOrbitalViewer(element.atomic_number)}
+          className="mt-2 w-full px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+        >
+          View Orbitals
+        </button>
       </div>
 
       <Section title="Properties">

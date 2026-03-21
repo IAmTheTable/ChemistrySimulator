@@ -9,6 +9,7 @@ import SubstanceInventory from "./components/ui/SubstanceInventory";
 import SimulationToggle from "./components/ui/SimulationToggle";
 import ReactionLog from "./components/ui/ReactionLog";
 import ContainerContextMenu from "./components/ui/ContainerContextMenu";
+import StructurePanel from "./components/ui/StructurePanel";
 
 export default function App() {
   return (
@@ -50,6 +51,12 @@ export default function App() {
               >
                 Reactions
               </Tabs.Trigger>
+              <Tabs.Trigger
+                value="structure"
+                className="flex-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors"
+              >
+                Structure
+              </Tabs.Trigger>
             </Tabs.List>
 
             <Tabs.Content value="inspector" className="flex-1 p-3 overflow-y-auto">
@@ -59,6 +66,10 @@ export default function App() {
             <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
               <h2 className="text-sm font-semibold text-gray-400 mb-1">Reaction Log</h2>
               <ReactionLog />
+            </Tabs.Content>
+
+            <Tabs.Content value="structure" className="flex-1 p-3 overflow-y-auto">
+              <StructurePanel />
             </Tabs.Content>
           </Tabs.Root>
         </div>
