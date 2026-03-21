@@ -32,10 +32,16 @@ function useItemHandlers(id: string) {
   const selectedBenchItem = useLabStore((s) => s.selectedBenchItem);
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
   const openContextMenu = useLabStore((s) => s.openContextMenu);
+  const combineContainers = useLabStore((s) => s.combineContainers);
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
-    selectBenchItem(selectedBenchItem === id ? null : id);
+    if (e.nativeEvent.shiftKey && selectedBenchItem && selectedBenchItem !== id) {
+      combineContainers(selectedBenchItem, id);
+      selectBenchItem(null);
+    } else {
+      selectBenchItem(selectedBenchItem === id ? null : id);
+    }
   };
 
   const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
@@ -145,6 +151,7 @@ function DynamicItems() {
   const selectedBenchItem = useLabStore((s) => s.selectedBenchItem);
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
   const openContextMenu = useLabStore((s) => s.openContextMenu);
+  const combineContainers = useLabStore((s) => s.combineContainers);
 
   return (
     <>
@@ -152,7 +159,12 @@ function DynamicItems() {
         const isSelected = selectedBenchItem === item.id;
         const onItemClick = (e: ThreeEvent<MouseEvent>) => {
           e.stopPropagation();
-          selectBenchItem(selectedBenchItem === item.id ? null : item.id);
+          if (e.nativeEvent.shiftKey && selectedBenchItem && selectedBenchItem !== item.id) {
+            combineContainers(selectedBenchItem, item.id);
+            selectBenchItem(null);
+          } else {
+            selectBenchItem(selectedBenchItem === item.id ? null : item.id);
+          }
         };
         const onContextMenu = (e: ThreeEvent<MouseEvent>) => {
           e.stopPropagation();

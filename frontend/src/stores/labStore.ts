@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { ReactionLogEntry } from "../types/reaction";
+import { runReaction } from "../api/reactions";
 
 export type StationId =
   | "main-bench"
@@ -60,6 +61,7 @@ interface LabState {
   setBenchItemEffects: (id: string, effects: string[]) => void;
   openContextMenu: (state: ContextMenuState) => void;
   closeContextMenu: () => void;
+  combineContainers: (sourceId: string, targetId: string) => Promise<void>;
 }
 
 export const useLabStore = create<LabState>()((set) => ({
@@ -124,4 +126,71 @@ export const useLabStore = create<LabState>()((set) => ({
     })),
   openContextMenu: (state) => set({ contextMenu: state }),
   closeContextMenu: () => set({ contextMenu: null }),
+  combineContainers: async (sourceId: string, targetId: string) => {
+    const state = useLabStore.getState();
+    const source = state.benchItems.find((i) => i.id === sourceId);
+    const target = state.benchItems.find((i) => i.id === targetId);
+    if (!source || !target || source.contents.length === 0) return;
+
+    const reactants = [...source.contents, ...target.contents].map((s) => ({
+      formula: s.formula,
+      amount_ml: s.amount_ml,
+      phase: s.phase,
+    }));
+
+    try {
+      const result = await runReaction(reactants, {
+        temperature: target.temperature,
+        pressure: 1,
+        catalyst: null,
+      });
+
+      // Update target with products
+      const newContents = result.products.map((p) => ({
+        formula: p.formula,
+        amount_ml: p.amount || 50,
+        phase: p.phase,
+        color: p.color || "#cccccc",
+      }));
+
+      set((state) => ({
+        benchItems: state.benchItems.map((item) => {
+          if (item.id === targetId) {
+            return { ...item, contents: newContents, temperature: item.temperature + result.temp_change };
+          }
+          if (item.id === sourceId) {
+            return { ...item, contents: [] };
+          }
+          return item;
+        }),
+        reactionLog: [
+          { ...result, id: `rxn-${Date.now()}`, timestamp: new Date() },
+          ...state.reactionLog,
+        ],
+      }));
+
+      // Set effects, then clear after 5 seconds
+      const effectNames: string[] = [];
+      if (result.effects.gas) effectNames.push("bubbles");
+      if (result.effects.heat === "exothermic") effectNames.push("steam");
+      if (result.effects.precipitate) effectNames.push("precipitate");
+
+      if (effectNames.length > 0) {
+        set((state) => ({
+          benchItems: state.benchItems.map((item) =>
+            item.id === targetId ? { ...item, activeEffects: effectNames } : item
+          ),
+        }));
+        setTimeout(() => {
+          set((state) => ({
+            benchItems: state.benchItems.map((item) =>
+              item.id === targetId ? { ...item, activeEffects: [] } : item
+            ),
+          }));
+        }, 5000);
+      }
+    } catch (e) {
+      console.error("Reaction failed:", e);
+    }
+  },
 }));
