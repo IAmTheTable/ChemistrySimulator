@@ -65,6 +65,7 @@ interface LabState {
     mode: "ball-and-stick" | "space-filling" | "wireframe" | "orbital";
     showLabels: boolean;
   };
+  activeRightTab: string;
 
   selectElement: (atomicNumber: number | null) => void;
   setStation: (station: StationId) => void;
@@ -88,6 +89,7 @@ interface LabState {
   setStructureMode: (mode: "ball-and-stick" | "space-filling" | "wireframe" | "orbital") => void;
   toggleStructureLabels: () => void;
   closeStructureViewer: () => void;
+  setActiveRightTab: (tab: string) => void;
 }
 
 export const useLabStore = create<LabState>()((set) => ({
@@ -106,6 +108,7 @@ export const useLabStore = create<LabState>()((set) => ({
     atmosphere: "air",
   },
   structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS },
+  activeRightTab: "inspector",
 
   selectElement: (atomicNumber) => set({ selectedElement: atomicNumber }),
   setStation: (station) => set({ activeStation: station }),
@@ -165,11 +168,12 @@ export const useLabStore = create<LabState>()((set) => ({
   cancelPouring: () => set({ pouringFrom: null }),
   openContextMenu: (state) => set({ contextMenu: state }),
   closeContextMenu: () => set({ contextMenu: null }),
-  openStructureViewer: (formula) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, formula } }),
-  openOrbitalViewer: (atomicNumber) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, atomicNumber, mode: "orbital" } }),
+  openStructureViewer: (formula) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, formula }, activeRightTab: "structure" }),
+  openOrbitalViewer: (atomicNumber) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, atomicNumber, mode: "orbital" }, activeRightTab: "structure" }),
   setStructureMode: (mode) => set((state) => ({ structureViewer: { ...state.structureViewer, mode } })),
   toggleStructureLabels: () => set((state) => ({ structureViewer: { ...state.structureViewer, showLabels: !state.structureViewer.showLabels } })),
   closeStructureViewer: () => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS } }),
+  setActiveRightTab: (tab) => set({ activeRightTab: tab }),
   combineContainers: async (sourceId: string, targetId: string) => {
     const state = useLabStore.getState();
     const source = state.benchItems.find((i) => i.id === sourceId);

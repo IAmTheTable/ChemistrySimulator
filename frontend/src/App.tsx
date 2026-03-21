@@ -10,8 +10,11 @@ import SimulationToggle from "./components/ui/SimulationToggle";
 import ReactionLog from "./components/ui/ReactionLog";
 import ContainerContextMenu from "./components/ui/ContainerContextMenu";
 import StructurePanel from "./components/ui/StructurePanel";
+import { useLabStore } from "./stores/labStore";
 
 export default function App() {
+  const activeRightTab = useLabStore((s) => s.activeRightTab);
+  const setActiveRightTab = useLabStore((s) => s.setActiveRightTab);
   return (
     <div className="h-screen w-screen bg-gray-950 text-white flex flex-col overflow-hidden">
       {/* Station tabs */}
@@ -37,7 +40,7 @@ export default function App() {
 
         {/* Right panel: tabbed Inspector | Reactions */}
         <div className="w-72 bg-gray-900 border-l border-gray-800 overflow-y-auto">
-          <Tabs.Root defaultValue="inspector" className="flex flex-col h-full">
+          <Tabs.Root value={activeRightTab} onValueChange={setActiveRightTab} className="flex flex-col h-full">
             <Tabs.List className="flex border-b border-gray-800 shrink-0">
               <Tabs.Trigger
                 value="inspector"

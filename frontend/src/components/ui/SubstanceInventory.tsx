@@ -54,6 +54,7 @@ export default function SubstanceInventory() {
             }`}
           >
             <span className="font-mono text-xs">{sub.formula}</span>
+            <span className={`ml-1 text-[10px] ${isActive ? "text-blue-200" : "text-gray-400"}`}>{sub.name}</span>
             <span
               className={`ml-1.5 text-[10px] ${
                 isActive ? "text-blue-200" : (PHASE_COLOR[sub.phase] ?? "text-gray-500")

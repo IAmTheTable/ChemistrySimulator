@@ -1,8 +1,138 @@
 import { useLabStore } from "../../stores/labStore";
 import { useElement } from "../../api/elements";
+import { useChemicalName } from "../../api/nomenclature";
 import { CATEGORY_COLORS } from "../../types/element";
+import type { ContainerSubstance } from "../../stores/labStore";
+
+const CONTAINER_LABELS: Record<string, string> = {
+  beaker: "Beaker",
+  erlenmeyer: "Erlenmeyer Flask",
+  "test-tube": "Test Tube",
+};
+
+const PHASE_LABEL: Record<string, string> = {
+  s: "solid",
+  l: "liquid",
+  g: "gas",
+  aq: "aqueous",
+};
 
 export default function ElementInspector() {
+  const selectedBenchItem = useLabStore((s) => s.selectedBenchItem);
+  const benchItems = useLabStore((s) => s.benchItems);
+
+  const benchItem = selectedBenchItem
+    ? benchItems.find((b) => b.id === selectedBenchItem)
+    : null;
+
+  // If a bench item is selected, show container info
+  if (benchItem) {
+    return <ContainerInspector />;
+  }
+
+  // Otherwise show element info
+  return <ElementInfo />;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Container Inspector                                                */
+/* ------------------------------------------------------------------ */
+
+function ContainerInspector() {
+  const selectedBenchItem = useLabStore((s) => s.selectedBenchItem);
+  const benchItems = useLabStore((s) => s.benchItems);
+  const selectBenchItem = useLabStore((s) => s.selectBenchItem);
+  const updateBenchItemContents = useLabStore((s) => s.updateBenchItemContents);
+  const openStructureViewer = useLabStore((s) => s.openStructureViewer);
+
+  const item = benchItems.find((b) => b.id === selectedBenchItem);
+  if (!item) return null;
+
+  const label = CONTAINER_LABELS[item.type] ?? item.type;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-gray-200">{label}</h3>
+        <button
+          onClick={() => selectBenchItem(null)}
+          className="text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
+        >
+          Deselect
+        </button>
+      </div>
+
+      <div className="text-xs text-gray-400">
+        Temperature: <span className="text-gray-200">{item.temperature}&deg;C</span>
+      </div>
+
+      <div>
+        <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Contents</h4>
+        {item.contents.length === 0 ? (
+          <p className="text-xs text-gray-600 italic">Empty</p>
+        ) : (
+          <div className="space-y-2">
+            {item.contents.map((sub, idx) => (
+              <SubstanceRow
+                key={`${sub.formula}-${idx}`}
+                substance={sub}
+                onViewStructure={() => openStructureViewer(sub.formula)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {item.contents.length > 0 && (
+        <button
+          onClick={() => updateBenchItemContents(item.id, [])}
+          className="w-full px-2 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 rounded transition-colors"
+        >
+          Empty Container
+        </button>
+      )}
+    </div>
+  );
+}
+
+function SubstanceRow({
+  substance,
+  onViewStructure,
+}: {
+  substance: ContainerSubstance;
+  onViewStructure: () => void;
+}) {
+  const { data: chemName } = useChemicalName(substance.formula);
+
+  return (
+    <div className="bg-gray-800 rounded p-2">
+      <div className="flex items-center justify-between">
+        <div>
+          <span className="font-mono text-xs text-gray-200">{substance.formula}</span>
+          {chemName && (
+            <span className="ml-1.5 text-[10px] text-gray-400">{chemName}</span>
+          )}
+        </div>
+        <button
+          onClick={onViewStructure}
+          className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors"
+        >
+          View Structure
+        </button>
+      </div>
+      <div className="flex gap-3 mt-1 text-[10px] text-gray-500">
+        <span>{substance.amount_ml} mL</span>
+        <span>{PHASE_LABEL[substance.phase] ?? substance.phase}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Element Info (original behavior)                                   */
+/* ------------------------------------------------------------------ */
+
+function ElementInfo() {
   const selectedElement = useLabStore((s) => s.selectedElement);
   const openOrbitalViewer = useLabStore((s) => s.openOrbitalViewer);
   const { data: element, isLoading } = useElement(selectedElement);
