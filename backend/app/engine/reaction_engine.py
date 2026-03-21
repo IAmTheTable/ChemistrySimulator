@@ -11,6 +11,7 @@ from app.engine.reaction_predictor import ReactionPredictor
 from app.engine.equation_balancer import balance_equation
 from app.engine.thermodynamics import ThermodynamicsCalculator
 from app.engine.effects_mapper import EffectsMapper
+from app.engine.nomenclature import name_compound
 from app.models.reaction import ReactionResult, ReactionEffects
 
 
@@ -73,6 +74,11 @@ class ReactionEngine:
         products_detail = curated.get("products_detail", [])
         curated_effects = curated.get("effects")
 
+        # Enrich products with compound names
+        for product in products_detail:
+            if "formula" in product and "name" not in product:
+                product["name"] = name_compound(product["formula"])
+
         # Map effects using curated effects data
         effects = self._effects_mapper.map_effects(
             reaction_type=reaction_type,
@@ -121,7 +127,8 @@ class ReactionEngine:
 
         # Build products detail for effects mapper (minimal info)
         products_detail = [
-            {"formula": f, "phase": "aq"} for f in product_formulas
+            {"formula": f, "name": name_compound(f), "phase": "aq"}
+            for f in product_formulas
         ]
         # Mark gaseous products
         for p in products_detail:
