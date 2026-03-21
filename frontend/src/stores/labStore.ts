@@ -47,6 +47,12 @@ interface LabState {
     pressure: number;
     atmosphere: string;
   };
+  structureViewer: {
+    formula: string | null;
+    atomicNumber: number | null;
+    mode: "ball-and-stick" | "space-filling" | "wireframe" | "orbital";
+    showLabels: boolean;
+  };
 
   selectElement: (atomicNumber: number | null) => void;
   setStation: (station: StationId) => void;
@@ -62,6 +68,11 @@ interface LabState {
   openContextMenu: (state: ContextMenuState) => void;
   closeContextMenu: () => void;
   combineContainers: (sourceId: string, targetId: string) => Promise<void>;
+  openStructureViewer: (formula: string) => void;
+  openOrbitalViewer: (atomicNumber: number) => void;
+  setStructureMode: (mode: "ball-and-stick" | "space-filling" | "wireframe" | "orbital") => void;
+  toggleStructureLabels: () => void;
+  closeStructureViewer: () => void;
 }
 
 export const useLabStore = create<LabState>()((set) => ({
@@ -78,6 +89,7 @@ export const useLabStore = create<LabState>()((set) => ({
     pressure: 1,
     atmosphere: "air",
   },
+  structureViewer: { formula: null, atomicNumber: null, mode: "ball-and-stick", showLabels: false },
 
   selectElement: (atomicNumber) => set({ selectedElement: atomicNumber }),
   setStation: (station) => set({ activeStation: station }),
@@ -126,6 +138,11 @@ export const useLabStore = create<LabState>()((set) => ({
     })),
   openContextMenu: (state) => set({ contextMenu: state }),
   closeContextMenu: () => set({ contextMenu: null }),
+  openStructureViewer: (formula) => set({ structureViewer: { formula, atomicNumber: null, mode: "ball-and-stick", showLabels: false } }),
+  openOrbitalViewer: (atomicNumber) => set({ structureViewer: { formula: null, atomicNumber, mode: "orbital", showLabels: false } }),
+  setStructureMode: (mode) => set((state) => ({ structureViewer: { ...state.structureViewer, mode } })),
+  toggleStructureLabels: () => set((state) => ({ structureViewer: { ...state.structureViewer, showLabels: !state.structureViewer.showLabels } })),
+  closeStructureViewer: () => set({ structureViewer: { formula: null, atomicNumber: null, mode: "ball-and-stick", showLabels: false } }),
   combineContainers: async (sourceId: string, targetId: string) => {
     const state = useLabStore.getState();
     const source = state.benchItems.find((i) => i.id === sourceId);
