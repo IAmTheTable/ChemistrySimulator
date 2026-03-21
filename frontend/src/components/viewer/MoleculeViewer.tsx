@@ -5,7 +5,7 @@ import type { MoleculeData, OrbitalData } from "../../types/structure";
 import AtomSphere from "./AtomSphere";
 import BondCylinder from "./BondCylinder";
 import MoleculeLabels from "./MoleculeLabels";
-import OrbitalMesh from "./OrbitalMesh";
+import BohrModel from "./OrbitalMesh";
 
 interface MoleculeViewerProps {
   molecule: MoleculeData | null;
@@ -60,17 +60,9 @@ export default function MoleculeViewer({
       {/* Atom symbol labels */}
       <MoleculeLabels atoms={centeredAtoms} visible={showLabels} />
 
-      {/* Orbitals — show only valence shell for clarity */}
+      {/* Bohr model — nucleus + shell rings + orbiting electrons */}
       {mode === "orbital" && orbitalData && (
-        <group>
-          {(() => {
-            const maxN = Math.max(...orbitalData.orbitals.map((o) => o.n));
-            const valence = orbitalData.orbitals.filter((o) => o.n === maxN);
-            return valence.map((orbital, i) => (
-              <OrbitalMesh key={i} orbital={orbital} position={[0, 0, 0]} />
-            ));
-          })()}
-        </group>
+        <BohrModel orbitalData={orbitalData} position={[0, 0, 0]} />
       )}
     </Canvas>
   );

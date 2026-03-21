@@ -1,183 +1,99 @@
+import { useRef, useMemo } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Html, Line } from "@react-three/drei";
 import * as THREE from "three";
-import type { OrbitalInfo } from "../../types/structure";
+import type { OrbitalData } from "../../types/structure";
 
-interface OrbitalMeshProps {
-  orbital: OrbitalInfo;
+interface BohrModelProps {
+  orbitalData: OrbitalData;
   position: [number, number, number];
 }
 
-const ORBITAL_BLUE = "#3b82f6";
-const ORBITAL_RED = "#ef4444";
+const SHELL_COLORS = ["#f472b6", "#a78bfa", "#60a5fa", "#34d399", "#f59e0b", "#ef4444", "#06b6d4"];
+const ELECTRON_COLOR = "#22d3ee";
+const NUCLEUS_COLOR = "#f472b6";
 
-const MATERIAL_PROPS = {
-  transparent: true,
-  opacity: 0.35,
-  depthWrite: false,
-  side: THREE.DoubleSide,
-} as const;
+function Electron({ shellRadius, index, total, speed }: { shellRadius: number; index: number; total: number; speed: number }) {
+  const ref = useRef<THREE.Mesh>(null!);
+  const startAngle = (index / total) * Math.PI * 2;
 
-/** s orbital: a small translucent sphere (nucleus region) */
-function SOrbital({ radius, position }: { radius: number; position: [number, number, number] }) {
+  useFrame(() => {
+    if (!ref.current) return;
+    const t = startAngle + performance.now() * 0.001 * speed;
+    ref.current.position.x = Math.cos(t) * shellRadius;
+    ref.current.position.z = Math.sin(t) * shellRadius;
+  });
+
   return (
-    <mesh position={position}>
-      <sphereGeometry args={[radius * 0.18, 32, 32]} />
-      <meshStandardMaterial color={ORBITAL_BLUE} {...MATERIAL_PROPS} opacity={0.5} />
+    <mesh ref={ref}>
+      <sphereGeometry args={[0.08, 12, 12]} />
+      <meshStandardMaterial color={ELECTRON_COLOR} emissive={ELECTRON_COLOR} emissiveIntensity={0.5} />
     </mesh>
   );
 }
 
-/** One lobe of a p orbital — elongated along its axis */
-function PLobe({
-  pos,
-  radius,
-  color,
-  axis,
-}: {
-  pos: [number, number, number];
-  radius: number;
-  color: string;
-  axis: string;
-}) {
-  // Stretch the sphere along the lobe axis to make it teardrop-shaped
-  const scale: [number, number, number] =
-    axis === "x" ? [2.2, 0.7, 0.7] : axis === "y" ? [0.7, 2.2, 0.7] : [0.7, 0.7, 2.2];
+function ShellRing({ radius, color }: { radius: number; color: string }) {
+  const points = useMemo(() => {
+    const pts: [number, number, number][] = [];
+    const segments = 64;
+    for (let i = 0; i <= segments; i++) {
+      const angle = (i / segments) * Math.PI * 2;
+      pts.push([Math.cos(angle) * radius, 0, Math.sin(angle) * radius]);
+    }
+    return pts;
+  }, [radius]);
 
-  return (
-    <mesh position={pos} scale={scale}>
-      <sphereGeometry args={[radius, 16, 16]} />
-      <meshStandardMaterial color={color} {...MATERIAL_PROPS} />
-    </mesh>
-  );
+  return <Line points={points} color={color} transparent opacity={0.4} lineWidth={1} />;
 }
 
-/** p orbital: dumbbell — two elongated lobes along EACH occupied axis */
-function POrbital({
-  orbital,
-  position,
-}: {
-  orbital: OrbitalInfo;
-  position: [number, number, number];
-}) {
-  const lobeRadius = orbital.radius * 0.3;
-  const offset = orbital.radius * 0.5;
-  const orientations = orbital.orientations.length > 0 ? orbital.orientations : ["z"];
+export default function BohrModel({ orbitalData, position }: BohrModelProps) {
+  const shells = new Map<number, number>();
+  for (const orbital of orbitalData.orbitals) {
+    shells.set(orbital.n, (shells.get(orbital.n) ?? 0) + orbital.electrons);
+  }
 
-  const axisOffset = (axis: string): [number, number, number] =>
-    axis === "x" ? [offset, 0, 0] : axis === "y" ? [0, offset, 0] : [0, 0, offset];
+  const shellEntries = Array.from(shells.entries()).sort((a, b) => a[0] - b[0]);
 
   return (
     <group position={position}>
-      {orientations.map((axis) => {
-        const off = axisOffset(axis);
+      {/* Nucleus */}
+      <mesh>
+        <sphereGeometry args={[0.35, 32, 32]} />
+        <meshStandardMaterial color={NUCLEUS_COLOR} emissive={NUCLEUS_COLOR} emissiveIntensity={0.3} roughness={0.3} />
+      </mesh>
+
+      {/* Element symbol */}
+      <Html center distanceFactor={8}>
+        <span style={{ color: "white", fontWeight: "bold", fontSize: "14px", textShadow: "0 0 4px #000" }}>
+          {orbitalData.element.substring(0, 2)}
+        </span>
+      </Html>
+
+      {/* Shell rings + orbiting electrons */}
+      {shellEntries.map(([n, electronCount], shellIndex) => {
+        const shellRadius = n * 0.8 + 0.3;
+        const color = SHELL_COLORS[shellIndex % SHELL_COLORS.length];
+        const speed = 0.5 / n;
+
         return (
-          <group key={axis}>
-            <PLobe pos={off} radius={lobeRadius} color={ORBITAL_BLUE} axis={axis} />
-            <PLobe pos={[-off[0], -off[1], -off[2]]} radius={lobeRadius} color={ORBITAL_RED} axis={axis} />
+          <group key={n}>
+            <ShellRing radius={shellRadius} color={color} />
+            <group rotation={[Math.PI / 3, 0, 0]}>
+              <ShellRing radius={shellRadius} color={color} />
+            </group>
+
+            {Array.from({ length: electronCount }, (_, i) => (
+              <Electron key={i} shellRadius={shellRadius} index={i} total={electronCount} speed={speed} />
+            ))}
+
+            <Html position={[shellRadius + 0.2, 0.3, 0]} center distanceFactor={10}>
+              <span style={{ color: color, fontSize: "10px", whiteSpace: "nowrap" }}>
+                n={n} ({electronCount}e⁻)
+              </span>
+            </Html>
           </group>
         );
       })}
     </group>
   );
-}
-
-/** d orbital: 4 lobes in a plane (cloverleaf approximation) */
-function DOrbital({
-  orbital,
-  position,
-}: {
-  orbital: OrbitalInfo;
-  position: [number, number, number];
-}) {
-  const lobeRadius = orbital.radius * 0.3;
-  const offset = orbital.radius * 0.45;
-  const orientation = orbital.orientations[0] ?? "xy";
-
-  // Build 4 lobe positions based on plane
-  let lobeOffsets: [number, number, number][];
-  if (orientation === "xz") {
-    lobeOffsets = [
-      [offset, 0, offset],
-      [-offset, 0, offset],
-      [offset, 0, -offset],
-      [-offset, 0, -offset],
-    ];
-  } else if (orientation === "yz") {
-    lobeOffsets = [
-      [0, offset, offset],
-      [0, -offset, offset],
-      [0, offset, -offset],
-      [0, -offset, -offset],
-    ];
-  } else {
-    // xy plane (default)
-    lobeOffsets = [
-      [offset, offset, 0],
-      [-offset, offset, 0],
-      [offset, -offset, 0],
-      [-offset, -offset, 0],
-    ];
-  }
-
-  const colors = [ORBITAL_BLUE, ORBITAL_RED, ORBITAL_RED, ORBITAL_BLUE];
-
-  return (
-    <group position={position}>
-      {lobeOffsets.map((off, i) => (
-        <mesh key={i} position={off}>
-          <sphereGeometry args={[lobeRadius, 12, 12]} />
-          <meshStandardMaterial color={colors[i]} {...MATERIAL_PROPS} />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
-/** f orbital: 6 lobes approximation (alternating colors) */
-function FOrbital({
-  orbital,
-  position,
-}: {
-  orbital: OrbitalInfo;
-  position: [number, number, number];
-}) {
-  const lobeRadius = orbital.radius * 0.25;
-  const offset = orbital.radius * 0.45;
-
-  const lobeOffsets: [number, number, number][] = [
-    [offset, 0, 0],
-    [-offset, 0, 0],
-    [0, offset, 0],
-    [0, -offset, 0],
-    [0, 0, offset],
-    [0, 0, -offset],
-  ];
-
-  return (
-    <group position={position}>
-      {lobeOffsets.map((off, i) => (
-        <mesh key={i} position={off}>
-          <sphereGeometry args={[lobeRadius, 12, 12]} />
-          <meshStandardMaterial
-            color={i % 2 === 0 ? ORBITAL_BLUE : ORBITAL_RED}
-            {...MATERIAL_PROPS}
-          />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
-export default function OrbitalMesh({ orbital, position }: OrbitalMeshProps) {
-  switch (orbital.shape) {
-    case "sphere":
-      return <SOrbital radius={orbital.radius} position={position} />;
-    case "dumbbell":
-      return <POrbital orbital={orbital} position={position} />;
-    case "cloverleaf":
-      return <DOrbital orbital={orbital} position={position} />;
-    case "complex":
-      return <FOrbital orbital={orbital} position={position} />;
-    default:
-      return <SOrbital radius={orbital.radius} position={position} />;
-  }
 }
