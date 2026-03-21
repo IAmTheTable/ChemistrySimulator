@@ -11,7 +11,7 @@ const ORBITAL_RED = "#ef4444";
 
 const MATERIAL_PROPS = {
   transparent: true,
-  opacity: 0.25,
+  opacity: 0.35,
   depthWrite: false,
   side: THREE.DoubleSide,
 } as const;
@@ -44,7 +44,7 @@ function PLobe({
   );
 }
 
-/** p orbital: dumbbell — two lobes along an axis */
+/** p orbital: dumbbell — two lobes along EACH occupied axis */
 function POrbital({
   orbital,
   position,
@@ -54,30 +54,22 @@ function POrbital({
 }) {
   const lobeRadius = orbital.radius * 0.35;
   const offset = orbital.radius * 0.4;
+  const orientations = orbital.orientations.length > 0 ? orbital.orientations : ["z"];
 
-  // Use the first orientation if available, default to "z"
-  const orientation = orbital.orientations[0] ?? "z";
-
-  const posOffset: [number, number, number] =
-    orientation === "x" ? [offset, 0, 0]
-    : orientation === "y" ? [0, offset, 0]
-    : [0, 0, offset];
-
-  const negOffset: [number, number, number] = [
-    position[0] - posOffset[0],
-    position[1] - posOffset[1],
-    position[2] - posOffset[2],
-  ];
-  const absPos: [number, number, number] = [
-    position[0] + posOffset[0],
-    position[1] + posOffset[1],
-    position[2] + posOffset[2],
-  ];
+  const axisOffset = (axis: string): [number, number, number] =>
+    axis === "x" ? [offset, 0, 0] : axis === "y" ? [0, offset, 0] : [0, 0, offset];
 
   return (
-    <group>
-      <PLobe pos={absPos} radius={lobeRadius} color={ORBITAL_BLUE} />
-      <PLobe pos={negOffset} radius={lobeRadius} color={ORBITAL_RED} />
+    <group position={position}>
+      {orientations.map((axis) => {
+        const off = axisOffset(axis);
+        return (
+          <group key={axis}>
+            <PLobe pos={off} radius={lobeRadius} color={ORBITAL_BLUE} />
+            <PLobe pos={[-off[0], -off[1], -off[2]]} radius={lobeRadius} color={ORBITAL_RED} />
+          </group>
+        );
+      })}
     </group>
   );
 }
@@ -171,16 +163,15 @@ function FOrbital({
 
 export default function OrbitalMesh({ orbital, position }: OrbitalMeshProps) {
   switch (orbital.shape) {
-    case "s":
+    case "sphere":
       return <SOrbital radius={orbital.radius} position={position} />;
-    case "p":
+    case "dumbbell":
       return <POrbital orbital={orbital} position={position} />;
-    case "d":
+    case "cloverleaf":
       return <DOrbital orbital={orbital} position={position} />;
-    case "f":
+    case "complex":
       return <FOrbital orbital={orbital} position={position} />;
     default:
-      // Fallback: render as s orbital
       return <SOrbital radius={orbital.radius} position={position} />;
   }
 }
