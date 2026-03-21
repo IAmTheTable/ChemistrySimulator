@@ -16,12 +16,12 @@ const MATERIAL_PROPS = {
   side: THREE.DoubleSide,
 } as const;
 
-/** s orbital: a single translucent sphere */
+/** s orbital: a small translucent sphere (nucleus region) */
 function SOrbital({ radius, position }: { radius: number; position: [number, number, number] }) {
   return (
     <mesh position={position}>
-      <sphereGeometry args={[radius * 0.5, 32, 32]} />
-      <meshStandardMaterial color={ORBITAL_BLUE} {...MATERIAL_PROPS} />
+      <sphereGeometry args={[radius * 0.18, 32, 32]} />
+      <meshStandardMaterial color={ORBITAL_BLUE} {...MATERIAL_PROPS} opacity={0.5} />
     </mesh>
   );
 }
