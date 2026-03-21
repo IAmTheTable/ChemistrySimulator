@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { ReactionLogEntry } from "../types/reaction";
 
 export type StationId =
   | "main-bench"
@@ -9,11 +10,20 @@ export type StationId =
   | "thermal-analysis"
   | "storage-safety";
 
+export interface ContainerSubstance {
+  formula: string;
+  amount_ml: number;
+  phase: string;
+  color: string;
+}
+
 export interface BenchItem {
   id: string;
   type: string;
   position: [number, number, number];
-  contents: string[];
+  contents: ContainerSubstance[];
+  temperature: number;
+  activeEffects: string[];
 }
 
 interface LabState {
@@ -22,6 +32,8 @@ interface LabState {
   benchItems: BenchItem[];
   selectedBenchItem: string | null;
   placingEquipment: string | null;
+  simulationMode: "instant" | "realistic";
+  reactionLog: ReactionLogEntry[];
   environment: {
     temperature: number;
     pressure: number;
@@ -35,6 +47,10 @@ interface LabState {
   moveBenchItem: (id: string, position: [number, number, number]) => void;
   selectBenchItem: (id: string | null) => void;
   setPlacingEquipment: (type: string | null) => void;
+  setSimulationMode: (mode: "instant" | "realistic") => void;
+  addReactionLogEntry: (entry: ReactionLogEntry) => void;
+  updateBenchItemContents: (id: string, contents: ContainerSubstance[], temperature?: number) => void;
+  setBenchItemEffects: (id: string, effects: string[]) => void;
 }
 
 export const useLabStore = create<LabState>()((set) => ({
@@ -43,6 +59,8 @@ export const useLabStore = create<LabState>()((set) => ({
   benchItems: [],
   selectedBenchItem: null,
   placingEquipment: null,
+  simulationMode: "instant",
+  reactionLog: [],
   environment: {
     temperature: 25,
     pressure: 1,
@@ -53,7 +71,14 @@ export const useLabStore = create<LabState>()((set) => ({
   setStation: (station) => set({ activeStation: station }),
   addBenchItem: (item) =>
     set((state) => ({
-      benchItems: [...state.benchItems, item],
+      benchItems: [
+        ...state.benchItems,
+        {
+          ...item,
+          temperature: item.temperature ?? 25,
+          activeEffects: item.activeEffects ?? [],
+        },
+      ],
       placingEquipment: null,
     })),
   removeBenchItem: (id) =>
@@ -70,4 +95,21 @@ export const useLabStore = create<LabState>()((set) => ({
     })),
   selectBenchItem: (id) => set({ selectedBenchItem: id }),
   setPlacingEquipment: (type) => set({ placingEquipment: type }),
+  setSimulationMode: (mode) => set({ simulationMode: mode }),
+  addReactionLogEntry: (entry) =>
+    set((state) => ({ reactionLog: [entry, ...state.reactionLog] })),
+  updateBenchItemContents: (id, contents, temperature) =>
+    set((state) => ({
+      benchItems: state.benchItems.map((item) =>
+        item.id === id
+          ? { ...item, contents, ...(temperature !== undefined ? { temperature } : {}) }
+          : item
+      ),
+    })),
+  setBenchItemEffects: (id, effects) =>
+    set((state) => ({
+      benchItems: state.benchItems.map((item) =>
+        item.id === id ? { ...item, activeEffects: effects } : item
+      ),
+    })),
 }));

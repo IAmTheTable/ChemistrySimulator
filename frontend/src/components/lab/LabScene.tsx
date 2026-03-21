@@ -94,6 +94,8 @@ function BenchSurface() {
       type: placingEquipment,
       position,
       contents: [],
+      temperature: 25,
+      activeEffects: [],
     });
   };
 

@@ -36,6 +36,8 @@ describe("labStore", () => {
       type: "beaker",
       position: [0, 0, 0],
       contents: [],
+      temperature: 25,
+      activeEffects: [],
     });
     expect(useLabStore.getState().benchItems).toHaveLength(1);
     expect(useLabStore.getState().benchItems[0].id).toBe("beaker-1");
@@ -47,6 +49,8 @@ describe("labStore", () => {
       type: "beaker",
       position: [0, 0, 0],
       contents: [],
+      temperature: 25,
+      activeEffects: [],
     });
     useLabStore.getState().moveBenchItem("beaker-1", [1, 0, 2]);
     expect(useLabStore.getState().benchItems[0].position).toEqual([1, 0, 2]);
@@ -58,6 +62,8 @@ describe("labStore", () => {
       type: "beaker",
       position: [0, 0, 0],
       contents: [],
+      temperature: 25,
+      activeEffects: [],
     });
     useLabStore.getState().removeBenchItem("beaker-1");
     expect(useLabStore.getState().benchItems).toHaveLength(0);
@@ -80,7 +86,67 @@ describe("labStore", () => {
       type: "beaker",
       position: [0, 0, 0],
       contents: [],
+      temperature: 25,
+      activeEffects: [],
     });
     expect(useLabStore.getState().placingEquipment).toBeNull();
+  });
+
+  it("defaults to instant simulation mode", () => {
+    expect(useLabStore.getState().simulationMode).toBe("instant");
+  });
+
+  it("switches simulation mode", () => {
+    useLabStore.getState().setSimulationMode("realistic");
+    expect(useLabStore.getState().simulationMode).toBe("realistic");
+  });
+
+  it("adds reaction log entry", () => {
+    useLabStore.getState().addReactionLogEntry({
+      id: "r1",
+      timestamp: new Date(),
+      equation: "Na + H2O -> NaOH + H2",
+      reaction_type: "single_displacement",
+      source: "curated",
+      reactants: [],
+      products: [],
+      limiting_reagent: null,
+      yield_percent: 100,
+      delta_h: -184,
+      delta_s: null,
+      delta_g: null,
+      spontaneous: true,
+      temp_change: 45,
+      effects: {
+        color: null,
+        gas: null,
+        heat: null,
+        precipitate: null,
+        special: [],
+        sounds: [],
+        safety: [],
+      },
+    });
+    expect(useLabStore.getState().reactionLog).toHaveLength(1);
+  });
+
+  it("updates bench item contents", () => {
+    useLabStore.getState().addBenchItem({
+      id: "b-1",
+      type: "beaker",
+      position: [0, 0, 0],
+      contents: [],
+      temperature: 25,
+      activeEffects: [],
+    });
+    useLabStore.getState().updateBenchItemContents(
+      "b-1",
+      [{ formula: "NaCl", amount_ml: 50, phase: "aq", color: "#f8f8f8" }],
+      38
+    );
+    const item = useLabStore.getState().benchItems[0];
+    expect(item.contents).toHaveLength(1);
+    expect(item.contents[0].formula).toBe("NaCl");
+    expect(item.temperature).toBe(38);
   });
 });
