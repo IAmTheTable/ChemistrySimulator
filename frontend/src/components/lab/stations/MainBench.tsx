@@ -1,60 +1,28 @@
+import { useEffect } from "react";
 import type { ThreeEvent } from "@react-three/fiber";
 import { useLabStore } from "../../../stores/labStore";
+import type { BenchItem } from "../../../stores/labStore";
 import Beaker from "../equipment/Beaker";
 import TestTube from "../equipment/TestTube";
 import ErlenmeyerFlask from "../equipment/ErlenmeyerFlask";
 
-// Starter equipment — fixed pieces always present on the bench
-const STARTER_BEAKERS = [
-  { id: "starter-beaker-1", position: [-0.6, 0.2, 0.3] as [number, number, number], fillLevel: 0, fillColor: "#4fc3f7" },
-  { id: "starter-beaker-2", position: [-0.3, 0.2, 0.3] as [number, number, number], fillLevel: 0.45, fillColor: "#1e88e5" },
-];
-
-const STARTER_FLASK = {
-  id: "starter-flask-1",
-  position: [0.3, 0.2, 0.4] as [number, number, number],
-  fillLevel: 0.35,
-  fillColor: "#ffb74d",
-};
-
-// 5 test tubes on the shelf rack at position [-1.2, 0.42, -1.05]
-const SHELF_Y = 0.595;
-const RACK_Z = -1.05;
-const STARTER_TEST_TUBES = [
-  { id: "starter-tt-1", position: [-1.35, SHELF_Y, RACK_Z] as [number, number, number], fillLevel: 0, fillColor: "#a5d6a7" },
-  { id: "starter-tt-2", position: [-1.25, SHELF_Y, RACK_Z] as [number, number, number], fillLevel: 0.3, fillColor: "#ef9a9a" },
-  { id: "starter-tt-3", position: [-1.15, SHELF_Y, RACK_Z] as [number, number, number], fillLevel: 0.55, fillColor: "#ce93d8" },
-  { id: "starter-tt-4", position: [-1.05, SHELF_Y, RACK_Z] as [number, number, number], fillLevel: 0.2, fillColor: "#80cbc4" },
-  { id: "starter-tt-5", position: [-0.95, SHELF_Y, RACK_Z] as [number, number, number], fillLevel: 0, fillColor: "#a5d6a7" },
-];
-
-function useItemHandlers(id: string) {
-  const selectedBenchItem = useLabStore((s) => s.selectedBenchItem);
-  const selectBenchItem = useLabStore((s) => s.selectBenchItem);
-  const openContextMenu = useLabStore((s) => s.openContextMenu);
-  const combineContainers = useLabStore((s) => s.combineContainers);
-
-  const handleClick = (e: ThreeEvent<MouseEvent>) => {
-    e.stopPropagation();
-    if (e.nativeEvent.shiftKey && selectedBenchItem && selectedBenchItem !== id) {
-      combineContainers(selectedBenchItem, id);
-      selectBenchItem(null);
-    } else {
-      selectBenchItem(selectedBenchItem === id ? null : id);
-    }
-  };
-
-  const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
-    e.stopPropagation();
-    // nativeEvent carries the DOM MouseEvent with screen coordinates
-    const domEvent = e.nativeEvent;
-    openContextMenu({ itemId: id, x: domEvent.clientX, y: domEvent.clientY });
-  };
-
-  return { isSelected: selectedBenchItem === id, handleClick, handleContextMenu };
-}
-
 export default function MainBench() {
+  // Initialize starter items in the store on first render
+  useEffect(() => {
+    if (useLabStore.getState().benchItems.length > 0) return;
+
+    const starters: BenchItem[] = [
+      { id: "beaker-1", type: "beaker", position: [-0.6, 0.05, 0.3], contents: [], temperature: 25, activeEffects: [] },
+      { id: "beaker-2", type: "beaker", position: [0.2, 0.05, -0.2], contents: [], temperature: 25, activeEffects: [] },
+      { id: "flask-1", type: "erlenmeyer", position: [0.8, 0.0, 0.4], contents: [], temperature: 25, activeEffects: [] },
+      { id: "tube-1", type: "test-tube", position: [-1.35, 0.37, -1.05], contents: [], temperature: 25, activeEffects: [] },
+      { id: "tube-2", type: "test-tube", position: [-1.25, 0.37, -1.05], contents: [], temperature: 25, activeEffects: [] },
+      { id: "tube-3", type: "test-tube", position: [-1.15, 0.37, -1.05], contents: [], temperature: 25, activeEffects: [] },
+    ];
+
+    useLabStore.setState((state) => ({ benchItems: [...state.benchItems, ...starters] }));
+  }, []);
+
   return (
     <group>
       {/* Bench back wall / shelf */}
@@ -87,62 +55,9 @@ export default function MainBench() {
         <meshStandardMaterial color="#1c1917" roughness={0.5} />
       </mesh>
 
-      {/* ── Starter equipment ── */}
-      {STARTER_BEAKERS.map((b) => (
-        <StarterBeaker key={b.id} {...b} />
-      ))}
-
-      <StarterFlask {...STARTER_FLASK} />
-
-      {STARTER_TEST_TUBES.map((tt) => (
-        <StarterTestTube key={tt.id} {...tt} />
-      ))}
-
-      {/* ── Dynamically placed items from store ── */}
+      {/* ── All items from store ── */}
       <DynamicItems />
     </group>
-  );
-}
-
-function StarterBeaker({ id, position, fillLevel, fillColor }: { id: string; position: [number, number, number]; fillLevel: number; fillColor: string }) {
-  const { isSelected, handleClick, handleContextMenu } = useItemHandlers(id);
-  return (
-    <Beaker
-      position={position}
-      fillLevel={fillLevel}
-      fillColor={fillColor}
-      selected={isSelected}
-      onClick={handleClick}
-      onContextMenu={handleContextMenu}
-    />
-  );
-}
-
-function StarterFlask({ id, position, fillLevel, fillColor }: { id: string; position: [number, number, number]; fillLevel: number; fillColor: string }) {
-  const { isSelected, handleClick, handleContextMenu } = useItemHandlers(id);
-  return (
-    <ErlenmeyerFlask
-      position={position}
-      fillLevel={fillLevel}
-      fillColor={fillColor}
-      selected={isSelected}
-      onClick={handleClick}
-      onContextMenu={handleContextMenu}
-    />
-  );
-}
-
-function StarterTestTube({ id, position, fillLevel, fillColor }: { id: string; position: [number, number, number]; fillLevel: number; fillColor: string }) {
-  const { isSelected, handleClick, handleContextMenu } = useItemHandlers(id);
-  return (
-    <TestTube
-      position={position}
-      fillLevel={fillLevel}
-      fillColor={fillColor}
-      selected={isSelected}
-      onClick={handleClick}
-      onContextMenu={handleContextMenu}
-    />
   );
 }
 
@@ -152,6 +67,10 @@ function DynamicItems() {
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
   const openContextMenu = useLabStore((s) => s.openContextMenu);
   const combineContainers = useLabStore((s) => s.combineContainers);
+  const placingEquipment = useLabStore((s) => s.placingEquipment);
+  const addSubstanceToContainer = useLabStore((s) => s.addSubstanceToContainer);
+  const pouringFrom = useLabStore((s) => s.pouringFrom);
+  const cancelPouring = useLabStore((s) => s.cancelPouring);
 
   return (
     <>
@@ -159,6 +78,28 @@ function DynamicItems() {
         const isSelected = selectedBenchItem === item.id;
         const onItemClick = (e: ThreeEvent<MouseEvent>) => {
           e.stopPropagation();
+
+          // Substance placement: add substance to clicked container
+          if (placingEquipment?.startsWith("substance:")) {
+            const formula = placingEquipment.replace("substance:", "");
+            addSubstanceToContainer(item.id, {
+              formula,
+              amount_ml: 50,
+              phase: "aq",
+              color: "#cccccc",
+            });
+            return;
+          }
+
+          // Pour mode: pour from source into this container
+          if (pouringFrom && pouringFrom !== item.id) {
+            combineContainers(pouringFrom, item.id);
+            cancelPouring();
+            selectBenchItem(null);
+            return;
+          }
+
+          // Shift+click combine
           if (e.nativeEvent.shiftKey && selectedBenchItem && selectedBenchItem !== item.id) {
             combineContainers(selectedBenchItem, item.id);
             selectBenchItem(null);

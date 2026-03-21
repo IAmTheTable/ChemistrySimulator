@@ -39,6 +39,7 @@ interface LabState {
   benchItems: BenchItem[];
   selectedBenchItem: string | null;
   placingEquipment: string | null;
+  pouringFrom: string | null;
   simulationMode: "instant" | "realistic";
   reactionLog: ReactionLogEntry[];
   contextMenu: ContextMenuState | null;
@@ -65,6 +66,9 @@ interface LabState {
   addReactionLogEntry: (entry: ReactionLogEntry) => void;
   updateBenchItemContents: (id: string, contents: ContainerSubstance[], temperature?: number) => void;
   setBenchItemEffects: (id: string, effects: string[]) => void;
+  addSubstanceToContainer: (containerId: string, substance: ContainerSubstance) => void;
+  startPouring: (containerId: string) => void;
+  cancelPouring: () => void;
   openContextMenu: (state: ContextMenuState) => void;
   closeContextMenu: () => void;
   combineContainers: (sourceId: string, targetId: string) => Promise<void>;
@@ -81,6 +85,7 @@ export const useLabStore = create<LabState>()((set) => ({
   benchItems: [],
   selectedBenchItem: null,
   placingEquipment: null,
+  pouringFrom: null,
   simulationMode: "instant",
   reactionLog: [],
   contextMenu: null,
@@ -136,6 +141,17 @@ export const useLabStore = create<LabState>()((set) => ({
         item.id === id ? { ...item, activeEffects: effects } : item
       ),
     })),
+  addSubstanceToContainer: (containerId, substance) =>
+    set((state) => ({
+      benchItems: state.benchItems.map((item) =>
+        item.id === containerId
+          ? { ...item, contents: [...item.contents, substance] }
+          : item
+      ),
+      placingEquipment: null,
+    })),
+  startPouring: (containerId) => set({ pouringFrom: containerId }),
+  cancelPouring: () => set({ pouringFrom: null }),
   openContextMenu: (state) => set({ contextMenu: state }),
   closeContextMenu: () => set({ contextMenu: null }),
   openStructureViewer: (formula) => set({ structureViewer: { formula, atomicNumber: null, mode: "ball-and-stick", showLabels: false } }),

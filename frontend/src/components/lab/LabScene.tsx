@@ -80,6 +80,8 @@ function BenchSurface() {
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     if (!placingEquipment) return;
+    // Substances go into existing containers, not onto the bench surface
+    if (placingEquipment.startsWith("substance:")) return;
     e.stopPropagation();
 
     const point = e.point;

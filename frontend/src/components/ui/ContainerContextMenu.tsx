@@ -19,6 +19,7 @@ export default function ContainerContextMenu() {
   const updateBenchItemContents = useLabStore((s) => s.updateBenchItemContents);
   const benchItems = useLabStore((s) => s.benchItems);
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
+  const startPouring = useLabStore((s) => s.startPouring);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close when clicking outside
@@ -61,7 +62,12 @@ export default function ContainerContextMenu() {
     closeContextMenu();
   };
 
-  const FUTURE_ACTIONS = ["Pour into", "Heat", "Stir", "Weigh", "Measure Temp"];
+  const handlePourInto = () => {
+    startPouring(itemId);
+    closeContextMenu();
+  };
+
+  const FUTURE_ACTIONS = ["Heat", "Stir", "Weigh", "Measure Temp"];
 
   return createPortal(
     <div
@@ -75,6 +81,12 @@ export default function ContainerContextMenu() {
         className="w-full text-left flex items-center px-2 py-1.5 rounded text-gray-200 hover:bg-gray-700 transition-colors"
       >
         Inspect
+      </button>
+      <button
+        onClick={handlePourInto}
+        className="w-full text-left flex items-center px-2 py-1.5 rounded text-gray-200 hover:bg-gray-700 transition-colors"
+      >
+        Pour into...
       </button>
       <button
         onClick={handleEmpty}
