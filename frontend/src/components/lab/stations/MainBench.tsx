@@ -180,6 +180,9 @@ function DynamicItems() {
                 selected={isSelected}
                 onClick={onItemClick}
                 onContextMenu={onContextMenu}
+                contents={item.contents}
+                activeEffects={item.activeEffects}
+                temperature={item.temperature}
               />
             );
           case "erlenmeyer":
@@ -190,6 +193,9 @@ function DynamicItems() {
                 selected={isSelected}
                 onClick={onItemClick}
                 onContextMenu={onContextMenu}
+                contents={item.contents}
+                activeEffects={item.activeEffects}
+                temperature={item.temperature}
               />
             );
           case "test-tube":
@@ -200,6 +206,9 @@ function DynamicItems() {
                 selected={isSelected}
                 onClick={onItemClick}
                 onContextMenu={onContextMenu}
+                contents={item.contents}
+                activeEffects={item.activeEffects}
+                temperature={item.temperature}
               />
             );
           default:

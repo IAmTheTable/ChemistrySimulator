@@ -1,14 +1,38 @@
 import { useRef } from "react";
 import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
+import type { ContainerSubstance } from "../../../stores/labStore";
+import BubbleEffect from "../effects/BubbleEffect";
+import SteamEffect from "../effects/SteamEffect";
+import FlameEffect from "../effects/FlameEffect";
+import PrecipitateEffect from "../effects/PrecipitateEffect";
+
+const CAPACITY_ML = 15;
 
 interface TestTubeProps {
   position: [number, number, number];
   selected?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
-  fillLevel?: number; // 0–1
+  // Legacy direct props
+  fillLevel?: number;
   fillColor?: string;
+  // Dynamic props from store
+  contents?: ContainerSubstance[];
+  activeEffects?: string[];
+  temperature?: number;
+}
+
+/** Blend hex colors equally by averaging RGB channels. */
+function blendColors(colors: string[]): string {
+  if (colors.length === 0) return "#a5d6a7";
+  if (colors.length === 1) return colors[0];
+  let r = 0, g = 0, b = 0;
+  for (const hex of colors) {
+    const c = new THREE.Color(hex);
+    r += c.r; g += c.g; b += c.b;
+  }
+  return new THREE.Color(r / colors.length, g / colors.length, b / colors.length).getHexString().padStart(6, "0").replace(/^/, "#");
 }
 
 export default function TestTube({
@@ -16,8 +40,11 @@ export default function TestTube({
   selected = false,
   onClick,
   onContextMenu,
-  fillLevel = 0,
-  fillColor = "#a5d6a7",
+  fillLevel: fillLevelProp,
+  fillColor: fillColorProp,
+  contents,
+  activeEffects = [],
+  temperature = 25,
 }: TestTubeProps) {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -26,10 +53,30 @@ export default function TestTube({
   const radialSegments = 16;
   const wallThickness = 0.003;
 
+  // Derive fill from contents if provided
+  let fillLevel = fillLevelProp ?? 0;
+  let fillColor = fillColorProp ?? "#a5d6a7";
+
+  if (contents && contents.length > 0) {
+    const totalMl = contents.reduce((sum, s) => sum + s.amount_ml, 0);
+    fillLevel = Math.min(1, totalMl / CAPACITY_ML);
+    fillColor = blendColors(contents.map((s) => s.color));
+  }
+
   // Liquid fill
   const fillHeight = Math.max(0, fillLevel) * (height - 0.02);
   const fillRadius = radius - wallThickness;
   const fillY = -height / 2 + fillHeight / 2 + 0.01;
+
+  // Hot glow
+  const isHot = temperature > 60;
+  const glassColor = isHot ? "#ffe0b2" : "#ddeeff";
+  const glassEmissive = isHot ? new THREE.Color("#ff6600") : new THREE.Color("#000000");
+  const glassEmissiveIntensity = isHot ? 0.15 : 0;
+
+  const effectAnchorY = -height / 2 + fillHeight + 0.01;
+  const effectPos: [number, number, number] = [0, effectAnchorY, 0];
+  const precipColor = contents && contents.length > 0 ? contents[0].color : "#ffffff";
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -51,11 +98,13 @@ export default function TestTube({
           transmission={0.92}
           thickness={0.3}
           side={THREE.DoubleSide}
-          color="#ddeeff"
+          color={glassColor}
+          emissive={glassEmissive}
+          emissiveIntensity={glassEmissiveIntensity}
         />
       </mesh>
 
-      {/* Rounded bottom — small hemisphere approximated by a flat disk + half-sphere */}
+      {/* Rounded bottom — small hemisphere */}
       <mesh position={[0, -height / 2, 0]} castShadow>
         <sphereGeometry args={[radius, radialSegments, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
         <meshPhysicalMaterial
@@ -65,7 +114,7 @@ export default function TestTube({
           metalness={0.0}
           transmission={0.92}
           thickness={0.3}
-          color="#ddeeff"
+          color={glassColor}
         />
       </mesh>
 
@@ -104,6 +153,20 @@ export default function TestTube({
             opacity={0.8}
           />
         </mesh>
+      )}
+
+      {/* Active effects */}
+      {activeEffects.includes("bubbles") && (
+        <BubbleEffect position={effectPos} rate="gentle" />
+      )}
+      {activeEffects.includes("steam") && (
+        <SteamEffect position={[0, height / 2, 0]} />
+      )}
+      {activeEffects.includes("flame") && (
+        <FlameEffect position={[0, -height / 2 - 0.04, 0]} />
+      )}
+      {activeEffects.includes("precipitate") && (
+        <PrecipitateEffect position={effectPos} color={precipColor} />
       )}
     </group>
   );

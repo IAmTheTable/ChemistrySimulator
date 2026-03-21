@@ -1,14 +1,38 @@
 import { useRef } from "react";
 import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
+import type { ContainerSubstance } from "../../../stores/labStore";
+import BubbleEffect from "../effects/BubbleEffect";
+import SteamEffect from "../effects/SteamEffect";
+import FlameEffect from "../effects/FlameEffect";
+import PrecipitateEffect from "../effects/PrecipitateEffect";
+
+const CAPACITY_ML = 250;
 
 interface ErlenmeyerFlaskProps {
   position: [number, number, number];
   selected?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
-  fillLevel?: number; // 0–1
+  // Legacy direct props
+  fillLevel?: number;
   fillColor?: string;
+  // Dynamic props from store
+  contents?: ContainerSubstance[];
+  activeEffects?: string[];
+  temperature?: number;
+}
+
+/** Blend hex colors equally by averaging RGB channels. */
+function blendColors(colors: string[]): string {
+  if (colors.length === 0) return "#ffb74d";
+  if (colors.length === 1) return colors[0];
+  let r = 0, g = 0, b = 0;
+  for (const hex of colors) {
+    const c = new THREE.Color(hex);
+    r += c.r; g += c.g; b += c.b;
+  }
+  return new THREE.Color(r / colors.length, g / colors.length, b / colors.length).getHexString().padStart(6, "0").replace(/^/, "#");
 }
 
 export default function ErlenmeyerFlask({
@@ -16,8 +40,11 @@ export default function ErlenmeyerFlask({
   selected = false,
   onClick,
   onContextMenu,
-  fillLevel = 0,
-  fillColor = "#ffb74d",
+  fillLevel: fillLevelProp,
+  fillColor: fillColorProp,
+  contents,
+  activeEffects = [],
+  temperature = 25,
 }: ErlenmeyerFlaskProps) {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -28,17 +55,33 @@ export default function ErlenmeyerFlask({
   const neckRadius = 0.02;
   const radialSegments = 24;
 
-  // Conical body: wide at bottom, narrow at top (shoulder)
-  // Neck sits on top of the conical body
+  // Derive fill from contents if provided
+  let fillLevel = fillLevelProp ?? 0;
+  let fillColor = fillColorProp ?? "#ffb74d";
+
+  if (contents && contents.length > 0) {
+    const totalMl = contents.reduce((sum, s) => sum + s.amount_ml, 0);
+    fillLevel = Math.min(1, totalMl / CAPACITY_ML);
+    fillColor = blendColors(contents.map((s) => s.color));
+  }
 
   // Total height for fill calculations
   const totalFillableHeight = bodyHeight - 0.01;
   const fillHeight = Math.max(0, fillLevel) * totalFillableHeight;
-  // Fill radius interpolates from baseRadius to shoulderRadius as fill rises
   const fillTopRadius =
     baseRadius - (baseRadius - shoulderRadius) * Math.min(1, fillLevel);
   const fillBottomRadius = baseRadius - 0.005;
   const fillY = -bodyHeight / 2 + fillHeight / 2 + 0.005;
+
+  // Hot glow
+  const isHot = temperature > 60;
+  const glassColor = isHot ? "#ffe0b2" : "#c8e6ff";
+  const glassEmissive = isHot ? new THREE.Color("#ff6600") : new THREE.Color("#000000");
+  const glassEmissiveIntensity = isHot ? 0.15 : 0;
+
+  const effectAnchorY = -bodyHeight / 2 + fillHeight + 0.01;
+  const effectPos: [number, number, number] = [0, effectAnchorY, 0];
+  const precipColor = contents && contents.length > 0 ? contents[0].color : "#ffffff";
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -60,7 +103,9 @@ export default function ErlenmeyerFlask({
           transmission={0.9}
           thickness={0.5}
           side={THREE.DoubleSide}
-          color="#c8e6ff"
+          color={glassColor}
+          emissive={glassEmissive}
+          emissiveIntensity={glassEmissiveIntensity}
         />
       </mesh>
 
@@ -74,7 +119,7 @@ export default function ErlenmeyerFlask({
           metalness={0.0}
           transmission={0.88}
           thickness={0.3}
-          color="#c8e6ff"
+          color={glassColor}
         />
       </mesh>
 
@@ -91,7 +136,9 @@ export default function ErlenmeyerFlask({
           transmission={0.9}
           thickness={0.5}
           side={THREE.DoubleSide}
-          color="#c8e6ff"
+          color={glassColor}
+          emissive={glassEmissive}
+          emissiveIntensity={glassEmissiveIntensity}
         />
       </mesh>
 
@@ -130,6 +177,20 @@ export default function ErlenmeyerFlask({
             opacity={0.8}
           />
         </mesh>
+      )}
+
+      {/* Active effects */}
+      {activeEffects.includes("bubbles") && (
+        <BubbleEffect position={effectPos} rate="moderate" />
+      )}
+      {activeEffects.includes("steam") && (
+        <SteamEffect position={[0, bodyHeight / 2 + neckHeight, 0]} />
+      )}
+      {activeEffects.includes("flame") && (
+        <FlameEffect position={[0, -bodyHeight / 2 - 0.04, 0]} />
+      )}
+      {activeEffects.includes("precipitate") && (
+        <PrecipitateEffect position={effectPos} color={precipColor} />
       )}
     </group>
   );
