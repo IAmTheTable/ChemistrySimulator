@@ -33,6 +33,17 @@ export interface ContextMenuState {
   y: number;
 }
 
+const STRUCTURE_VIEWER_DEFAULTS = { formula: null, atomicNumber: null, mode: "ball-and-stick" as const, showLabels: false };
+
+const STARTER_ITEMS: BenchItem[] = [
+  { id: "beaker-1", type: "beaker", position: [-0.6, 0.20, 0.3], contents: [], temperature: 25, activeEffects: [] },
+  { id: "beaker-2", type: "beaker", position: [0.2, 0.20, -0.2], contents: [], temperature: 25, activeEffects: [] },
+  { id: "flask-1", type: "erlenmeyer", position: [0.8, 0.14, 0.4], contents: [], temperature: 25, activeEffects: [] },
+  { id: "tube-1", type: "test-tube", position: [-1.35, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
+  { id: "tube-2", type: "test-tube", position: [-1.25, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
+  { id: "tube-3", type: "test-tube", position: [-1.15, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
+];
+
 interface LabState {
   selectedElement: number | null;
   activeStation: StationId;
@@ -82,7 +93,7 @@ interface LabState {
 export const useLabStore = create<LabState>()((set) => ({
   selectedElement: null,
   activeStation: "main-bench",
-  benchItems: [],
+  benchItems: [...STARTER_ITEMS],
   selectedBenchItem: null,
   placingEquipment: null,
   pouringFrom: null,
@@ -94,7 +105,7 @@ export const useLabStore = create<LabState>()((set) => ({
     pressure: 1,
     atmosphere: "air",
   },
-  structureViewer: { formula: null, atomicNumber: null, mode: "ball-and-stick", showLabels: false },
+  structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS },
 
   selectElement: (atomicNumber) => set({ selectedElement: atomicNumber }),
   setStation: (station) => set({ activeStation: station }),
@@ -154,11 +165,11 @@ export const useLabStore = create<LabState>()((set) => ({
   cancelPouring: () => set({ pouringFrom: null }),
   openContextMenu: (state) => set({ contextMenu: state }),
   closeContextMenu: () => set({ contextMenu: null }),
-  openStructureViewer: (formula) => set({ structureViewer: { formula, atomicNumber: null, mode: "ball-and-stick", showLabels: false } }),
-  openOrbitalViewer: (atomicNumber) => set({ structureViewer: { formula: null, atomicNumber, mode: "orbital", showLabels: false } }),
+  openStructureViewer: (formula) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, formula } }),
+  openOrbitalViewer: (atomicNumber) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, atomicNumber, mode: "orbital" } }),
   setStructureMode: (mode) => set((state) => ({ structureViewer: { ...state.structureViewer, mode } })),
   toggleStructureLabels: () => set((state) => ({ structureViewer: { ...state.structureViewer, showLabels: !state.structureViewer.showLabels } })),
-  closeStructureViewer: () => set({ structureViewer: { formula: null, atomicNumber: null, mode: "ball-and-stick", showLabels: false } }),
+  closeStructureViewer: () => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS } }),
   combineContainers: async (sourceId: string, targetId: string) => {
     const state = useLabStore.getState();
     const source = state.benchItems.find((i) => i.id === sourceId);
@@ -186,10 +197,17 @@ export const useLabStore = create<LabState>()((set) => ({
         color: p.color || "#cccccc",
       }));
 
+      // Build effects list
+      const effectNames: string[] = [];
+      if (result.effects.gas) effectNames.push("bubbles");
+      if (result.effects.heat === "exothermic") effectNames.push("steam");
+      if (result.effects.precipitate) effectNames.push("precipitate");
+
+      // Merge contents, temperature, and effects into a single set() call
       set((state) => ({
         benchItems: state.benchItems.map((item) => {
           if (item.id === targetId) {
-            return { ...item, contents: newContents, temperature: item.temperature + result.temp_change };
+            return { ...item, contents: newContents, temperature: item.temperature + result.temp_change, activeEffects: effectNames };
           }
           if (item.id === sourceId) {
             return { ...item, contents: [] };
@@ -199,27 +217,13 @@ export const useLabStore = create<LabState>()((set) => ({
         reactionLog: [
           { ...result, id: `rxn-${Date.now()}`, timestamp: new Date() },
           ...state.reactionLog,
-        ],
+        ].slice(0, 100),
       }));
 
-      // Set effects, then clear after 5 seconds
-      const effectNames: string[] = [];
-      if (result.effects.gas) effectNames.push("bubbles");
-      if (result.effects.heat === "exothermic") effectNames.push("steam");
-      if (result.effects.precipitate) effectNames.push("precipitate");
-
+      // Clear effects after timeout using the existing action
       if (effectNames.length > 0) {
-        set((state) => ({
-          benchItems: state.benchItems.map((item) =>
-            item.id === targetId ? { ...item, activeEffects: effectNames } : item
-          ),
-        }));
         setTimeout(() => {
-          set((state) => ({
-            benchItems: state.benchItems.map((item) =>
-              item.id === targetId ? { ...item, activeEffects: [] } : item
-            ),
-          }));
+          useLabStore.getState().setBenchItemEffects(targetId, []);
         }, 5000);
       }
     } catch (e) {

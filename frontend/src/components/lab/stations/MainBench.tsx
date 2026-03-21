@@ -1,28 +1,16 @@
-import { useEffect } from "react";
 import type { ThreeEvent } from "@react-three/fiber";
 import { useLabStore } from "../../../stores/labStore";
-import type { BenchItem } from "../../../stores/labStore";
 import Beaker from "../equipment/Beaker";
 import TestTube from "../equipment/TestTube";
 import ErlenmeyerFlask from "../equipment/ErlenmeyerFlask";
 
+const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
+  beaker: Beaker,
+  erlenmeyer: ErlenmeyerFlask,
+  "test-tube": TestTube,
+};
+
 export default function MainBench() {
-  // Initialize starter items in the store on first render
-  useEffect(() => {
-    if (useLabStore.getState().benchItems.length > 0) return;
-
-    const starters: BenchItem[] = [
-      { id: "beaker-1", type: "beaker", position: [-0.6, 0.20, 0.3], contents: [], temperature: 25, activeEffects: [] },
-      { id: "beaker-2", type: "beaker", position: [0.2, 0.20, -0.2], contents: [], temperature: 25, activeEffects: [] },
-      { id: "flask-1", type: "erlenmeyer", position: [0.8, 0.14, 0.4], contents: [], temperature: 25, activeEffects: [] },
-      { id: "tube-1", type: "test-tube", position: [-1.35, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
-      { id: "tube-2", type: "test-tube", position: [-1.25, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
-      { id: "tube-3", type: "test-tube", position: [-1.15, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
-    ];
-
-    useLabStore.setState((state) => ({ benchItems: [...state.benchItems, ...starters] }));
-  }, []);
-
   return (
     <group>
       {/* Bench back wall / shelf */}
@@ -112,49 +100,20 @@ function DynamicItems() {
           openContextMenu({ itemId: item.id, x: e.nativeEvent.clientX, y: e.nativeEvent.clientY });
         };
 
-        switch (item.type) {
-          case "beaker":
-            return (
-              <Beaker
-                key={item.id}
-                position={item.position}
-                selected={isSelected}
-                onClick={onItemClick}
-                onContextMenu={onContextMenu}
-                contents={item.contents}
-                activeEffects={item.activeEffects}
-                temperature={item.temperature}
-              />
-            );
-          case "erlenmeyer":
-            return (
-              <ErlenmeyerFlask
-                key={item.id}
-                position={item.position}
-                selected={isSelected}
-                onClick={onItemClick}
-                onContextMenu={onContextMenu}
-                contents={item.contents}
-                activeEffects={item.activeEffects}
-                temperature={item.temperature}
-              />
-            );
-          case "test-tube":
-            return (
-              <TestTube
-                key={item.id}
-                position={item.position}
-                selected={isSelected}
-                onClick={onItemClick}
-                onContextMenu={onContextMenu}
-                contents={item.contents}
-                activeEffects={item.activeEffects}
-                temperature={item.temperature}
-              />
-            );
-          default:
-            return null;
-        }
+        const Component = COMPONENT_MAP[item.type];
+        if (!Component) return null;
+        return (
+          <Component
+            key={item.id}
+            position={item.position}
+            selected={isSelected}
+            onClick={onItemClick}
+            onContextMenu={onContextMenu}
+            contents={item.contents}
+            activeEffects={item.activeEffects}
+            temperature={item.temperature}
+          />
+        );
       })}
     </>
   );

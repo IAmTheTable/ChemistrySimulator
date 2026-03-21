@@ -9,15 +9,12 @@ import { useLabStore } from "../../stores/labStore";
  * ContextMenu.Trigger cannot wrap those elements directly. Instead:
  *   - Equipment calls openContextMenu({ itemId, x, y }) on right-click.
  *   - This component renders a positioned menu in a portal at (x, y).
- *
- * Usage in equipment: see useContainerContextMenu hook below.
  */
 export default function ContainerContextMenu() {
   const contextMenu = useLabStore((s) => s.contextMenu);
   const closeContextMenu = useLabStore((s) => s.closeContextMenu);
   const removeBenchItem = useLabStore((s) => s.removeBenchItem);
   const updateBenchItemContents = useLabStore((s) => s.updateBenchItemContents);
-  const benchItems = useLabStore((s) => s.benchItems);
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
   const startPouring = useLabStore((s) => s.startPouring);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -46,9 +43,7 @@ export default function ContainerContextMenu() {
   const { itemId, x, y } = contextMenu;
 
   const handleInspect = () => {
-    const item = benchItems.find((b) => b.id === itemId);
     selectBenchItem(itemId);
-    console.log(`[Inspect] Container "${itemId}":`, item);
     closeContextMenu();
   };
 

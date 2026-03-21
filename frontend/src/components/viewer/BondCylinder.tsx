@@ -13,7 +13,6 @@ const Y_AXIS = new THREE.Vector3(0, 1, 0);
 
 function computeQuaternion(dir: THREE.Vector3): THREE.Quaternion {
   const q = new THREE.Quaternion();
-  // Default cylinder axis is Y. Rotate Y to match bond direction.
   q.setFromUnitVectors(Y_AXIS, dir.clone().normalize());
   return q;
 }
@@ -53,9 +52,6 @@ function Stick({ mid, quaternion, length, radius, color, offset }: StickProps) {
 }
 
 export default function BondCylinder({ atom1, atom2, order, mode }: BondCylinderProps) {
-  // Space-filling mode hides bonds entirely
-  if (mode === "space-filling") return null;
-
   const mid = new THREE.Vector3(
     (atom1.x + atom2.x) / 2,
     (atom1.y + atom2.y) / 2,

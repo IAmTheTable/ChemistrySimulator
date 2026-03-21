@@ -30,43 +30,52 @@ describe("labStore", () => {
     expect(useLabStore.getState().activeStation).toBe("fume-hood");
   });
 
+  it("starts with starter items", () => {
+    expect(useLabStore.getState().benchItems.length).toBeGreaterThanOrEqual(6);
+  });
+
   it("tracks bench items", () => {
+    const initialCount = useLabStore.getState().benchItems.length;
     useLabStore.getState().addBenchItem({
-      id: "beaker-1",
+      id: "test-beaker-new",
       type: "beaker",
       position: [0, 0, 0],
       contents: [],
       temperature: 25,
       activeEffects: [],
     });
-    expect(useLabStore.getState().benchItems).toHaveLength(1);
-    expect(useLabStore.getState().benchItems[0].id).toBe("beaker-1");
+    expect(useLabStore.getState().benchItems).toHaveLength(initialCount + 1);
+    const added = useLabStore.getState().benchItems.find((b) => b.id === "test-beaker-new");
+    expect(added).toBeDefined();
   });
 
   it("moves a bench item", () => {
     useLabStore.getState().addBenchItem({
-      id: "beaker-1",
+      id: "test-beaker-move",
       type: "beaker",
       position: [0, 0, 0],
       contents: [],
       temperature: 25,
       activeEffects: [],
     });
-    useLabStore.getState().moveBenchItem("beaker-1", [1, 0, 2]);
-    expect(useLabStore.getState().benchItems[0].position).toEqual([1, 0, 2]);
+    useLabStore.getState().moveBenchItem("test-beaker-move", [1, 0, 2]);
+    const item = useLabStore.getState().benchItems.find((b) => b.id === "test-beaker-move")!;
+    expect(item.position).toEqual([1, 0, 2]);
   });
 
   it("removes a bench item", () => {
+    const initialCount = useLabStore.getState().benchItems.length;
     useLabStore.getState().addBenchItem({
-      id: "beaker-1",
+      id: "test-beaker-remove",
       type: "beaker",
       position: [0, 0, 0],
       contents: [],
       temperature: 25,
       activeEffects: [],
     });
-    useLabStore.getState().removeBenchItem("beaker-1");
-    expect(useLabStore.getState().benchItems).toHaveLength(0);
+    expect(useLabStore.getState().benchItems).toHaveLength(initialCount + 1);
+    useLabStore.getState().removeBenchItem("test-beaker-remove");
+    expect(useLabStore.getState().benchItems).toHaveLength(initialCount);
   });
 
   it("selects a bench item", () => {
@@ -132,7 +141,7 @@ describe("labStore", () => {
 
   it("updates bench item contents", () => {
     useLabStore.getState().addBenchItem({
-      id: "b-1",
+      id: "test-b-1",
       type: "beaker",
       position: [0, 0, 0],
       contents: [],
@@ -140,11 +149,11 @@ describe("labStore", () => {
       activeEffects: [],
     });
     useLabStore.getState().updateBenchItemContents(
-      "b-1",
+      "test-b-1",
       [{ formula: "NaCl", amount_ml: 50, phase: "aq", color: "#f8f8f8" }],
       38
     );
-    const item = useLabStore.getState().benchItems[0];
+    const item = useLabStore.getState().benchItems.find((b) => b.id === "test-b-1")!;
     expect(item.contents).toHaveLength(1);
     expect(item.contents[0].formula).toBe("NaCl");
     expect(item.temperature).toBe(38);

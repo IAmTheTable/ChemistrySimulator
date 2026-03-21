@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { MoleculeData, OrbitalData } from "../../types/structure";
@@ -19,35 +20,24 @@ export default function MoleculeViewer({
   mode,
   showLabels,
 }: MoleculeViewerProps) {
+  const { centeredAtoms, cameraZ } = useMemo(() => {
+    if (!molecule) return { centeredAtoms: [], cameraZ: 5 };
+    const cx = molecule.atoms.reduce((s, a) => s + a.x, 0) / molecule.atoms.length;
+    const cy = molecule.atoms.reduce((s, a) => s + a.y, 0) / molecule.atoms.length;
+    const cz = molecule.atoms.reduce((s, a) => s + a.z, 0) / molecule.atoms.length;
+    const centered = molecule.atoms.map((a) => ({ ...a, x: a.x - cx, y: a.y - cy, z: a.z - cz }));
+    const maxDist = Math.max(...centered.map((a) => Math.sqrt(a.x ** 2 + a.y ** 2 + a.z ** 2)), 0.01);
+    return { centeredAtoms: centered, cameraZ: Math.max(maxDist * 2.5, 5) };
+  }, [molecule]);
+
   if (!molecule) return null;
-
-  // Center the molecule at the origin
-  const cx = molecule.atoms.reduce((s, a) => s + a.x, 0) / molecule.atoms.length;
-  const cy = molecule.atoms.reduce((s, a) => s + a.y, 0) / molecule.atoms.length;
-  const cz = molecule.atoms.reduce((s, a) => s + a.z, 0) / molecule.atoms.length;
-
-  const centeredAtoms = molecule.atoms.map((a) => ({
-    ...a,
-    x: a.x - cx,
-    y: a.y - cy,
-    z: a.z - cz,
-  }));
-
-  // Determine camera distance from molecule bounds
-  const maxDist = Math.max(
-    ...centeredAtoms.map((a) => Math.sqrt(a.x ** 2 + a.y ** 2 + a.z ** 2)),
-    0.01, // guard against single-atom molecules collapsing to 0
-  );
-  const cameraZ = Math.max(maxDist * 2.5, 5);
 
   return (
     <Canvas camera={{ position: [0, 0, cameraZ], fov: 50 }} style={{ width: "100%", height: "100%" }}>
-      {/* Lighting */}
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} intensity={0.8} />
       <pointLight position={[-5, -5, -5]} intensity={0.3} />
 
-      {/* Camera controls */}
       <OrbitControls enablePan enableZoom />
 
       {/* Atoms */}

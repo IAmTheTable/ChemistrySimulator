@@ -6,8 +6,10 @@ import BubbleEffect from "../effects/BubbleEffect";
 import SteamEffect from "../effects/SteamEffect";
 import FlameEffect from "../effects/FlameEffect";
 import PrecipitateEffect from "../effects/PrecipitateEffect";
+import { computeFillState, getGlassAppearance } from "./equipmentUtils";
 
 const CAPACITY_ML = 250;
+const COLD_GLASS_COLOR = "#c8e6ff";
 
 interface BeakerProps {
   position: [number, number, number];
@@ -21,18 +23,6 @@ interface BeakerProps {
   contents?: ContainerSubstance[];
   activeEffects?: string[];
   temperature?: number;
-}
-
-/** Blend hex colors equally by averaging RGB channels. */
-function blendColors(colors: string[]): string {
-  if (colors.length === 0) return "#4fc3f7";
-  if (colors.length === 1) return colors[0];
-  let r = 0, g = 0, b = 0;
-  for (const hex of colors) {
-    const c = new THREE.Color(hex);
-    r += c.r; g += c.g; b += c.b;
-  }
-  return new THREE.Color(r / colors.length, g / colors.length, b / colors.length).getHexString().padStart(6, "0").replace(/^/, "#");
 }
 
 export default function Beaker({
@@ -55,14 +45,9 @@ export default function Beaker({
   const wallThickness = 0.005;
 
   // Derive fill level and color from contents if provided, else fall back to legacy props
-  let fillLevel = fillLevelProp ?? 0;
-  let fillColor = fillColorProp ?? "#4fc3f7";
-
-  if (contents && contents.length > 0) {
-    const totalMl = contents.reduce((sum, s) => sum + s.amount_ml, 0);
-    fillLevel = Math.min(1, totalMl / CAPACITY_ML);
-    fillColor = blendColors(contents.map((s) => s.color));
-  }
+  const computed = contents && contents.length > 0 ? computeFillState(contents, CAPACITY_ML) : null;
+  const fillLevel = computed ? computed.fillLevel : (fillLevelProp ?? 0);
+  const fillColor = computed ? computed.fillColor : (fillColorProp ?? "#4fc3f7");
 
   // Liquid fill dimensions
   const fillHeight = Math.max(0, fillLevel) * (height - 0.02);
@@ -73,10 +58,7 @@ export default function Beaker({
   const fillY = -height / 2 + fillHeight / 2 + 0.01;
 
   // Emissive glow when hot
-  const isHot = temperature > 60;
-  const glassColor = isHot ? "#ffe0b2" : "#c8e6ff";
-  const glassEmissive = isHot ? new THREE.Color("#ff6600") : new THREE.Color("#000000");
-  const glassEmissiveIntensity = isHot ? 0.15 : 0;
+  const { glassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
 
   // Effect anchor: top of the liquid, centered
   const effectAnchorY = -height / 2 + fillHeight + 0.02;

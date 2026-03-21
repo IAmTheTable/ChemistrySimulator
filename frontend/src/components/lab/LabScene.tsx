@@ -3,6 +3,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Grid, Environment } from "@react-three/drei";
 import { useLabStore } from "../../stores/labStore";
 import MainBench from "./stations/MainBench";
+import { EQUIPMENT_Y_OFFSETS } from "./equipment/equipmentUtils";
 
 export default function LabScene() {
   return (
@@ -16,7 +17,6 @@ export default function LabScene() {
       shadows
       style={{ width: "100%", height: "100%" }}
     >
-      {/* Lighting */}
       <ambientLight intensity={0.4} />
       <directionalLight
         position={[5, 8, 5]}
@@ -27,7 +27,6 @@ export default function LabScene() {
       />
       <pointLight position={[-3, 4, -3]} intensity={0.3} color="#b4d4ff" />
 
-      {/* Camera controls — orbit around bench center */}
       <OrbitControls
         target={[0, 0, 0]}
         maxPolarAngle={Math.PI / 2.2}
@@ -86,10 +85,9 @@ function BenchSurface() {
 
     const point = e.point;
     // Y offset so equipment sits ON the bench (top at Y=0.05), not inside it
-    const yOffset: Record<string, number> = { beaker: 0.20, erlenmeyer: 0.14, "test-tube": 0.20 };
     const position: [number, number, number] = [
       Math.round(point.x * 10) / 10,
-      yOffset[placingEquipment] ?? 0.20,
+      EQUIPMENT_Y_OFFSETS[placingEquipment] ?? 0.20,
       Math.round(point.z * 10) / 10,
     ];
 
