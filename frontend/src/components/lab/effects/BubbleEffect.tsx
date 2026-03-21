@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -15,14 +15,15 @@ export default function BubbleEffect({ position, rate = "moderate" }: BubbleEffe
   const dummy = useRef<THREE.Object3D>(new THREE.Object3D());
   const positions = useRef<Float32Array | undefined>(undefined);
 
-  if (!positions.current) {
+  useLayoutEffect(() => {
     positions.current = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       positions.current[i * 3] = (Math.random() - 0.5) * 0.08;
       positions.current[i * 3 + 1] = Math.random() * 0.25;
       positions.current[i * 3 + 2] = (Math.random() - 0.5) * 0.08;
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useFrame((_, delta) => {
     if (!meshRef.current || !positions.current) return;

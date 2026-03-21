@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -15,7 +15,7 @@ export default function SteamEffect({ position }: SteamEffectProps) {
   // Each particle: x, y, z, age (0–1)
   const particles = useRef<Float32Array | undefined>(undefined);
 
-  if (!particles.current) {
+  useLayoutEffect(() => {
     particles.current = new Float32Array(PARTICLE_COUNT * 4);
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       particles.current[i * 4] = (Math.random() - 0.5) * 0.12;
@@ -23,7 +23,7 @@ export default function SteamEffect({ position }: SteamEffectProps) {
       particles.current[i * 4 + 2] = (Math.random() - 0.5) * 0.12;
       particles.current[i * 4 + 3] = Math.random(); // age
     }
-  }
+  }, []);
 
   useFrame((_, delta) => {
     if (!meshRef.current || !particles.current) return;

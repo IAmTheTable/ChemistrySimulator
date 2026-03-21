@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -11,7 +11,10 @@ export default function FlameEffect({ position, color = "#ff6600" }: FlameEffect
   const meshRef = useRef<THREE.Mesh>(null);
   const innerRef = useRef<THREE.Mesh>(null);
   const lightRef = useRef<THREE.PointLight>(null);
-  const timeRef = useRef(Math.random() * Math.PI * 2); // random phase offset
+  const timeRef = useRef(0); // random phase offset, seeded in useLayoutEffect
+  useLayoutEffect(() => {
+    timeRef.current = Math.random() * Math.PI * 2;
+  }, []);
 
   useFrame((_, delta) => {
     timeRef.current += delta * 8;
