@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import StationTabs from "./components/ui/StationTabs";
 import EnvironmentBar from "./components/ui/EnvironmentBar";
@@ -10,11 +11,24 @@ import SimulationToggle from "./components/ui/SimulationToggle";
 import ReactionLog from "./components/ui/ReactionLog";
 import ContainerContextMenu from "./components/ui/ContainerContextMenu";
 import StructurePanel from "./components/ui/StructurePanel";
+import ResizeHandle from "./components/ui/ResizeHandle";
 import { useLabStore } from "./stores/labStore";
 
 export default function App() {
   const activeRightTab = useLabStore((s) => s.activeRightTab);
   const setActiveRightTab = useLabStore((s) => s.setActiveRightTab);
+
+  const [leftWidth, setLeftWidth] = useState(192);
+  const [rightWidth, setRightWidth] = useState(288);
+
+  const handleLeftResize = useCallback((delta: number) => {
+    setLeftWidth((w) => Math.max(120, Math.min(400, w + delta)));
+  }, []);
+
+  const handleRightResize = useCallback((delta: number) => {
+    setRightWidth((w) => Math.max(200, Math.min(500, w + delta)));
+  }, []);
+
   return (
     <div className="h-screen w-screen bg-gray-950 text-white flex flex-col overflow-hidden">
       {/* Station tabs */}
@@ -23,7 +37,7 @@ export default function App() {
       {/* Main content area */}
       <div className="flex-1 flex min-h-0">
         {/* Left panel: equipment palette + substance inventory + simulation toggle */}
-        <div className="w-48 bg-gray-900 border-r border-gray-800 p-3 overflow-y-auto space-y-4">
+        <div style={{ width: leftWidth }} className="bg-gray-900 border-r border-gray-800 p-3 overflow-y-auto space-y-4 flex-shrink-0">
           <EquipmentPalette />
           <div className="border-t border-gray-800 pt-3">
             <SubstanceInventory />
@@ -33,13 +47,17 @@ export default function App() {
           </div>
         </div>
 
+        <ResizeHandle side="left" onResize={handleLeftResize} />
+
         {/* Center: 3D lab scene */}
         <div className="flex-1 bg-gray-950">
           <LabScene />
         </div>
 
+        <ResizeHandle side="right" onResize={handleRightResize} />
+
         {/* Right panel: tabbed Inspector | Reactions */}
-        <div className="w-72 bg-gray-900 border-l border-gray-800 overflow-hidden">
+        <div style={{ width: rightWidth }} className="bg-gray-900 border-l border-gray-800 overflow-hidden flex-shrink-0">
           <Tabs.Root value={activeRightTab} onValueChange={setActiveRightTab} className="flex flex-col h-full">
             <Tabs.List className="flex border-b border-gray-800 shrink-0">
               <Tabs.Trigger

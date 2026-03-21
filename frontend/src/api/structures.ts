@@ -1,10 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import type { MoleculeData, OrbitalData } from "../types/structure";
 
-async function fetchCommonStructure(formula: string): Promise<MoleculeData> {
-  const response = await fetch(`/api/structures/common/${encodeURIComponent(formula)}`);
-  if (!response.ok) throw new Error(`No structure for ${formula}`);
-  return response.json();
+async function fetchStructure(formula: string): Promise<MoleculeData> {
+  // Try precomputed cache first
+  const commonResponse = await fetch(`/api/structures/common/${encodeURIComponent(formula)}`);
+  if (commonResponse.ok) return commonResponse.json();
+
+  // Fall back to RDKit generation via formula
+  const genResponse = await fetch("/api/structures/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ input: formula, input_type: "formula" }),
+  });
+  if (genResponse.ok) return genResponse.json();
+
+  throw new Error(`No structure available for ${formula}`);
 }
 
 async function fetchOrbitals(atomicNumber: number): Promise<OrbitalData> {
@@ -26,7 +36,7 @@ export async function generateStructure(input: string, inputType: string = "smil
 export function useCommonStructure(formula: string | null) {
   return useQuery({
     queryKey: ["structure", formula],
-    queryFn: () => fetchCommonStructure(formula!),
+    queryFn: () => fetchStructure(formula!),
     enabled: formula !== null,
     staleTime: Infinity,
   });
