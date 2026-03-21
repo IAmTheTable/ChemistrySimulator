@@ -1,0 +1,16 @@
+{
+  "always_soluble_cations": ["Na", "K", "NH4", "Li"],
+  "always_soluble_anions": ["NO3", "ClO4", "CH3COO"],
+  "soluble_with_exceptions": {
+    "Cl": {"insoluble_with": ["Ag", "Pb", "Hg"]},
+    "Br": {"insoluble_with": ["Ag", "Pb", "Hg"]},
+    "I": {"insoluble_with": ["Ag", "Pb", "Hg"]},
+    "SO4": {"insoluble_with": ["Ba", "Pb", "Ca", "Sr"]}
+  },
+  "generally_insoluble": {
+    "OH": {"soluble_with": ["Na", "K", "Ba", "Ca"]},
+    "S": {"soluble_with": ["Na", "K", "NH4"]},
+    "CO3": {"soluble_with": ["Na", "K", "NH4"]},
+    "PO4": {"soluble_with": ["Na", "K", "NH4"]}
+  }
+}

@@ -1,0 +1,650 @@
+[
+  {
+    "reactants": ["HCl", "NaOH"],
+    "products": ["NaCl", "H2O"],
+    "equation": "HCl + NaOH -> NaCl + H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -57.1,
+    "products_detail": [
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": ["bubble_gentle"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["H2SO4", "NaOH"],
+    "products": ["Na2SO4", "H2O"],
+    "equation": "H2SO4 + 2NaOH -> Na2SO4 + 2H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -114.2,
+    "products_detail": [
+      {"formula": "Na2SO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": ["bubble_gentle"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["HCl", "NaHCO3"],
+    "products": ["NaCl", "H2O", "CO2"],
+    "equation": "HCl + NaHCO3 -> NaCl + H2O + CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -25.8,
+    "products_detail": [
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "CO2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing"],
+      "sounds": ["fizz_vigorous"],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["CH3COOH", "NaOH"],
+    "products": ["CH3COONa", "H2O"],
+    "equation": "CH3COOH + NaOH -> CH3COONa + H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -56.1,
+    "products_detail": [
+      {"formula": "CH3COONa", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": ["bubble_gentle"],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Na", "H2O"],
+    "products": ["NaOH", "H2"],
+    "equation": "2Na + 2H2O -> 2NaOH + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -184.0,
+    "products_detail": [
+      {"formula": "NaOH", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "H2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["sparks"],
+      "sounds": ["fizz_vigorous", "sizzle"],
+      "safety": ["flammable_gas", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["Zn", "HCl"],
+    "products": ["ZnCl2", "H2"],
+    "equation": "Zn + 2HCl -> ZnCl2 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -153.9,
+    "products_detail": [
+      {"formula": "ZnCl2", "phase": "aq", "color": "#e8e8e8"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#e8e8e8", "speed": "medium"},
+      "gas": {"type": "H2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["Fe", "CuSO4"],
+    "products": ["FeSO4", "Cu"],
+    "equation": "Fe + CuSO4 -> FeSO4 + Cu",
+    "reaction_type": "single_displacement",
+    "delta_h": -157.0,
+    "products_detail": [
+      {"formula": "FeSO4", "phase": "aq", "color": "#c8e6c9"},
+      {"formula": "Cu", "phase": "s", "color": "#b87333"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#4fc3f7", "to": "#c8e6c9", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Cu", "color": "#b87333"},
+      "special": ["color_change"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Mg", "HCl"],
+    "products": ["MgCl2", "H2"],
+    "equation": "Mg + 2HCl -> MgCl2 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -462.0,
+    "products_detail": [
+      {"formula": "MgCl2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "H2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling"],
+      "sounds": ["fizz_vigorous"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["AgNO3", "NaCl"],
+    "products": ["AgCl", "NaNO3"],
+    "equation": "AgNO3 + NaCl -> AgCl + NaNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -65.5,
+    "products_detail": [
+      {"formula": "AgCl", "phase": "s", "color": "#f5f5f5"},
+      {"formula": "NaNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#f5f5f5", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "AgCl", "color": "#f5f5f5"},
+      "special": ["white_precipitate"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Pb(NO3)2", "KI"],
+    "products": ["PbI2", "KNO3"],
+    "equation": "Pb(NO3)2 + 2KI -> PbI2 + 2KNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -98.3,
+    "products_detail": [
+      {"formula": "PbI2", "phase": "s", "color": "#ffd700"},
+      {"formula": "KNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#ffd700", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "PbI2", "color": "#ffd700"},
+      "special": ["yellow_precipitate", "golden_rain"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["BaCl2", "Na2SO4"],
+    "products": ["BaSO4", "NaCl"],
+    "equation": "BaCl2 + Na2SO4 -> BaSO4 + 2NaCl",
+    "reaction_type": "double_displacement",
+    "delta_h": -70.0,
+    "products_detail": [
+      {"formula": "BaSO4", "phase": "s", "color": "#ffffff"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#ffffff", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "BaSO4", "color": "#ffffff"},
+      "special": ["white_precipitate"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["CH4", "O2"],
+    "products": ["CO2", "H2O"],
+    "equation": "CH4 + 2O2 -> CO2 + 2H2O",
+    "reaction_type": "combustion",
+    "delta_h": -890.4,
+    "products_detail": [
+      {"formula": "CO2", "phase": "g", "color": null},
+      {"formula": "H2O", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": null, "to": "#ff6600", "speed": "fast"},
+      "gas": {"type": "CO2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["flame", "blue_flame"],
+      "sounds": ["whoosh", "roar"],
+      "safety": ["flammable_gas", "extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["Mg", "O2"],
+    "products": ["MgO"],
+    "equation": "2Mg + O2 -> 2MgO",
+    "reaction_type": "combustion",
+    "delta_h": -601.6,
+    "products_detail": [
+      {"formula": "MgO", "phase": "s", "color": "#ffffff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#d0d0d0", "to": "#ffffff", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bright_white_light", "flame"],
+      "sounds": ["sizzle"],
+      "safety": ["extreme_heat", "blinding_light"]
+    }
+  },
+  {
+    "reactants": ["C2H5OH", "O2"],
+    "products": ["CO2", "H2O"],
+    "equation": "C2H5OH + 3O2 -> 2CO2 + 3H2O",
+    "reaction_type": "combustion",
+    "delta_h": -1368.0,
+    "products_detail": [
+      {"formula": "CO2", "phase": "g", "color": null},
+      {"formula": "H2O", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": null, "to": "#ff9900", "speed": "fast"},
+      "gas": {"type": "CO2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["flame", "blue_flame"],
+      "sounds": ["whoosh"],
+      "safety": ["flammable", "extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["H2O2"],
+    "products": ["H2O", "O2"],
+    "equation": "2H2O2 -> 2H2O + O2",
+    "reaction_type": "decomposition",
+    "delta_h": -98.2,
+    "products_detail": [
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "O2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": "MnO2"},
+    "effects": {
+      "color": {"from": "#e6f0ff", "to": "#cce5ff", "speed": "fast"},
+      "gas": {"type": "O2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["foam", "rapid_bubbling"],
+      "sounds": ["fizz_vigorous", "whoosh"],
+      "safety": ["oxidizer"]
+    }
+  },
+  {
+    "reactants": ["CaCO3"],
+    "products": ["CaO", "CO2"],
+    "equation": "CaCO3 -> CaO + CO2",
+    "reaction_type": "decomposition",
+    "delta_h": 178.0,
+    "products_detail": [
+      {"formula": "CaO", "phase": "s", "color": "#f5f5f0"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 840, "catalyst": null},
+    "effects": {
+      "color": {"from": "#f5f5f0", "to": "#f0f0e8", "speed": "slow"},
+      "gas": {"type": "CO2", "rate": "slow"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": [],
+      "safety": ["extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["Fe", "S"],
+    "products": ["FeS"],
+    "equation": "Fe + S -> FeS",
+    "reaction_type": "synthesis",
+    "delta_h": -100.0,
+    "products_detail": [
+      {"formula": "FeS", "phase": "s", "color": "#3d3d3d"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#808080", "to": "#3d3d3d", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["glow"],
+      "sounds": ["sizzle"],
+      "safety": ["extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["Na", "Cl2"],
+    "products": ["NaCl"],
+    "equation": "2Na + Cl2 -> 2NaCl",
+    "reaction_type": "synthesis",
+    "delta_h": -411.2,
+    "products_detail": [
+      {"formula": "NaCl", "phase": "s", "color": "#ffffff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#ffffff", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bright_yellow_flame"],
+      "sounds": ["sizzle", "crackle"],
+      "safety": ["toxic_gas", "extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["Zn", "CuSO4"],
+    "products": ["ZnSO4", "Cu"],
+    "equation": "Zn + CuSO4 -> ZnSO4 + Cu",
+    "reaction_type": "redox",
+    "delta_h": -218.7,
+    "products_detail": [
+      {"formula": "ZnSO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "Cu", "phase": "s", "color": "#b87333"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#4fc3f7", "to": "#f0f0f0", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Cu", "color": "#b87333"},
+      "special": ["color_change", "copper_deposit"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["HCl", "KOH"],
+    "products": ["KCl", "H2O"],
+    "equation": "HCl + KOH -> KCl + H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -57.3,
+    "products_detail": [
+      {"formula": "KCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": ["bubble_gentle"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["H2SO4", "KOH"],
+    "products": ["K2SO4", "H2O"],
+    "equation": "H2SO4 + 2KOH -> K2SO4 + 2H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -114.6,
+    "products_detail": [
+      {"formula": "K2SO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": ["bubble_gentle"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["Mg", "H2O"],
+    "products": ["Mg(OH)2", "H2"],
+    "equation": "Mg + 2H2O -> Mg(OH)2 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -353.0,
+    "products_detail": [
+      {"formula": "Mg(OH)2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 100, "catalyst": null},
+    "effects": {
+      "color": {"from": "#cce5ff", "to": "#f0f0f0", "speed": "slow"},
+      "gas": {"type": "H2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["Cu", "AgNO3"],
+    "products": ["Cu(NO3)2", "Ag"],
+    "equation": "Cu + 2AgNO3 -> Cu(NO3)2 + 2Ag",
+    "reaction_type": "single_displacement",
+    "delta_h": -146.4,
+    "products_detail": [
+      {"formula": "Cu(NO3)2", "phase": "aq", "color": "#4fc3f7"},
+      {"formula": "Ag", "phase": "s", "color": "#c0c0c0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#4fc3f7", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Ag", "color": "#c0c0c0"},
+      "special": ["silver_crystals", "color_change"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["H2", "O2"],
+    "products": ["H2O"],
+    "equation": "2H2 + O2 -> 2H2O",
+    "reaction_type": "synthesis",
+    "delta_h": -285.8,
+    "products_detail": [
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": null, "to": "#cce5ff", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["explosion", "flame"],
+      "sounds": ["bang", "whoosh"],
+      "safety": ["explosive", "extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["H2SO4", "NaHCO3"],
+    "products": ["Na2SO4", "H2O", "CO2"],
+    "equation": "H2SO4 + 2NaHCO3 -> Na2SO4 + 2H2O + 2CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -52.0,
+    "products_detail": [
+      {"formula": "Na2SO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "CO2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing", "foam"],
+      "sounds": ["fizz_vigorous"],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["CH3COOH", "NaHCO3"],
+    "products": ["CH3COONa", "H2O", "CO2"],
+    "equation": "CH3COOH + NaHCO3 -> CH3COONa + H2O + CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -24.5,
+    "products_detail": [
+      {"formula": "CH3COONa", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "CO2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing", "foam"],
+      "sounds": ["fizz_vigorous"],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Fe", "O2"],
+    "products": ["Fe2O3"],
+    "equation": "4Fe + 3O2 -> 2Fe2O3",
+    "reaction_type": "synthesis",
+    "delta_h": -824.2,
+    "products_detail": [
+      {"formula": "Fe2O3", "phase": "s", "color": "#8b0000"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#808080", "to": "#8b0000", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["rust_formation"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Zn", "H2SO4"],
+    "products": ["ZnSO4", "H2"],
+    "equation": "Zn + H2SO4 -> ZnSO4 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -158.0,
+    "products_detail": [
+      {"formula": "ZnSO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "H2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["NaOH", "NH3"],
+    "products": ["NaOH", "NH3"],
+    "equation": "NaOH + NH3 -> no reaction",
+    "reaction_type": "no_reaction",
+    "delta_h": 0.0,
+    "products_detail": [],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": null,
+      "gas": null,
+      "heat": null,
+      "precipitate": null,
+      "special": [],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Fe", "HCl"],
+    "products": ["FeCl2", "H2"],
+    "equation": "Fe + 2HCl -> FeCl2 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -87.9,
+    "products_detail": [
+      {"formula": "FeCl2", "phase": "aq", "color": "#c8e6c9"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#c8e6c9", "speed": "slow"},
+      "gas": {"type": "H2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["H2O2", "KMnO4"],
+    "products": ["O2", "MnO2", "KOH", "H2O"],
+    "equation": "3H2O2 + 2KMnO4 -> 3O2 + 2MnO2 + 2KOH + 2H2O",
+    "reaction_type": "redox",
+    "delta_h": -450.0,
+    "products_detail": [
+      {"formula": "O2", "phase": "g", "color": null},
+      {"formula": "MnO2", "phase": "s", "color": "#2d2d2d"},
+      {"formula": "KOH", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#8b008b", "to": "#2d2d2d", "speed": "fast"},
+      "gas": {"type": "O2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": {"formula": "MnO2", "color": "#2d2d2d"},
+      "special": ["color_change", "decolorization", "rapid_bubbling"],
+      "sounds": ["fizz_vigorous"],
+      "safety": ["oxidizer"]
+    }
+  }
+]
