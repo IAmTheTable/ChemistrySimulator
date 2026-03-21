@@ -13,13 +13,9 @@ export default function App() {
 
       {/* Main content area */}
       <div className="flex-1 flex min-h-0">
-        {/* Left panel: will hold periodic table / inventory */}
-        <div className="w-80 bg-gray-900 border-r border-gray-800 p-3 overflow-y-auto">
-          <h2 className="text-sm font-semibold text-gray-400 mb-2">Periodic Table</h2>
-          <PeriodicTable />
-          <div className="mt-4">
-            <EquipmentPalette />
-          </div>
+        {/* Left panel: equipment palette */}
+        <div className="w-48 bg-gray-900 border-r border-gray-800 p-3 overflow-y-auto">
+          <EquipmentPalette />
         </div>
 
         {/* Center: 3D lab scene */}
@@ -34,7 +30,10 @@ export default function App() {
         </div>
       </div>
 
-      {/* Bottom: environment bar */}
+      {/* Bottom: periodic table + environment bar */}
+      <div className="bg-gray-900 border-t border-gray-800 px-4 py-2">
+        <PeriodicTable />
+      </div>
       <EnvironmentBar />
     </div>
   );
