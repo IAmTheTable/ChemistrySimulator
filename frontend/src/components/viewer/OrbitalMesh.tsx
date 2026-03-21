@@ -1,0 +1,186 @@
+import * as THREE from "three";
+import type { OrbitalInfo } from "../../types/structure";
+
+interface OrbitalMeshProps {
+  orbital: OrbitalInfo;
+  position: [number, number, number];
+}
+
+const ORBITAL_BLUE = "#3b82f6";
+const ORBITAL_RED = "#ef4444";
+
+const MATERIAL_PROPS = {
+  transparent: true,
+  opacity: 0.25,
+  depthWrite: false,
+  side: THREE.DoubleSide,
+} as const;
+
+/** s orbital: a single translucent sphere */
+function SOrbital({ radius, position }: { radius: number; position: [number, number, number] }) {
+  return (
+    <mesh position={position}>
+      <sphereGeometry args={[radius * 0.5, 32, 32]} />
+      <meshStandardMaterial color={ORBITAL_BLUE} {...MATERIAL_PROPS} />
+    </mesh>
+  );
+}
+
+/** One lobe of a p orbital */
+function PLobe({
+  pos,
+  radius,
+  color,
+}: {
+  pos: [number, number, number];
+  radius: number;
+  color: string;
+}) {
+  return (
+    <mesh position={pos}>
+      <sphereGeometry args={[radius, 16, 16]} />
+      <meshStandardMaterial color={color} {...MATERIAL_PROPS} />
+    </mesh>
+  );
+}
+
+/** p orbital: dumbbell — two lobes along an axis */
+function POrbital({
+  orbital,
+  position,
+}: {
+  orbital: OrbitalInfo;
+  position: [number, number, number];
+}) {
+  const lobeRadius = orbital.radius * 0.35;
+  const offset = orbital.radius * 0.4;
+
+  // Use the first orientation if available, default to "z"
+  const orientation = orbital.orientations[0] ?? "z";
+
+  const posOffset: [number, number, number] =
+    orientation === "x" ? [offset, 0, 0]
+    : orientation === "y" ? [0, offset, 0]
+    : [0, 0, offset];
+
+  const negOffset: [number, number, number] = [
+    position[0] - posOffset[0],
+    position[1] - posOffset[1],
+    position[2] - posOffset[2],
+  ];
+  const absPos: [number, number, number] = [
+    position[0] + posOffset[0],
+    position[1] + posOffset[1],
+    position[2] + posOffset[2],
+  ];
+
+  return (
+    <group>
+      <PLobe pos={absPos} radius={lobeRadius} color={ORBITAL_BLUE} />
+      <PLobe pos={negOffset} radius={lobeRadius} color={ORBITAL_RED} />
+    </group>
+  );
+}
+
+/** d orbital: 4 lobes in a plane (cloverleaf approximation) */
+function DOrbital({
+  orbital,
+  position,
+}: {
+  orbital: OrbitalInfo;
+  position: [number, number, number];
+}) {
+  const lobeRadius = orbital.radius * 0.3;
+  const offset = orbital.radius * 0.45;
+  const orientation = orbital.orientations[0] ?? "xy";
+
+  // Build 4 lobe positions based on plane
+  let lobeOffsets: [number, number, number][];
+  if (orientation === "xz") {
+    lobeOffsets = [
+      [offset, 0, offset],
+      [-offset, 0, offset],
+      [offset, 0, -offset],
+      [-offset, 0, -offset],
+    ];
+  } else if (orientation === "yz") {
+    lobeOffsets = [
+      [0, offset, offset],
+      [0, -offset, offset],
+      [0, offset, -offset],
+      [0, -offset, -offset],
+    ];
+  } else {
+    // xy plane (default)
+    lobeOffsets = [
+      [offset, offset, 0],
+      [-offset, offset, 0],
+      [offset, -offset, 0],
+      [-offset, -offset, 0],
+    ];
+  }
+
+  const colors = [ORBITAL_BLUE, ORBITAL_RED, ORBITAL_RED, ORBITAL_BLUE];
+
+  return (
+    <group position={position}>
+      {lobeOffsets.map((off, i) => (
+        <mesh key={i} position={off}>
+          <sphereGeometry args={[lobeRadius, 12, 12]} />
+          <meshStandardMaterial color={colors[i]} {...MATERIAL_PROPS} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+/** f orbital: 6 lobes approximation (alternating colors) */
+function FOrbital({
+  orbital,
+  position,
+}: {
+  orbital: OrbitalInfo;
+  position: [number, number, number];
+}) {
+  const lobeRadius = orbital.radius * 0.25;
+  const offset = orbital.radius * 0.45;
+
+  const lobeOffsets: [number, number, number][] = [
+    [offset, 0, 0],
+    [-offset, 0, 0],
+    [0, offset, 0],
+    [0, -offset, 0],
+    [0, 0, offset],
+    [0, 0, -offset],
+  ];
+
+  return (
+    <group position={position}>
+      {lobeOffsets.map((off, i) => (
+        <mesh key={i} position={off}>
+          <sphereGeometry args={[lobeRadius, 12, 12]} />
+          <meshStandardMaterial
+            color={i % 2 === 0 ? ORBITAL_BLUE : ORBITAL_RED}
+            {...MATERIAL_PROPS}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+export default function OrbitalMesh({ orbital, position }: OrbitalMeshProps) {
+  switch (orbital.shape) {
+    case "s":
+      return <SOrbital radius={orbital.radius} position={position} />;
+    case "p":
+      return <POrbital orbital={orbital} position={position} />;
+    case "d":
+      return <DOrbital orbital={orbital} position={position} />;
+    case "f":
+      return <FOrbital orbital={orbital} position={position} />;
+    default:
+      // Fallback: render as s orbital
+      return <SOrbital radius={orbital.radius} position={position} />;
+  }
+}
