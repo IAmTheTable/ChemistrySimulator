@@ -1,14 +1,77 @@
 import { useLabStore } from "../../stores/labStore";
 import { useCommonStructure, useOrbitals } from "../../api/structures";
+import { useCharges, useEnergy, useGeometryByFormula } from "../../api/quantum";
+import type { BondLengthInfo, BondAngleInfo } from "../../api/quantum";
 import MoleculeViewer from "../viewer/MoleculeViewer";
 
+/** Show unique bond lengths (deduplicate by atom pair type) */
+function BondLengthsTable({ lengths }: { lengths: BondLengthInfo[] }) {
+  const seen = new Set<string>();
+  const unique: BondLengthInfo[] = [];
+  for (const bl of lengths) {
+    const key = [bl.atom1_symbol, bl.atom2_symbol].sort().join("-");
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(bl);
+    }
+  }
+  if (unique.length === 0) return null;
+
+  return (
+    <div>
+      <div className="text-[10px] font-semibold text-gray-400 mb-0.5">Bond Lengths</div>
+      <div className="space-y-px">
+        {unique.map((bl, i) => (
+          <div key={i} className="flex justify-between text-[10px] text-gray-500 font-mono">
+            <span>{bl.atom1_symbol}-{bl.atom2_symbol}</span>
+            <span>{bl.length_angstrom.toFixed(3)} A</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Show unique bond angles (deduplicate by atom triple type) */
+function BondAnglesTable({ angles }: { angles: BondAngleInfo[] }) {
+  const heavyAngles = angles.filter((a) => !a.atoms.startsWith("H-") || a.atoms.split("-")[1] !== "H");
+  const seen = new Set<string>();
+  const unique: BondAngleInfo[] = [];
+  for (const ba of heavyAngles) {
+    const key = ba.atoms;
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(ba);
+    }
+  }
+  if (unique.length === 0) return null;
+
+  return (
+    <div>
+      <div className="text-[10px] font-semibold text-gray-400 mb-0.5">Bond Angles</div>
+      <div className="space-y-px">
+        {unique.slice(0, 6).map((ba, i) => (
+          <div key={i} className="flex justify-between text-[10px] text-gray-500 font-mono">
+            <span>{ba.atoms}</span>
+            <span>{ba.angle_degrees.toFixed(1)} deg</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function StructurePanel() {
-  const { formula, atomicNumber, mode, showLabels } = useLabStore((s) => s.structureViewer);
+  const { formula, atomicNumber, mode, showLabels, showCharges } = useLabStore((s) => s.structureViewer);
   const setStructureMode = useLabStore((s) => s.setStructureMode);
   const toggleStructureLabels = useLabStore((s) => s.toggleStructureLabels);
+  const toggleStructureCharges = useLabStore((s) => s.toggleStructureCharges);
 
   const { data: molecule } = useCommonStructure(formula);
   const { data: orbitalData } = useOrbitals(atomicNumber);
+  const { data: chargesData } = useCharges(showCharges ? formula : null);
+  const { data: energyData } = useEnergy(formula);
+  const { data: geometryData } = useGeometryByFormula(formula);
 
   const modes = [
     { id: "ball-and-stick", label: "Ball & Stick" },
@@ -64,11 +127,31 @@ export default function StructurePanel() {
         ))}
       </div>
 
-      {/* Labels toggle */}
-      <label className="flex items-center gap-1.5 text-xs text-gray-400 mb-2 cursor-pointer">
-        <input type="checkbox" checked={showLabels} onChange={toggleStructureLabels} className="accent-blue-500" />
-        Show labels
-      </label>
+      {/* Options toggles */}
+      <div className="flex gap-3 mb-2">
+        <label className="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer">
+          <input type="checkbox" checked={showLabels} onChange={toggleStructureLabels} className="accent-blue-500" />
+          Labels
+        </label>
+        {formula && (
+          <label className="flex items-center gap-1.5 text-xs text-gray-400 cursor-pointer">
+            <input type="checkbox" checked={showCharges} onChange={toggleStructureCharges} className="accent-blue-500" />
+            Charges
+          </label>
+        )}
+      </div>
+
+      {/* Charge color legend */}
+      {showCharges && chargesData && (
+        <div className="flex items-center gap-2 mb-2 text-[10px] text-gray-500">
+          <span className="inline-block w-3 h-3 rounded-sm" style={{ background: "#ff6666" }} />
+          <span>Negative</span>
+          <span className="inline-block w-3 h-3 rounded-sm" style={{ background: "#ffffff" }} />
+          <span>Neutral</span>
+          <span className="inline-block w-3 h-3 rounded-sm" style={{ background: "#6666ff" }} />
+          <span>Positive</span>
+        </div>
+      )}
 
       {/* 3D Viewer */}
       <div className="flex-1 min-h-[200px] bg-gray-950 rounded overflow-hidden">
@@ -77,17 +160,51 @@ export default function StructurePanel() {
           orbitalData={orbitalData ?? null}
           mode={mode}
           showLabels={showLabels}
+          chargeAtoms={showCharges ? chargesData?.atoms ?? null : null}
         />
       </div>
 
-      {/* Properties */}
-      {molecule?.properties && (
-        <div className="mt-2 text-xs text-gray-500 space-y-0.5">
-          {molecule.properties.molecular_weight != null && (
-            <div>MW: {String(molecule.properties.molecular_weight as string | number)} g/mol</div>
-          )}
-        </div>
-      )}
+      {/* Properties & Geometry Info */}
+      <div className="mt-2 text-xs text-gray-500 space-y-1.5">
+        {molecule?.properties?.molecular_weight != null && (
+          <div>MW: {String(molecule.properties.molecular_weight as string | number)} g/mol</div>
+        )}
+        {energyData && (
+          <div className="font-mono text-[10px]">
+            Energy: {energyData.energy.toFixed(2)} {energyData.unit} ({energyData.method})
+          </div>
+        )}
+
+        {/* Geometry info */}
+        {geometryData && (
+          <>
+            <div className="text-[10px] font-mono">
+              Geometry: <span className="text-gray-300 capitalize">{geometryData.geometry}</span>
+            </div>
+            <BondLengthsTable lengths={geometryData.bond_lengths} />
+            <BondAnglesTable angles={geometryData.bond_angles} />
+          </>
+        )}
+
+        {/* Charge details when active */}
+        {showCharges && chargesData && (
+          <div>
+            <div className="text-[10px] font-semibold text-gray-400 mb-0.5">Partial Charges</div>
+            <div className="space-y-px">
+              {chargesData.atoms
+                .filter((a) => a.symbol !== "H")
+                .map((a) => (
+                  <div key={a.index} className="flex justify-between text-[10px] font-mono">
+                    <span>{a.symbol}({a.index})</span>
+                    <span className={a.partial_charge < 0 ? "text-red-400" : "text-blue-400"}>
+                      {a.partial_charge > 0 ? "+" : ""}{a.partial_charge.toFixed(4)}
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

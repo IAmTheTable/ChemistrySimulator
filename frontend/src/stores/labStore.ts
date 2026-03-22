@@ -33,7 +33,7 @@ export interface ContextMenuState {
   y: number;
 }
 
-const STRUCTURE_VIEWER_DEFAULTS = { formula: null, atomicNumber: null, mode: "ball-and-stick" as const, showLabels: false };
+const STRUCTURE_VIEWER_DEFAULTS = { formula: null, atomicNumber: null, mode: "ball-and-stick" as const, showLabels: false, showCharges: false };
 
 const STARTER_ITEMS: BenchItem[] = [
   { id: "beaker-1", type: "beaker", position: [-0.6, 0.20, 0.3], contents: [], temperature: 25, activeEffects: [] },
@@ -64,6 +64,7 @@ interface LabState {
     atomicNumber: number | null;
     mode: "ball-and-stick" | "space-filling" | "wireframe" | "orbital";
     showLabels: boolean;
+    showCharges: boolean;
   };
   activeRightTab: string;
 
@@ -88,6 +89,7 @@ interface LabState {
   openOrbitalViewer: (atomicNumber: number) => void;
   setStructureMode: (mode: "ball-and-stick" | "space-filling" | "wireframe" | "orbital") => void;
   toggleStructureLabels: () => void;
+  toggleStructureCharges: () => void;
   closeStructureViewer: () => void;
   setActiveRightTab: (tab: string) => void;
 }
@@ -172,6 +174,7 @@ export const useLabStore = create<LabState>()((set) => ({
   openOrbitalViewer: (atomicNumber) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, atomicNumber, mode: "orbital" }, activeRightTab: "structure" }),
   setStructureMode: (mode) => set((state) => ({ structureViewer: { ...state.structureViewer, mode } })),
   toggleStructureLabels: () => set((state) => ({ structureViewer: { ...state.structureViewer, showLabels: !state.structureViewer.showLabels } })),
+  toggleStructureCharges: () => set((state) => ({ structureViewer: { ...state.structureViewer, showCharges: !state.structureViewer.showCharges } })),
   closeStructureViewer: () => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS } }),
   setActiveRightTab: (tab) => set({ activeRightTab: tab }),
   combineContainers: async (sourceId: string, targetId: string) => {

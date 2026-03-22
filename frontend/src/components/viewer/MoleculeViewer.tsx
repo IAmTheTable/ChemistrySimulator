@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { MoleculeData, OrbitalData } from "../../types/structure";
+import type { ChargeAtom } from "../../api/quantum";
 import AtomSphere from "./AtomSphere";
 import BondCylinder from "./BondCylinder";
 import MoleculeLabels from "./MoleculeLabels";
@@ -12,6 +13,7 @@ interface MoleculeViewerProps {
   orbitalData?: OrbitalData | null;
   mode: string;
   showLabels: boolean;
+  chargeAtoms?: ChargeAtom[] | null;
 }
 
 export default function MoleculeViewer({
@@ -19,6 +21,7 @@ export default function MoleculeViewer({
   orbitalData,
   mode,
   showLabels,
+  chargeAtoms,
 }: MoleculeViewerProps) {
   const { centeredAtoms, cameraZ } = useMemo(() => {
     if (!molecule) return { centeredAtoms: [], cameraZ: 5 };
@@ -29,6 +32,14 @@ export default function MoleculeViewer({
     const maxDist = Math.max(...centered.map((a) => Math.sqrt(a.x ** 2 + a.y ** 2 + a.z ** 2)), 0.01);
     return { centeredAtoms: centered, cameraZ: Math.max(maxDist * 2.5, 5) };
   }, [molecule]);
+
+  // Build a charge map by atom index
+  const chargeMap = useMemo(() => {
+    if (!chargeAtoms) return null;
+    const map = new Map<number, number>();
+    chargeAtoms.forEach((ca) => map.set(ca.index, ca.partial_charge));
+    return map;
+  }, [chargeAtoms]);
 
   if (!molecule) return null;
 
@@ -42,10 +53,15 @@ export default function MoleculeViewer({
 
       {/* Atoms */}
       {centeredAtoms.map((atom) => (
-        <AtomSphere key={atom.index} atom={atom} mode={mode} />
+        <AtomSphere
+          key={atom.index}
+          atom={atom}
+          mode={mode}
+          charge={chargeMap?.get(atom.index) ?? null}
+        />
       ))}
 
-      {/* Bonds — hidden in space-filling mode */}
+      {/* Bonds -- hidden in space-filling mode */}
       {mode !== "space-filling" &&
         molecule.bonds.map((bond, i) => (
           <BondCylinder
@@ -60,7 +76,7 @@ export default function MoleculeViewer({
       {/* Atom symbol labels */}
       <MoleculeLabels atoms={centeredAtoms} visible={showLabels} />
 
-      {/* Bohr model — nucleus + shell rings + orbiting electrons */}
+      {/* Bohr model -- nucleus + shell rings + orbiting electrons */}
       {mode === "orbital" && orbitalData && (
         <BohrModel orbitalData={orbitalData} position={[0, 0, 0]} />
       )}
