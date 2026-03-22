@@ -158,5 +158,245 @@
     "color": "#e8e8e8",
     "molar_mass": 331.21,
     "hazard_class": "toxic"
+  },
+  {
+    "formula": "KCl",
+    "name": "Potassium Chloride",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 74.55,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "CaCl2",
+    "name": "Calcium Chloride",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 110.98,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "Na2CO3",
+    "name": "Sodium Carbonate",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 105.99,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "FeCl3",
+    "name": "Iron(III) Chloride",
+    "phase": "s",
+    "color": "#b8860b",
+    "molar_mass": 162.20,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "CuSO4",
+    "name": "Copper(II) Sulfate",
+    "phase": "s",
+    "color": "#4fc3f7",
+    "molar_mass": 159.61,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "Al",
+    "name": "Aluminum",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 26.98,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "Li",
+    "name": "Lithium",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 6.94,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "K",
+    "name": "Potassium",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 39.10,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "Ca",
+    "name": "Calcium",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 40.08,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "S",
+    "name": "Sulfur",
+    "phase": "s",
+    "color": "#ffff00",
+    "molar_mass": 32.07,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "P",
+    "name": "Phosphorus",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 30.97,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "NH4Cl",
+    "name": "Ammonium Chloride",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 53.49,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "KClO3",
+    "name": "Potassium Chlorate",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 122.55,
+    "hazard_class": "oxidizer"
+  },
+  {
+    "formula": "NH4NO3",
+    "name": "Ammonium Nitrate",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 80.04,
+    "hazard_class": "oxidizer"
+  },
+  {
+    "formula": "C3H8",
+    "name": "Propane",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 44.10,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C6H12O6",
+    "name": "Glucose",
+    "phase": "s",
+    "color": "#f5f5dc",
+    "molar_mass": 180.16,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "C2H2",
+    "name": "Acetylene",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 26.04,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "Na2S",
+    "name": "Sodium Sulfide",
+    "phase": "s",
+    "color": "#fffdd0",
+    "molar_mass": 78.04,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "H2CO3",
+    "name": "Carbonic Acid",
+    "phase": "aq",
+    "color": "#e0e0e0",
+    "molar_mass": 62.03,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "H3PO4",
+    "name": "Phosphoric Acid",
+    "phase": "aq",
+    "color": "#e0e0e0",
+    "molar_mass": 98.00,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "Fe2O3",
+    "name": "Iron(III) Oxide",
+    "phase": "s",
+    "color": "#8b0000",
+    "molar_mass": 159.69,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Al2O3",
+    "name": "Aluminum Oxide",
+    "phase": "s",
+    "color": "#f0f0f0",
+    "molar_mass": 101.96,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "SO2",
+    "name": "Sulfur Dioxide",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 64.07,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "HNO3",
+    "name": "Nitric Acid",
+    "phase": "aq",
+    "color": "#e0e0e0",
+    "molar_mass": 63.01,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "BaCl2",
+    "name": "Barium Chloride",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 208.23,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "Sn",
+    "name": "Tin",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 118.71,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Ni",
+    "name": "Nickel",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 58.69,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "CuO",
+    "name": "Copper(II) Oxide",
+    "phase": "s",
+    "color": "#2d2d2d",
+    "molar_mass": 79.55,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "MgO",
+    "name": "Magnesium Oxide",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 40.30,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Ca(OH)2",
+    "name": "Calcium Hydroxide",
+    "phase": "s",
+    "color": "#f0f0f0",
+    "molar_mass": 74.09,
+    "hazard_class": "corrosive"
   }
 ]
