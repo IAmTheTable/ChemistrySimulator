@@ -1,9 +1,13 @@
-import StationShell from "./StationShell";
+import { Html } from "@react-three/drei";
+import StationShell, { LABEL_STYLE } from "./StationShell";
 
 export default function ThermalAnalysis() {
   return (
     <StationShell wallColor="#2e2820">
       {/* ── Calorimeter ── */}
+      <Html position={[-0.8, 0.7, 0.2]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Bomb Calorimeter</span>
+      </Html>
       {/* Outer cylinder */}
       <mesh position={[-0.8, 0.25, 0.2]} castShadow>
         <cylinderGeometry args={[0.2, 0.2, 0.42, 20]} />
@@ -36,6 +40,9 @@ export default function ThermalAnalysis() {
       </mesh>
 
       {/* ── Ice bath (shallow box) ── */}
+      <Html position={[0.5, 0.32, 0.3]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Ice Bath</span>
+      </Html>
       {/* Outer container */}
       <mesh position={[0.5, 0.1, 0.3]} castShadow>
         <boxGeometry args={[0.65, 0.18, 0.55]} />
@@ -76,6 +83,9 @@ export default function ThermalAnalysis() {
       </mesh>
 
       {/* ── Bunsen burner / hot plate ── */}
+      <Html position={[1.3, 0.38, 0.0]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Hot Plate</span>
+      </Html>
       {/* Hot plate body */}
       <mesh position={[1.3, 0.1, 0.0]} castShadow>
         <boxGeometry args={[0.35, 0.14, 0.32]} />
@@ -115,6 +125,9 @@ export default function ThermalAnalysis() {
       </mesh>
 
       {/* ── Thermometer standing in holder ── */}
+      <Html position={[0.0, 0.82, -0.5]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Digital Thermometer</span>
+      </Html>
       {/* Stand */}
       <mesh position={[0.0, 0.35, -0.5]}>
         <cylinderGeometry args={[0.01, 0.01, 0.6, 8]} />

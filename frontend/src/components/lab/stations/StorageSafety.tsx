@@ -1,9 +1,13 @@
-import StationShell from "./StationShell";
+import { Html } from "@react-three/drei";
+import StationShell, { LABEL_STYLE } from "./StationShell";
 
 export default function StorageSafety() {
   return (
     <StationShell wallColor="#2a2820" showShelf={false}>
       {/* ── Chemical storage cabinet ── */}
+      <Html position={[-1.55, 1.02, -0.85]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Chemical Storage Cabinet</span>
+      </Html>
       {/* Cabinet body */}
       <mesh position={[-1.55, 0.5, -0.85]} castShadow>
         <boxGeometry args={[0.55, 0.9, 0.4]} />
@@ -39,6 +43,9 @@ export default function StorageSafety() {
       </mesh>
 
       {/* ── Safety shower ── */}
+      <Html position={[1.5, 1.72, -1.0]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Emergency Shower</span>
+      </Html>
       {/* Vertical pipe */}
       <mesh position={[1.5, 0.85, -1.0]} castShadow>
         <cylinderGeometry args={[0.025, 0.025, 1.55, 10]} />
@@ -65,6 +72,9 @@ export default function StorageSafety() {
       </mesh>
 
       {/* ── Eye wash station ── */}
+      <Html position={[0.85, 0.62, -1.0]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Eye Wash Station</span>
+      </Html>
       {/* Pedestal */}
       <mesh position={[0.85, 0.2, -1.0]} castShadow>
         <cylinderGeometry args={[0.06, 0.08, 0.35, 12]} />
@@ -92,6 +102,9 @@ export default function StorageSafety() {
       </mesh>
 
       {/* ── Fire extinguisher ── */}
+      <Html position={[-0.3, 0.78, -1.15]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Fire Extinguisher</span>
+      </Html>
       {/* Body (red cylinder) */}
       <mesh position={[-0.3, 0.28, -1.15]} castShadow>
         <cylinderGeometry args={[0.065, 0.07, 0.5, 14]} />
@@ -114,6 +127,9 @@ export default function StorageSafety() {
       </mesh>
 
       {/* ── Waste containers ── */}
+      <Html position={[0.5, 0.48, 0.8]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Chemical Waste</span>
+      </Html>
       {/* Red sharps bin */}
       <mesh position={[0.2, 0.18, 0.8]} castShadow>
         <cylinderGeometry args={[0.1, 0.1, 0.32, 14]} />
@@ -143,6 +159,9 @@ export default function StorageSafety() {
       </mesh>
 
       {/* ── SDS reference terminal ── */}
+      <Html position={[-0.5, 0.68, 0.7]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>SDS Reference Terminal</span>
+      </Html>
       {/* Terminal body */}
       <mesh position={[-0.5, 0.3, 0.7]} castShadow>
         <boxGeometry args={[0.3, 0.5, 0.22]} />

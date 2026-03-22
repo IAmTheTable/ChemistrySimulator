@@ -1,4 +1,5 @@
-import StationShell from "./StationShell";
+import { Html } from "@react-three/drei";
+import StationShell, { LABEL_STYLE } from "./StationShell";
 
 export default function InstrumentRoom() {
   return (
@@ -20,6 +21,9 @@ export default function InstrumentRoom() {
         <boxGeometry args={[0.7, 0.4, 0.5]} />
         <meshStandardMaterial color="#252a3d" roughness={0.4} metalness={0.4} />
       </mesh>
+      <Html position={[-1.4, 0.56, -0.95]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Mass Spec</span>
+      </Html>
       {/* Screen on instrument 1 */}
       <mesh position={[-1.4, 0.35, -0.69]}>
         <boxGeometry args={[0.4, 0.2, 0.01]} />
@@ -50,6 +54,9 @@ export default function InstrumentRoom() {
         <boxGeometry args={[0.55, 0.28, 0.45]} />
         <meshStandardMaterial color="#1e2840" roughness={0.5} metalness={0.3} />
       </mesh>
+      <Html position={[-0.4, 0.44, -0.97]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>HPLC</span>
+      </Html>
       {/* Screen */}
       <mesh position={[-0.4, 0.28, -0.74]}>
         <boxGeometry args={[0.28, 0.14, 0.01]} />
@@ -73,6 +80,9 @@ export default function InstrumentRoom() {
         <boxGeometry args={[0.5, 0.24, 0.42]} />
         <meshStandardMaterial color="#22273d" roughness={0.5} metalness={0.3} />
       </mesh>
+      <Html position={[0.55, 0.42, -0.97]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>UV-Vis Spectrophotometer</span>
+      </Html>
       {/* Lid/sample compartment */}
       <mesh position={[0.55, 0.25, -0.84]}>
         <boxGeometry args={[0.22, 0.06, 0.18]} />
@@ -94,6 +104,9 @@ export default function InstrumentRoom() {
         <boxGeometry args={[0.55, 0.55, 0.5]} />
         <meshStandardMaterial color="#1c2035" roughness={0.45} metalness={0.35} />
       </mesh>
+      <Html position={[1.45, 0.68, -0.93]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>NMR</span>
+      </Html>
       {/* Circular display / port */}
       <mesh position={[1.45, 0.38, -0.675]}>
         <cylinderGeometry args={[0.1, 0.1, 0.015, 24]} />
@@ -117,6 +130,9 @@ export default function InstrumentRoom() {
       ))}
 
       {/* ── Computer workstation ── */}
+      <Html position={[0.05, 0.72, 0.6]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Data Workstation</span>
+      </Html>
       {/* Monitor stand */}
       <mesh position={[0.05, 0.2, 0.6]} castShadow>
         <boxGeometry args={[0.06, 0.35, 0.06]} />

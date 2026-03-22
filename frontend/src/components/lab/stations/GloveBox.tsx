@@ -1,9 +1,13 @@
-import StationShell from "./StationShell";
+import { Html } from "@react-three/drei";
+import StationShell, { LABEL_STYLE } from "./StationShell";
 
 export default function GloveBox() {
   return (
     <StationShell wallColor="#303035" showShelf={false}>
       {/* ── Main glove box body — frame ── */}
+      <Html position={[0, 1.12, -0.4]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Inert Atmosphere Glove Box</span>
+      </Html>
       {/* Bottom panel */}
       <mesh position={[0, 0.06, -0.4]} castShadow>
         <boxGeometry args={[2.2, 0.06, 1.1]} />
@@ -44,6 +48,9 @@ export default function GloveBox() {
       </mesh>
 
       {/* ── Glove ports (torus shapes) ── */}
+      <Html position={[0, 0.7, 0.14]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Glove Ports</span>
+      </Html>
       <mesh position={[-0.42, 0.48, 0.14]} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[0.13, 0.025, 12, 32]} />
         <meshStandardMaterial color="#1a1a1a" roughness={0.6} />
@@ -90,6 +97,9 @@ export default function GloveBox() {
       ))}
 
       {/* ── Airlock chamber — smaller box on right side ── */}
+      <Html position={[1.52, 0.98, -0.4]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Airlock</span>
+      </Html>
       {/* Airlock body */}
       <mesh position={[1.52, 0.51, -0.4]} castShadow>
         <boxGeometry args={[0.45, 0.7, 0.7]} />
@@ -112,6 +122,9 @@ export default function GloveBox() {
       </mesh>
 
       {/* ── Gas line connections at top ── */}
+      <Html position={[0, 1.3, -0.4]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>N₂/Ar Gas Lines</span>
+      </Html>
       {/* Argon line pipe */}
       <mesh position={[-0.6, 1.02, -0.4]}>
         <cylinderGeometry args={[0.018, 0.018, 0.25, 8]} />

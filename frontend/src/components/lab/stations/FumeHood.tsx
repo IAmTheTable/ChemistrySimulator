@@ -1,4 +1,5 @@
-import StationShell from "./StationShell";
+import { Html } from "@react-three/drei";
+import StationShell, { LABEL_STYLE } from "./StationShell";
 
 export default function FumeHood() {
   return (
@@ -8,6 +9,9 @@ export default function FumeHood() {
         <boxGeometry args={[3.2, 0.06, 1.4]} />
         <meshStandardMaterial color="#4a4a55" roughness={0.7} metalness={0.3} />
       </mesh>
+      <Html position={[0, 1.65, -0.6]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Fume Hood</span>
+      </Html>
 
       {/* Hood left wall */}
       <mesh position={[-1.6, 0.95, -0.6]} castShadow>
@@ -33,6 +37,9 @@ export default function FumeHood() {
           transmission={0.8}
         />
       </mesh>
+      <Html position={[0, 1.32, 0.1]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Sash (adjustable)</span>
+      </Html>
 
       {/* Sash frame top bar */}
       <mesh position={[0, 1.27, 0.1]} castShadow>
@@ -55,6 +62,9 @@ export default function FumeHood() {
       ))}
 
       {/* Distillation flask (round bottom) */}
+      <Html position={[-0.1, 0.72, -0.75]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Distillation Setup</span>
+      </Html>
       <mesh position={[-0.5, 0.22, -0.75]} castShadow>
         <sphereGeometry args={[0.12, 16, 16]} />
         <meshPhysicalMaterial

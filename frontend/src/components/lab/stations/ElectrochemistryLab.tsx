@@ -1,9 +1,13 @@
-import StationShell from "./StationShell";
+import { Html } from "@react-three/drei";
+import StationShell, { LABEL_STYLE } from "./StationShell";
 
 export default function ElectrochemistryLab() {
   return (
     <StationShell wallColor="#2a3028">
       {/* ── Electrolysis cell (central) ── */}
+      <Html position={[0, 0.5, 0]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Electrolysis Cell</span>
+      </Html>
       {/* Cell body — transparent box */}
       <mesh position={[0, 0.2, 0]}>
         <boxGeometry args={[0.55, 0.32, 0.35]} />
@@ -49,6 +53,9 @@ export default function ElectrochemistryLab() {
       ))}
 
       {/* ── Power supply box ── */}
+      <Html position={[1.1, 0.5, 0.3]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>DC Power Supply</span>
+      </Html>
       <mesh position={[1.1, 0.18, 0.3]} castShadow>
         <boxGeometry args={[0.38, 0.28, 0.28]} />
         <meshStandardMaterial color="#2a2a2a" roughness={0.5} metalness={0.4} />
@@ -93,6 +100,9 @@ export default function ElectrochemistryLab() {
       </mesh>
 
       {/* ── pH meter ── */}
+      <Html position={[-1.0, 0.58, 0.4]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>pH Meter</span>
+      </Html>
       {/* Body */}
       <mesh position={[-1.0, 0.2, 0.4]} castShadow>
         <boxGeometry args={[0.22, 0.3, 0.14]} />
@@ -115,6 +125,9 @@ export default function ElectrochemistryLab() {
       </mesh>
 
       {/* ── Burette on clamp stand ── */}
+      <Html position={[-1.3, 0.95, -0.3]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Burette</span>
+      </Html>
       {/* Stand vertical rod */}
       <mesh position={[-1.55, 0.5, -0.3]} castShadow>
         <cylinderGeometry args={[0.012, 0.012, 0.9, 8]} />

@@ -1,3 +1,15 @@
+import React from "react";
+
+export const LABEL_STYLE: React.CSSProperties = {
+  color: "#d1d5db",
+  fontSize: "8px",
+  whiteSpace: "nowrap",
+  background: "rgba(0,0,0,0.6)",
+  padding: "1px 5px",
+  borderRadius: "3px",
+  pointerEvents: "none",
+};
+
 export default function StationShell({
   children,
   wallColor = "#3f3f46",
