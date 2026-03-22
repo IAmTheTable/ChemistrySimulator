@@ -38,7 +38,6 @@ export default function App() {
           <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <Tabs.List className="flex border-b border-gray-800 shrink-0">
               <Tabs.Trigger value="lab" className={TAB_CLASS}>Lab</Tabs.Trigger>
-              <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
               <Tabs.Trigger value="reactions" className={TAB_CLASS}>Reactions</Tabs.Trigger>
               <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
               <Tabs.Trigger value="spectra" className={TAB_CLASS}>Spectra</Tabs.Trigger>
@@ -52,10 +51,6 @@ export default function App() {
               <div className="border-t border-gray-800 pt-3">
                 <SimulationToggle />
               </div>
-            </Tabs.Content>
-
-            <Tabs.Content value="inspector" className="flex-1 p-3 overflow-y-auto">
-              <ElementInspector />
             </Tabs.Content>
 
             <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
@@ -80,7 +75,12 @@ export default function App() {
         </div>
       </div>
 
-      {/* Bottom: periodic table + environment bar */}
+      {/* Element/Container Inspector — horizontal strip between lab and periodic table */}
+      <div className="bg-gray-900 border-t border-gray-800 px-4 py-2 max-h-48 overflow-y-auto">
+        <ElementInspector />
+      </div>
+
+      {/* Periodic table */}
       <div className="bg-gray-900 border-t border-gray-800 px-4 py-2 flex justify-center">
         <div className="max-w-3xl w-full">
           <PeriodicTable />
