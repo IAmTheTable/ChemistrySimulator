@@ -3,6 +3,12 @@ import type { ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Grid, Environment } from "@react-three/drei";
 import { useLabStore } from "../../stores/labStore";
 import MainBench from "./stations/MainBench";
+import FumeHood from "./stations/FumeHood";
+import InstrumentRoom from "./stations/InstrumentRoom";
+import ElectrochemistryLab from "./stations/ElectrochemistryLab";
+import GloveBox from "./stations/GloveBox";
+import ThermalAnalysis from "./stations/ThermalAnalysis";
+import StorageSafety from "./stations/StorageSafety";
 import { EQUIPMENT_Y_OFFSETS } from "./equipment/equipmentUtils";
 
 export default function LabScene() {
@@ -128,6 +134,18 @@ function StationContent() {
   switch (activeStation) {
     case "main-bench":
       return <MainBench />;
+    case "fume-hood":
+      return <FumeHood />;
+    case "instrument-room":
+      return <InstrumentRoom />;
+    case "electrochemistry":
+      return <ElectrochemistryLab />;
+    case "glove-box":
+      return <GloveBox />;
+    case "thermal-analysis":
+      return <ThermalAnalysis />;
+    case "storage-safety":
+      return <StorageSafety />;
     default:
       return null;
   }
