@@ -3,6 +3,15 @@ import re
 from pathlib import Path
 
 from app.engine.equation_balancer import parse_formula
+from app.engine.constants import (
+    ACID_BASE,
+    SINGLE_DISPLACEMENT,
+    DOUBLE_DISPLACEMENT,
+    PRECIPITATION,
+    COMBUSTION,
+    DECOMPOSITION,
+    SYNTHESIS,
+)
 
 _DATA_DIR = Path(__file__).parent.parent / "data"
 _ACTIVITY_SERIES_PATH = _DATA_DIR / "activity_series.json"
@@ -253,9 +262,7 @@ class ReactionPredictor:
         _, anion = _KNOWN_ACIDS[acid]
         salt = _make_salt_formula(metal, anion)
         products = [salt, "H2"]
-        return self._result(
-            "single_displacement", reactants, products
-        )
+        return self._result(SINGLE_DISPLACEMENT, reactants, products)
 
     def _try_acid_base(self, reactants: list[str]) -> dict | None:
         """Acid + Base -> salt + H2O (neutralization)."""
@@ -273,7 +280,7 @@ class ReactionPredictor:
         base_cation, _ = _KNOWN_SALTS[base]
         salt = _make_salt_formula(base_cation, acid_anion)
         products = [salt, "H2O"]
-        return self._result("acid_base", reactants, products)
+        return self._result(ACID_BASE, reactants, products)
 
     def _try_acid_carbonate(self, reactants: list[str]) -> dict | None:
         """Acid + Carbonate -> salt + CO2 + H2O."""
@@ -291,7 +298,7 @@ class ReactionPredictor:
         carb_cation, _ = _KNOWN_SALTS[carbonate]
         salt = _make_salt_formula(carb_cation, acid_anion)
         products = [salt, "CO2", "H2O"]
-        return self._result("acid_base", reactants, products)
+        return self._result(ACID_BASE, reactants, products)
 
     def _try_precipitation(self, reactants: list[str]) -> dict | None:
         """Two ionic compounds -> check for insoluble product."""
@@ -331,7 +338,7 @@ class ReactionPredictor:
             return None
 
         products = precipitate_products + soluble_products
-        return self._result("precipitation", reactants, products)
+        return self._result(PRECIPITATION, reactants, products)
 
     def _try_metal_salt_displacement(self, reactants: list[str]) -> dict | None:
         """Metal + Salt solution -> displacement if metal is more reactive."""
@@ -352,7 +359,7 @@ class ReactionPredictor:
 
         new_salt = _make_salt_formula(metal, salt_anion)
         products = [new_salt, salt_cation]
-        return self._result("single_displacement", reactants, products)
+        return self._result(SINGLE_DISPLACEMENT, reactants, products)
 
     def _try_combustion(self, reactants: list[str]) -> dict | None:
         """Organic compound + O2 -> CO2 + H2O (combustion).
@@ -371,7 +378,7 @@ class ReactionPredictor:
             return None
 
         products = ["CO2", "H2O"]
-        return self._result("combustion", reactants, products)
+        return self._result(COMBUSTION, reactants, products)
 
     # ------------------------------------------------------------------
     # NEW: Synthesis (combination) reactions
@@ -405,7 +412,7 @@ class ReactionPredictor:
         if product is None:
             return None
 
-        return self._result("synthesis", reactants, [product])
+        return self._result(SYNTHESIS, reactants, [product])
 
     @staticmethod
     def _element_from_formula(formula: str) -> str | None:
@@ -467,7 +474,7 @@ class ReactionPredictor:
             _KNOWN_SALTS[hydroxide] = (metal, "OH")
 
         products = [hydroxide, "H2"]
-        return self._result("single_displacement", reactants, products)
+        return self._result(SINGLE_DISPLACEMENT, reactants, products)
 
     # ------------------------------------------------------------------
     # NEW: Oxide + water
@@ -497,12 +504,12 @@ class ReactionPredictor:
                 hydroxide = f"{metal}(OH){charge}"
             if hydroxide not in _KNOWN_SALTS:
                 _KNOWN_SALTS[hydroxide] = (metal, "OH")
-            return self._result("synthesis", [oxide, "H2O"], [hydroxide])
+            return self._result(SYNTHESIS, [oxide, "H2O"], [hydroxide])
 
         # Nonmetal oxide + water -> acid
         if oxide in _NONMETAL_OXIDE_ACIDS:
             acid = _NONMETAL_OXIDE_ACIDS[oxide]
-            return self._result("synthesis", [oxide, "H2O"], [acid])
+            return self._result(SYNTHESIS, [oxide, "H2O"], [acid])
 
         return None
 
@@ -539,7 +546,7 @@ class ReactionPredictor:
             return None
 
         products = [prod1, prod2]
-        rtype = "precipitation" if has_precipitate else "double_displacement"
+        rtype = PRECIPITATION if has_precipitate else DOUBLE_DISPLACEMENT
         return self._result(rtype, reactants, products)
 
     # ------------------------------------------------------------------
@@ -562,7 +569,7 @@ class ReactionPredictor:
         _, acid_anion = _KNOWN_ACIDS[acid]
         salt = _make_salt_formula(metal, acid_anion)
         products = [salt, "H2O"]
-        return self._result("acid_base", reactants, products)
+        return self._result(ACID_BASE, reactants, products)
 
     def _try_thermal_decomposition(
         self, reactants: list[str], conditions: dict | None = None
@@ -589,12 +596,12 @@ class ReactionPredictor:
             cation, _ = _KNOWN_SALTS[compound]
             oxide = f"{cation}O" if cation != "Ca" else "CaO"
             products = [oxide, "CO2"]
-            return self._result("decomposition", reactants, products)
+            return self._result(DECOMPOSITION, reactants, products)
 
         # H2O2 decomposition
         if compound == "H2O2":
             products = ["H2O", "O2"]
-            return self._result("decomposition", reactants, products)
+            return self._result(DECOMPOSITION, reactants, products)
 
         return None
 

@@ -7,6 +7,7 @@ rendering.
 
 from __future__ import annotations
 
+from app.engine.constants import COMBUSTION, GAS, MIXTURE, SOLID, AQUEOUS
 from app.models.reaction import ReactionEffects
 
 
@@ -38,7 +39,7 @@ class EffectsMapper:
         if curated_effects is not None:
             return self._from_curated(curated_effects)
 
-        if reaction_type == "mixture":
+        if reaction_type == MIXTURE:
             return self._mixture_effects()
 
         return self._derive(reaction_type, delta_h, products)
@@ -80,7 +81,7 @@ class EffectsMapper:
         # --- Gas detection -------------------------------------------
         gas: dict | None = None
         for p in products:
-            if p.get("phase") == "g":
+            if p.get("phase") == GAS:
                 formula = p.get("formula", "")
                 abs_dh = abs(delta_h) if delta_h is not None else 0
                 if abs_dh > 100:
@@ -95,8 +96,8 @@ class EffectsMapper:
         # --- Precipitate detection ------------------------------------
         precipitate: dict | None = None
         phases = [p.get("phase") for p in products]
-        has_solid = "s" in phases
-        has_aqueous = "aq" in phases
+        has_solid = SOLID in phases
+        has_aqueous = AQUEOUS in phases
         if has_solid and has_aqueous:
             precipitate = {"color": "#ffffff", "speed": "moderate"}
 
@@ -113,7 +114,7 @@ class EffectsMapper:
                 heat = "endothermic"
 
         # --- Combustion special effect --------------------------------
-        if reaction_type == "combustion":
+        if reaction_type == COMBUSTION:
             special.append("flame")
 
         # --- Safety warnings -----------------------------------------

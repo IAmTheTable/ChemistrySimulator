@@ -15,6 +15,15 @@ import SpectraPanel from "./components/ui/SpectraPanel";
 import ResizeHandle from "./components/ui/ResizeHandle";
 import { useLabStore } from "./stores/labStore";
 
+const LAYOUT = {
+  SIDEBAR_DEFAULT: 280,
+  SIDEBAR_MIN: 200,
+  BOTTOM_DEFAULT: 160,
+  BOTTOM_MIN: 80,
+  MIN_LAB_WIDTH: 300,
+  MIN_TOP_HEIGHT: 150,
+} as const;
+
 const TAB_CLASS =
   "flex-1 px-2 py-1.5 text-[10px] font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors";
 
@@ -22,27 +31,24 @@ export default function App() {
   const activeTab = useLabStore((s) => s.activeRightTab);
   const setActiveTab = useLabStore((s) => s.setActiveRightTab);
 
-  const [sidebarWidth, setSidebarWidth] = useState(280);
-  const [bottomHeight, setBottomHeight] = useState(160);
+  const [sidebarWidth, setSidebarWidth] = useState<number>(LAYOUT.SIDEBAR_DEFAULT);
+  const [bottomHeight, setBottomHeight] = useState<number>(LAYOUT.BOTTOM_DEFAULT);
 
   const handleSidebarResize = useCallback((delta: number) => {
-    setSidebarWidth((w) => Math.max(200, Math.min(window.innerWidth - 300, w + delta)));
+    setSidebarWidth((w) => Math.max(LAYOUT.SIDEBAR_MIN, Math.min(window.innerWidth - LAYOUT.MIN_LAB_WIDTH, w + delta)));
   }, []);
 
   const handleBottomResize = useCallback((delta: number) => {
-    setBottomHeight((h) => Math.max(80, Math.min(window.innerHeight - 150, h - delta)));
+    setBottomHeight((h) => Math.max(LAYOUT.BOTTOM_MIN, Math.min(window.innerHeight - LAYOUT.MIN_TOP_HEIGHT, h - delta)));
   }, []);
 
   return (
     <div className="h-screen w-screen bg-gray-950 text-white flex flex-col overflow-hidden">
       <StationTabs />
 
-      {/* Body: left sidebar spans full height, right side splits lab + periodic table */}
       <div className="flex-1 flex min-h-0">
 
-        {/* Left sidebar — full height, split top/bottom */}
         <div style={{ width: sidebarWidth }} className="bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0 overflow-hidden">
-          {/* Top half: Lab / Reactions / Spectra */}
           <div className="flex-1 flex flex-col min-h-0 border-b border-gray-800">
             <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
               <Tabs.List className="flex border-b border-gray-800 shrink-0">
@@ -64,7 +70,6 @@ export default function App() {
             </Tabs.Root>
           </div>
 
-          {/* Bottom half: Inspector / Structure */}
           <div className="flex-1 flex flex-col min-h-0">
             <Tabs.Root defaultValue="inspector" className="flex flex-col h-full">
               <Tabs.List className="flex border-b border-gray-800 shrink-0">
@@ -83,17 +88,13 @@ export default function App() {
 
         <ResizeHandle direction="vertical" onResize={handleSidebarResize} />
 
-        {/* Right side: 3D lab on top, periodic table on bottom */}
         <div className="flex-1 flex flex-col min-h-0">
-          {/* 3D lab scene */}
           <div className="flex-1 bg-gray-950 min-h-0 overflow-hidden">
             <LabScene />
           </div>
 
-          {/* Horizontal resize handle */}
           <ResizeHandle direction="horizontal" onResize={handleBottomResize} />
 
-          {/* Periodic table */}
           <div style={{ height: bottomHeight }} className="bg-gray-900 border-t border-gray-800 px-4 py-2 overflow-y-auto flex justify-center flex-shrink-0">
             <div className="max-w-4xl w-full">
               <PeriodicTable />

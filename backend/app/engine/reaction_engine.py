@@ -12,6 +12,7 @@ from app.engine.equation_balancer import balance_equation
 from app.engine.thermodynamics import ThermodynamicsCalculator
 from app.engine.effects_mapper import EffectsMapper
 from app.engine.nomenclature import name_compound
+from app.engine.constants import MIXTURE, NO_REACTION, AQUEOUS, GAS
 from app.models.reaction import ReactionResult, ReactionEffects
 
 
@@ -131,13 +132,13 @@ class ReactionEngine:
 
         # Build products detail for effects mapper (minimal info)
         products_detail = [
-            {"formula": f, "name": name_compound(f), "phase": "aq"}
+            {"formula": f, "name": name_compound(f), "phase": AQUEOUS}
             for f in product_formulas
         ]
         # Mark gaseous products
         for p in products_detail:
             if p["formula"] in ("H2", "O2", "CO2", "Cl2", "N2", "SO2", "NH3"):
-                p["phase"] = "g"
+                p["phase"] = GAS
 
         # Map effects (no curated effects for predicted reactions)
         effects = self._effects_mapper.map_effects(
@@ -174,11 +175,11 @@ class ReactionEngine:
             + " -> mixture (no chemical change observed)"
         )
         products_detail = [
-            {"formula": f, "name": name_compound(f), "phase": "aq"}
+            {"formula": f, "name": name_compound(f), "phase": AQUEOUS}
             for f in formulas
         ]
         effects = self._effects_mapper.map_effects(
-            reaction_type="mixture",
+            reaction_type=MIXTURE,
             delta_h=None,
             products=products_detail,
             source="predicted",
@@ -186,7 +187,7 @@ class ReactionEngine:
         )
         return ReactionResult(
             equation=equation,
-            reaction_type="mixture",
+            reaction_type=MIXTURE,
             source="predicted",
             reactants=reactants,
             products=products_detail,
@@ -198,8 +199,8 @@ class ReactionEngine:
         """Build a ReactionResult indicating no reaction occurred."""
         return ReactionResult(
             equation="No reaction",
-            reaction_type="none",
-            source="none",
+            reaction_type=NO_REACTION,
+            source=NO_REACTION,
             reactants=reactants,
             products=[],
             effects=ReactionEffects(),
