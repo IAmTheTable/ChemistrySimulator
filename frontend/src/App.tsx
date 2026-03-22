@@ -45,7 +45,6 @@ export default function App() {
             <Tabs.List className="flex border-b border-gray-800 shrink-0">
               <Tabs.Trigger value="lab" className={TAB_CLASS}>Lab</Tabs.Trigger>
               <Tabs.Trigger value="reactions" className={TAB_CLASS}>Reactions</Tabs.Trigger>
-              <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
               <Tabs.Trigger value="spectra" className={TAB_CLASS}>Spectra</Tabs.Trigger>
             </Tabs.List>
 
@@ -61,10 +60,6 @@ export default function App() {
 
             <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
               <ReactionLog />
-            </Tabs.Content>
-
-            <Tabs.Content value="structure" className="flex-1 p-3 flex flex-col min-h-0">
-              <StructurePanel />
             </Tabs.Content>
 
             <Tabs.Content value="spectra" className="flex-1 p-3 overflow-y-auto">
@@ -84,11 +79,21 @@ export default function App() {
       {/* Horizontal resize handle */}
       <ResizeHandle direction="horizontal" onResize={handleBottomResize} />
 
-      {/* Bottom: Inspector (left) + Periodic Table (right) — resizable height */}
+      {/* Bottom: Inspector + Structure (left) | Periodic Table (right) */}
       <div style={{ height: bottomHeight }} className="bg-gray-900 flex min-h-0 flex-shrink-0 overflow-hidden">
-        <div className="w-64 border-r border-gray-800 px-3 py-2 overflow-y-auto flex-shrink-0">
-          <h3 className="text-[10px] font-semibold text-gray-500 uppercase mb-1">Inspector</h3>
-          <ElementInspector />
+        <div className="w-72 border-r border-gray-800 flex flex-col flex-shrink-0 overflow-hidden">
+          <Tabs.Root defaultValue="inspector" className="flex flex-col h-full">
+            <Tabs.List className="flex border-b border-gray-800 shrink-0">
+              <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
+              <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="inspector" className="flex-1 px-3 py-2 overflow-y-auto">
+              <ElementInspector />
+            </Tabs.Content>
+            <Tabs.Content value="structure" className="flex-1 px-3 py-2 flex flex-col min-h-0">
+              <StructurePanel />
+            </Tabs.Content>
+          </Tabs.Root>
         </div>
         <div className="flex-1 px-4 py-2 overflow-y-auto flex justify-center">
           <div className="max-w-3xl w-full">
