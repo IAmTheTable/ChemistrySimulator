@@ -37,11 +37,11 @@ export default function App() {
     <div className="h-screen w-screen bg-gray-950 text-white flex flex-col overflow-hidden">
       <StationTabs />
 
-      {/* Main area: left sidebar + 3D lab */}
+      {/* Body: left sidebar spans full height, right side splits lab + periodic table */}
       <div className="flex-1 flex min-h-0">
-        {/* Left sidebar — split top/bottom */}
-        <div style={{ width: sidebarWidth }} className="bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0 overflow-hidden">
 
+        {/* Left sidebar — full height, split top/bottom */}
+        <div style={{ width: sidebarWidth }} className="bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0 overflow-hidden">
           {/* Top half: Lab / Reactions / Spectra */}
           <div className="flex-1 flex flex-col min-h-0 border-b border-gray-800">
             <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
@@ -50,21 +50,14 @@ export default function App() {
                 <Tabs.Trigger value="reactions" className={TAB_CLASS}>Reactions</Tabs.Trigger>
                 <Tabs.Trigger value="spectra" className={TAB_CLASS}>Spectra</Tabs.Trigger>
               </Tabs.List>
-
               <Tabs.Content value="lab" className="flex-1 p-3 overflow-y-auto space-y-4">
                 <EquipmentPalette />
-                <div className="border-t border-gray-800 pt-3">
-                  <SubstanceInventory />
-                </div>
-                <div className="border-t border-gray-800 pt-3">
-                  <SimulationToggle />
-                </div>
+                <div className="border-t border-gray-800 pt-3"><SubstanceInventory /></div>
+                <div className="border-t border-gray-800 pt-3"><SimulationToggle /></div>
               </Tabs.Content>
-
               <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
                 <ReactionLog />
               </Tabs.Content>
-
               <Tabs.Content value="spectra" className="flex-1 p-3 overflow-y-auto">
                 <SpectraPanel />
               </Tabs.Content>
@@ -78,11 +71,9 @@ export default function App() {
                 <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
                 <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
               </Tabs.List>
-
               <Tabs.Content value="inspector" className="flex-1 px-3 py-2 overflow-y-auto">
                 <ElementInspector />
               </Tabs.Content>
-
               <Tabs.Content value="structure" className="flex-1 px-3 py-2 flex flex-col min-h-0">
                 <StructurePanel />
               </Tabs.Content>
@@ -92,19 +83,22 @@ export default function App() {
 
         <ResizeHandle direction="vertical" onResize={handleSidebarResize} />
 
-        {/* 3D lab scene */}
-        <div className="flex-1 bg-gray-950">
-          <LabScene />
-        </div>
-      </div>
+        {/* Right side: 3D lab on top, periodic table on bottom */}
+        <div className="flex-1 flex flex-col min-h-0">
+          {/* 3D lab scene */}
+          <div className="flex-1 bg-gray-950">
+            <LabScene />
+          </div>
 
-      {/* Horizontal resize handle */}
-      <ResizeHandle direction="horizontal" onResize={handleBottomResize} />
+          {/* Horizontal resize handle */}
+          <ResizeHandle direction="horizontal" onResize={handleBottomResize} />
 
-      {/* Periodic table — full width */}
-      <div style={{ height: bottomHeight }} className="bg-gray-900 px-4 py-2 overflow-y-auto flex justify-center flex-shrink-0">
-        <div className="max-w-4xl w-full">
-          <PeriodicTable />
+          {/* Periodic table */}
+          <div style={{ height: bottomHeight }} className="bg-gray-900 border-t border-gray-800 px-4 py-2 overflow-y-auto flex justify-center flex-shrink-0">
+            <div className="max-w-4xl w-full">
+              <PeriodicTable />
+            </div>
+          </div>
         </div>
       </div>
 
