@@ -23,54 +23,76 @@ export default function App() {
   const setActiveTab = useLabStore((s) => s.setActiveRightTab);
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
-  const [bottomHeight, setBottomHeight] = useState(180);
+  const [bottomHeight, setBottomHeight] = useState(160);
 
   const handleSidebarResize = useCallback((delta: number) => {
     setSidebarWidth((w) => Math.max(200, Math.min(window.innerWidth - 300, w + delta)));
   }, []);
 
   const handleBottomResize = useCallback((delta: number) => {
-    setBottomHeight((h) => Math.max(100, Math.min(window.innerHeight - 200, h - delta)));
+    setBottomHeight((h) => Math.max(80, Math.min(400, h - delta)));
   }, []);
 
   return (
     <div className="h-screen w-screen bg-gray-950 text-white flex flex-col overflow-hidden">
       <StationTabs />
 
-      {/* Main area: sidebar + lab */}
+      {/* Main area: left sidebar + 3D lab */}
       <div className="flex-1 flex min-h-0">
-        {/* Left sidebar */}
+        {/* Left sidebar — split top/bottom */}
         <div style={{ width: sidebarWidth }} className="bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0 overflow-hidden">
-          <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
-            <Tabs.List className="flex border-b border-gray-800 shrink-0">
-              <Tabs.Trigger value="lab" className={TAB_CLASS}>Lab</Tabs.Trigger>
-              <Tabs.Trigger value="reactions" className={TAB_CLASS}>Reactions</Tabs.Trigger>
-              <Tabs.Trigger value="spectra" className={TAB_CLASS}>Spectra</Tabs.Trigger>
-            </Tabs.List>
 
-            <Tabs.Content value="lab" className="flex-1 p-3 overflow-y-auto space-y-4">
-              <EquipmentPalette />
-              <div className="border-t border-gray-800 pt-3">
-                <SubstanceInventory />
-              </div>
-              <div className="border-t border-gray-800 pt-3">
-                <SimulationToggle />
-              </div>
-            </Tabs.Content>
+          {/* Top half: Lab / Reactions / Spectra */}
+          <div className="flex-1 flex flex-col min-h-0 border-b border-gray-800">
+            <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
+              <Tabs.List className="flex border-b border-gray-800 shrink-0">
+                <Tabs.Trigger value="lab" className={TAB_CLASS}>Lab</Tabs.Trigger>
+                <Tabs.Trigger value="reactions" className={TAB_CLASS}>Reactions</Tabs.Trigger>
+                <Tabs.Trigger value="spectra" className={TAB_CLASS}>Spectra</Tabs.Trigger>
+              </Tabs.List>
 
-            <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
-              <ReactionLog />
-            </Tabs.Content>
+              <Tabs.Content value="lab" className="flex-1 p-3 overflow-y-auto space-y-4">
+                <EquipmentPalette />
+                <div className="border-t border-gray-800 pt-3">
+                  <SubstanceInventory />
+                </div>
+                <div className="border-t border-gray-800 pt-3">
+                  <SimulationToggle />
+                </div>
+              </Tabs.Content>
 
-            <Tabs.Content value="spectra" className="flex-1 p-3 overflow-y-auto">
-              <SpectraPanel />
-            </Tabs.Content>
-          </Tabs.Root>
+              <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
+                <ReactionLog />
+              </Tabs.Content>
+
+              <Tabs.Content value="spectra" className="flex-1 p-3 overflow-y-auto">
+                <SpectraPanel />
+              </Tabs.Content>
+            </Tabs.Root>
+          </div>
+
+          {/* Bottom half: Inspector / Structure */}
+          <div className="flex-1 flex flex-col min-h-0">
+            <Tabs.Root defaultValue="inspector" className="flex flex-col h-full">
+              <Tabs.List className="flex border-b border-gray-800 shrink-0">
+                <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
+                <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
+              </Tabs.List>
+
+              <Tabs.Content value="inspector" className="flex-1 px-3 py-2 overflow-y-auto">
+                <ElementInspector />
+              </Tabs.Content>
+
+              <Tabs.Content value="structure" className="flex-1 px-3 py-2 flex flex-col min-h-0">
+                <StructurePanel />
+              </Tabs.Content>
+            </Tabs.Root>
+          </div>
         </div>
 
         <ResizeHandle direction="vertical" onResize={handleSidebarResize} />
 
-        {/* Center: lab scene */}
+        {/* 3D lab scene */}
         <div className="flex-1 bg-gray-950">
           <LabScene />
         </div>
@@ -79,26 +101,10 @@ export default function App() {
       {/* Horizontal resize handle */}
       <ResizeHandle direction="horizontal" onResize={handleBottomResize} />
 
-      {/* Bottom: Inspector + Structure (left) | Periodic Table (right) */}
-      <div style={{ height: bottomHeight }} className="bg-gray-900 flex min-h-0 flex-shrink-0 overflow-hidden">
-        <div className="w-72 border-r border-gray-800 flex flex-col flex-shrink-0 overflow-hidden">
-          <Tabs.Root defaultValue="inspector" className="flex flex-col h-full">
-            <Tabs.List className="flex border-b border-gray-800 shrink-0">
-              <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
-              <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
-            </Tabs.List>
-            <Tabs.Content value="inspector" className="flex-1 px-3 py-2 overflow-y-auto">
-              <ElementInspector />
-            </Tabs.Content>
-            <Tabs.Content value="structure" className="flex-1 px-3 py-2 flex flex-col min-h-0">
-              <StructurePanel />
-            </Tabs.Content>
-          </Tabs.Root>
-        </div>
-        <div className="flex-1 px-4 py-2 overflow-y-auto flex justify-center">
-          <div className="max-w-3xl w-full">
-            <PeriodicTable />
-          </div>
+      {/* Periodic table — full width */}
+      <div style={{ height: bottomHeight }} className="bg-gray-900 px-4 py-2 overflow-y-auto flex justify-center flex-shrink-0">
+        <div className="max-w-4xl w-full">
+          <PeriodicTable />
         </div>
       </div>
 
