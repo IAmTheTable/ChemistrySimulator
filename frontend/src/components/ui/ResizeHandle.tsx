@@ -51,8 +51,8 @@ export default function ResizeHandle({ direction, onResize }: ResizeHandleProps)
   }
 
   return (
-    <div onMouseDown={onMouseDown} className="h-2 cursor-row-resize flex-shrink-0 relative group z-10">
-      <div className="absolute inset-x-0 -top-2 -bottom-2 group-hover:bg-blue-500/20 active:bg-blue-500/40 transition-colors" />
+    <div onMouseDown={onMouseDown} className="h-3 cursor-row-resize flex-shrink-0 relative group z-20">
+      <div className="absolute inset-x-0 -top-3 -bottom-3 group-hover:bg-blue-500/20 active:bg-blue-500/40 transition-colors" />
       <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-700 group-hover:bg-blue-500 transition-colors" />
     </div>
   );
