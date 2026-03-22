@@ -16,7 +16,6 @@ export default function ContainerContextMenu() {
   const removeBenchItem = useLabStore((s) => s.removeBenchItem);
   const updateBenchItemContents = useLabStore((s) => s.updateBenchItemContents);
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
-  const setActiveRightTab = useLabStore((s) => s.setActiveRightTab);
   const startPouring = useLabStore((s) => s.startPouring);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -45,7 +44,6 @@ export default function ContainerContextMenu() {
 
   const handleInspect = () => {
     selectBenchItem(itemId);
-    setActiveRightTab("inspector");
     closeContextMenu();
   };
 

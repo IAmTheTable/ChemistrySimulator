@@ -108,7 +108,7 @@ export const useLabStore = create<LabState>()((set) => ({
     atmosphere: "air",
   },
   structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS },
-  activeRightTab: "inspector",
+  activeRightTab: "reactions",
 
   selectElement: (atomicNumber) => set({ selectedElement: atomicNumber }),
   setStation: (station) => set({ activeStation: station }),

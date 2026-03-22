@@ -51,6 +51,10 @@ export default function App() {
           <div className="border-t border-gray-800 pt-3">
             <SimulationToggle />
           </div>
+          <div className="border-t border-gray-800 pt-3">
+            <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">Inspector</h3>
+            <ElementInspector />
+          </div>
         </div>
 
         <ResizeHandle side="left" onResize={handleLeftResize} />
@@ -67,12 +71,6 @@ export default function App() {
           <Tabs.Root value={activeRightTab} onValueChange={setActiveRightTab} className="flex flex-col h-full">
             <Tabs.List className="flex border-b border-gray-800 shrink-0">
               <Tabs.Trigger
-                value="inspector"
-                className="flex-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors"
-              >
-                Inspector
-              </Tabs.Trigger>
-              <Tabs.Trigger
                 value="reactions"
                 className="flex-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors"
               >
@@ -85,10 +83,6 @@ export default function App() {
                 Structure
               </Tabs.Trigger>
             </Tabs.List>
-
-            <Tabs.Content value="inspector" className="flex-1 p-3 overflow-y-auto">
-              <ElementInspector />
-            </Tabs.Content>
 
             <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
               <h2 className="text-sm font-semibold text-gray-400 mb-1">Reaction Log</h2>
