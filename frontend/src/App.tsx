@@ -75,15 +75,15 @@ export default function App() {
         </div>
       </div>
 
-      {/* Element/Container Inspector — horizontal strip between lab and periodic table */}
-      <div className="bg-gray-900 border-t border-gray-800 px-4 py-2 max-h-48 overflow-y-auto">
-        <ElementInspector />
-      </div>
-
-      {/* Periodic table */}
-      <div className="bg-gray-900 border-t border-gray-800 px-4 py-2 flex justify-center">
-        <div className="max-w-3xl w-full">
-          <PeriodicTable />
+      {/* Bottom: Periodic table (left) + Inspector (right) side by side */}
+      <div className="bg-gray-900 border-t border-gray-800 flex min-h-0">
+        <div className="flex-1 px-4 py-2 flex justify-center">
+          <div className="max-w-3xl w-full">
+            <PeriodicTable />
+          </div>
+        </div>
+        <div className="w-72 border-l border-gray-800 px-3 py-2 overflow-y-auto flex-shrink-0">
+          <ElementInspector />
         </div>
       </div>
       <EnvironmentBar />
