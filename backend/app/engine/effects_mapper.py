@@ -38,11 +38,21 @@ class EffectsMapper:
         if curated_effects is not None:
             return self._from_curated(curated_effects)
 
+        if reaction_type == "mixture":
+            return self._mixture_effects()
+
         return self._derive(reaction_type, delta_h, products)
 
     # ------------------------------------------------------------------
     # Private helpers
     # ------------------------------------------------------------------
+
+    @staticmethod
+    def _mixture_effects() -> ReactionEffects:
+        """Return minimal effects for a mixture (no chemical change)."""
+        return ReactionEffects(
+            sounds=["pour"],
+        )
 
     def _from_curated(self, curated: dict) -> ReactionEffects:
         """Build a ReactionEffects directly from a curated effects dict."""

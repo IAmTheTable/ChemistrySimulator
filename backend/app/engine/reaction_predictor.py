@@ -2,9 +2,67 @@ import json
 import re
 from pathlib import Path
 
+from app.engine.equation_balancer import parse_formula
+
 _DATA_DIR = Path(__file__).parent.parent / "data"
 _ACTIVITY_SERIES_PATH = _DATA_DIR / "activity_series.json"
 _SOLUBILITY_RULES_PATH = _DATA_DIR / "solubility_rules.json"
+
+# Common nonmetals (elemental form symbols)
+_NONMETAL_ELEMENTS: set[str] = {
+    "H", "He", "C", "N", "O", "F", "Ne", "P", "S", "Cl", "Ar",
+    "Se", "Br", "Kr", "I", "Xe", "At", "Rn",
+}
+
+# Diatomic nonmetal formulas (the molecular form)
+_DIATOMIC: dict[str, str] = {
+    "H": "H2", "N": "N2", "O": "O2", "F": "F2",
+    "Cl": "Cl2", "Br": "Br2", "I": "I2",
+}
+
+# Common oxidation states for metals (used to build binary formulas)
+_METAL_CHARGES: dict[str, int] = {
+    "Li": 1, "Na": 1, "K": 1, "Rb": 1, "Cs": 1,
+    "Be": 2, "Mg": 2, "Ca": 2, "Sr": 2, "Ba": 2,
+    "Al": 3, "Zn": 2, "Fe": 2, "Cu": 2, "Ag": 1,
+    "Sn": 2, "Pb": 2, "Cr": 3, "Co": 2, "Ni": 2,
+    "Mn": 2, "Hg": 2, "Pt": 4, "Au": 3,
+}
+
+# Common oxidation states for nonmetals in binary compounds
+_NONMETAL_CHARGES: dict[str, int] = {
+    "F": -1, "Cl": -1, "Br": -1, "I": -1,
+    "O": -2, "S": -2, "Se": -2,
+    "N": -3, "P": -3,
+}
+
+# Alkali metals
+_ALKALI_METALS: set[str] = {"Li", "Na", "K", "Rb", "Cs"}
+
+# Alkaline earth metals
+_ALKALINE_EARTH_METALS: set[str] = {"Be", "Mg", "Ca", "Sr", "Ba"}
+
+# Metal oxides: formula -> metal cation
+_METAL_OXIDES: dict[str, str] = {
+    "Li2O": "Li", "Na2O": "Na", "K2O": "K",
+    "MgO": "Mg", "CaO": "Ca", "BaO": "Ba", "SrO": "Sr",
+    "Al2O3": "Al", "Fe2O3": "Fe", "FeO": "Fe",
+    "CuO": "Cu", "Cu2O": "Cu", "ZnO": "Zn",
+    "PbO": "Pb", "SnO": "Sn", "Cr2O3": "Cr",
+    "MnO": "Mn", "MnO2": "Mn", "NiO": "Ni",
+}
+
+# Nonmetal oxides -> acid produced with water
+_NONMETAL_OXIDE_ACIDS: dict[str, str] = {
+    "CO2": "H2CO3",
+    "SO2": "H2SO3",
+    "SO3": "H2SO4",
+    "N2O5": "HNO3",
+    "N2O3": "HNO2",
+    "P2O5": "H3PO4",
+    "P4O10": "H3PO4",
+    "Cl2O7": "HClO4",
+}
 
 # Known acid decompositions into (cation, anion)
 _KNOWN_ACIDS: dict[str, tuple[str, str]] = {
@@ -297,7 +355,10 @@ class ReactionPredictor:
         return self._result("single_displacement", reactants, products)
 
     def _try_combustion(self, reactants: list[str]) -> dict | None:
-        """Organic compound + O2 -> CO2 + H2O (combustion)."""
+        """Organic compound + O2 -> CO2 + H2O (combustion).
+
+        Also handles any compound containing C and H burned in O2.
+        """
         organic = None
         has_o2 = False
         for r in reactants:
@@ -311,6 +372,197 @@ class ReactionPredictor:
 
         products = ["CO2", "H2O"]
         return self._result("combustion", reactants, products)
+
+    # ------------------------------------------------------------------
+    # NEW: Synthesis (combination) reactions
+    # ------------------------------------------------------------------
+
+    def _try_synthesis(self, reactants: list[str]) -> dict | None:
+        """Two elements -> binary compound (e.g., Fe + S -> FeS).
+
+        Handles metal + nonmetal combinations using common oxidation states.
+        """
+        if len(reactants) != 2:
+            return None
+
+        # Identify which is metal and which is nonmetal
+        metal = nonmetal = None
+        for r in reactants:
+            # Strip diatomic form to get the element
+            elem = self._element_from_formula(r)
+            if elem is None:
+                continue
+            if elem in _NONMETAL_ELEMENTS and elem not in ("He", "Ne", "Ar", "Kr", "Xe", "Rn"):
+                nonmetal = elem
+            elif elem not in _NONMETAL_ELEMENTS:
+                metal = elem
+
+        if metal is None or nonmetal is None:
+            return None
+
+        # Build the binary compound formula from charges
+        product = self._binary_formula(metal, nonmetal)
+        if product is None:
+            return None
+
+        return self._result("synthesis", reactants, [product])
+
+    @staticmethod
+    def _element_from_formula(formula: str) -> str | None:
+        """If *formula* is a pure element (e.g., 'Fe', 'O2', 'S8'), return
+        the element symbol. Otherwise return None."""
+        parsed = parse_formula(formula)
+        if len(parsed) == 1:
+            return next(iter(parsed))
+        return None
+
+    @staticmethod
+    def _binary_formula(metal: str, nonmetal: str) -> str | None:
+        """Build a binary ionic compound formula from a metal and nonmetal."""
+        m_charge = _METAL_CHARGES.get(metal)
+        nm_charge = _NONMETAL_CHARGES.get(nonmetal)
+        if m_charge is None or nm_charge is None:
+            return None
+
+        # Cross-reduce charges to get subscripts
+        nm_abs = abs(nm_charge)
+        from math import gcd as _gcd
+        g = _gcd(m_charge, nm_abs)
+        m_sub = nm_abs // g
+        nm_sub = m_charge // g
+
+        m_part = metal if m_sub == 1 else f"{metal}{m_sub}"
+        nm_part = nonmetal if nm_sub == 1 else f"{nonmetal}{nm_sub}"
+        return m_part + nm_part
+
+    # ------------------------------------------------------------------
+    # NEW: Metal + water
+    # ------------------------------------------------------------------
+
+    def _try_metal_water(self, reactants: list[str]) -> dict | None:
+        """Alkali / alkaline-earth metal + H2O -> metal hydroxide + H2."""
+        metal = None
+        has_water = False
+        for r in reactants:
+            if self._is_water(r):
+                has_water = True
+            elif self._is_metal(r):
+                metal = r
+
+        if metal is None or not has_water:
+            return None
+
+        # Only alkali and alkaline earth metals react with water
+        if metal not in _ALKALI_METALS and metal not in _ALKALINE_EARTH_METALS:
+            return None
+
+        charge = _METAL_CHARGES.get(metal, 1)
+        if charge == 1:
+            hydroxide = f"{metal}OH"
+        else:
+            hydroxide = f"{metal}(OH){charge}"
+
+        # Register the hydroxide in _KNOWN_SALTS if not already there
+        if hydroxide not in _KNOWN_SALTS:
+            _KNOWN_SALTS[hydroxide] = (metal, "OH")
+
+        products = [hydroxide, "H2"]
+        return self._result("single_displacement", reactants, products)
+
+    # ------------------------------------------------------------------
+    # NEW: Oxide + water
+    # ------------------------------------------------------------------
+
+    def _try_oxide_water(self, reactants: list[str]) -> dict | None:
+        """Metal oxide + H2O -> metal hydroxide.
+        Nonmetal oxide + H2O -> acid."""
+        oxide = None
+        has_water = False
+        for r in reactants:
+            if self._is_water(r):
+                has_water = True
+            else:
+                oxide = r
+
+        if oxide is None or not has_water:
+            return None
+
+        # Metal oxide + water -> hydroxide
+        if oxide in _METAL_OXIDES:
+            metal = _METAL_OXIDES[oxide]
+            charge = _METAL_CHARGES.get(metal, 2)
+            if charge == 1:
+                hydroxide = f"{metal}OH"
+            else:
+                hydroxide = f"{metal}(OH){charge}"
+            if hydroxide not in _KNOWN_SALTS:
+                _KNOWN_SALTS[hydroxide] = (metal, "OH")
+            return self._result("synthesis", [oxide, "H2O"], [hydroxide])
+
+        # Nonmetal oxide + water -> acid
+        if oxide in _NONMETAL_OXIDE_ACIDS:
+            acid = _NONMETAL_OXIDE_ACIDS[oxide]
+            return self._result("synthesis", [oxide, "H2O"], [acid])
+
+        return None
+
+    # ------------------------------------------------------------------
+    # NEW: Double displacement (general)
+    # ------------------------------------------------------------------
+
+    def _try_double_displacement(self, reactants: list[str]) -> dict | None:
+        """Any two ionic compounds -> swap ions, check if products differ
+        from reactants. A reaction occurs if at least one product is
+        insoluble, a gas, or water."""
+        ions_list: list[tuple[str, str]] = []
+        for r in reactants:
+            ions = self._ions(r)
+            if ions is None:
+                return None
+            ions_list.append(ions)
+
+        if len(ions_list) != 2:
+            return None
+
+        (cat1, an1), (cat2, an2) = ions_list
+
+        # Cross-swap: cat1+an2 and cat2+an1
+        prod1 = _make_salt_formula(cat1, an2)
+        prod2 = _make_salt_formula(cat2, an1)
+
+        # Check driving forces
+        has_precipitate = self._is_insoluble(cat1, an2) or self._is_insoluble(cat2, an1)
+        forms_water = prod1 == "H2O" or prod2 == "H2O" or (cat1 == "H" and an2 == "OH") or (cat2 == "H" and an1 == "OH")
+        forms_gas = prod1 in ("CO2", "SO2", "H2S", "NH3") or prod2 in ("CO2", "SO2", "H2S", "NH3")
+
+        if not has_precipitate and not forms_water and not forms_gas:
+            return None
+
+        products = [prod1, prod2]
+        rtype = "precipitation" if has_precipitate else "double_displacement"
+        return self._result(rtype, reactants, products)
+
+    # ------------------------------------------------------------------
+    # NEW: Acid + metal oxide
+    # ------------------------------------------------------------------
+
+    def _try_acid_metal_oxide(self, reactants: list[str]) -> dict | None:
+        """Acid + metal oxide -> salt + H2O."""
+        acid = oxide = None
+        for r in reactants:
+            if self._is_acid(r):
+                acid = r
+            elif r in _METAL_OXIDES:
+                oxide = r
+
+        if acid is None or oxide is None:
+            return None
+
+        metal = _METAL_OXIDES[oxide]
+        _, acid_anion = _KNOWN_ACIDS[acid]
+        salt = _make_salt_formula(metal, acid_anion)
+        products = [salt, "H2O"]
+        return self._result("acid_base", reactants, products)
 
     def _try_thermal_decomposition(
         self, reactants: list[str], conditions: dict | None = None
@@ -388,9 +640,14 @@ class ReactionPredictor:
             self._try_metal_acid,
             self._try_acid_base,
             self._try_acid_carbonate,
+            self._try_acid_metal_oxide,
             self._try_precipitation,
+            self._try_double_displacement,
             self._try_metal_salt_displacement,
+            self._try_metal_water,
+            self._try_oxide_water,
             self._try_combustion,
+            self._try_synthesis,
         ):
             result = rule(reactants)
             if result is not None:

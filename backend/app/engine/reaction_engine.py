@@ -54,11 +54,15 @@ class ReactionEngine:
             return self._build_curated_result(curated, reactants, total_volume_ml)
 
         # 3. Try predicted reaction
-        predicted = self._predictor.predict(formulas)
+        predicted = self._predictor.predict(formulas, conditions)
         if predicted is not None:
             return self._build_predicted_result(predicted, reactants, total_volume_ml)
 
-        # 4. No reaction
+        # 4. General mixture fallback — substances mixed but no chemical change
+        if len(formulas) >= 2:
+            return self._build_mixture_result(formulas, reactants)
+
+        # 5. No reaction
         return self._build_no_reaction_result(reactants)
 
     def _build_curated_result(
@@ -155,6 +159,37 @@ class ReactionEngine:
             delta_g=thermo.get("delta_g"),
             spontaneous=thermo.get("spontaneous", False),
             temp_change=thermo.get("temp_change", 0.0),
+            effects=effects,
+        )
+
+    def _build_mixture_result(
+        self,
+        formulas: list[str],
+        reactants: list[dict],
+    ) -> ReactionResult:
+        """Build a ReactionResult for substances that were mixed but did
+        not undergo a chemical change."""
+        equation = (
+            " + ".join(formulas)
+            + " -> mixture (no chemical change observed)"
+        )
+        products_detail = [
+            {"formula": f, "name": name_compound(f), "phase": "aq"}
+            for f in formulas
+        ]
+        effects = self._effects_mapper.map_effects(
+            reaction_type="mixture",
+            delta_h=None,
+            products=products_detail,
+            source="predicted",
+            curated_effects=None,
+        )
+        return ReactionResult(
+            equation=equation,
+            reaction_type="mixture",
+            source="predicted",
+            reactants=reactants,
+            products=products_detail,
             effects=effects,
         )
 
