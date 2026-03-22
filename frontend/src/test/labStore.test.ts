@@ -135,6 +135,10 @@ describe("labStore", () => {
         sounds: [],
         safety: [],
       },
+      description: "",
+      observations: [],
+      safety_notes: [],
+      balanced_with_states: "",
     });
     expect(useLabStore.getState().reactionLog).toHaveLength(1);
   });

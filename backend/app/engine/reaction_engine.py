@@ -12,8 +12,19 @@ from app.engine.equation_balancer import balance_equation
 from app.engine.thermodynamics import ThermodynamicsCalculator
 from app.engine.effects_mapper import EffectsMapper
 from app.engine.nomenclature import name_compound
-from app.engine.constants import MIXTURE, NO_REACTION, AQUEOUS, GAS
+from app.engine.constants import MIXTURE, NO_REACTION, AQUEOUS, GAS, SOLID
 from app.models.reaction import ReactionResult, ReactionEffects
+
+# Phase symbol labels for state notation
+_PHASE_SYMBOLS: dict[str, str] = {
+    "s": "(s)",
+    "l": "(l)",
+    "g": "(g)",
+    "aq": "(aq)",
+}
+
+# Alkali metals for safety notes
+_ALKALI_METALS = {"Li", "Na", "K", "Rb", "Cs", "Fr"}
 
 
 class ReactionEngine:
@@ -93,6 +104,18 @@ class ReactionEngine:
             curated_effects=curated_effects,
         )
 
+        # Build the new enrichment fields
+        description = self._build_description(
+            reactants, products_detail, reaction_type, delta_h,
+        )
+        observations = self._build_observations(effects, delta_h)
+        safety_notes = self._build_safety_notes(
+            reactants, products_detail, effects, delta_h,
+        )
+        balanced_with_states = self._build_equation_with_states(
+            equation, reactants, products_detail,
+        )
+
         return ReactionResult(
             equation=equation,
             reaction_type=reaction_type,
@@ -101,6 +124,10 @@ class ReactionEngine:
             products=products_detail,
             delta_h=delta_h,
             effects=effects,
+            description=description,
+            observations=observations,
+            safety_notes=safety_notes,
+            balanced_with_states=balanced_with_states,
         )
 
     def _build_predicted_result(
@@ -149,18 +176,36 @@ class ReactionEngine:
             curated_effects=None,
         )
 
+        predicted_delta_h = thermo.get("delta_h")
+
+        # Build the new enrichment fields
+        description = self._build_description(
+            reactants, products_detail, reaction_type, predicted_delta_h,
+        )
+        observations = self._build_observations(effects, predicted_delta_h)
+        safety_notes = self._build_safety_notes(
+            reactants, products_detail, effects, predicted_delta_h,
+        )
+        balanced_with_states = self._build_equation_with_states(
+            equation, reactants, products_detail,
+        )
+
         return ReactionResult(
             equation=equation,
             reaction_type=reaction_type,
             source="predicted",
             reactants=reactants,
             products=products_detail,
-            delta_h=thermo.get("delta_h"),
+            delta_h=predicted_delta_h,
             delta_s=thermo.get("delta_s"),
             delta_g=thermo.get("delta_g"),
             spontaneous=thermo.get("spontaneous", False),
             temp_change=thermo.get("temp_change", 0.0),
             effects=effects,
+            description=description,
+            observations=observations,
+            safety_notes=safety_notes,
+            balanced_with_states=balanced_with_states,
         )
 
     def _build_mixture_result(
@@ -185,6 +230,14 @@ class ReactionEngine:
             source="predicted",
             curated_effects=None,
         )
+        reactant_names = [
+            name_compound(f) for f in formulas
+        ]
+        description = (
+            f"{' and '.join(reactant_names)} were mixed but no chemical "
+            f"reaction was observed under current conditions."
+        )
+
         return ReactionResult(
             equation=equation,
             reaction_type=MIXTURE,
@@ -192,6 +245,10 @@ class ReactionEngine:
             reactants=reactants,
             products=products_detail,
             effects=effects,
+            description=description,
+            observations=["Substances mix without visible chemical change"],
+            safety_notes=[],
+            balanced_with_states="",
         )
 
     @staticmethod
@@ -205,6 +262,232 @@ class ReactionEngine:
             products=[],
             effects=ReactionEffects(),
         )
+
+    # ------------------------------------------------------------------
+    # Enrichment helpers: description, observations, safety, states
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _build_description(
+        reactants: list[dict],
+        products: list[dict],
+        reaction_type: str,
+        delta_h: float | None,
+    ) -> str:
+        """Generate a human-readable description of the reaction."""
+        reactant_names = [
+            name_compound(r.get("formula", r.get("formula", "")))
+            for r in reactants
+            if r.get("formula")
+        ]
+        product_names = [
+            p.get("name") or name_compound(p.get("formula", ""))
+            for p in products
+            if p.get("formula")
+        ]
+
+        # Reaction type label
+        type_labels = {
+            "acid_base": "an acid-base neutralization reaction",
+            "single_displacement": "a single displacement reaction",
+            "double_displacement": "a double displacement reaction",
+            "precipitation": "a precipitation reaction",
+            "combustion": "a combustion reaction",
+            "decomposition": "a decomposition reaction",
+            "synthesis": "a synthesis reaction",
+            "redox": "a redox reaction",
+        }
+        type_label = type_labels.get(reaction_type, f"a {reaction_type} reaction")
+
+        # Energy description
+        energy_part = ""
+        if delta_h is not None:
+            if delta_h < -200:
+                energy_part = ", releasing a large amount of energy"
+            elif delta_h < -50:
+                energy_part = ", releasing energy as heat"
+            elif delta_h < 0:
+                energy_part = ", with a slight release of heat"
+            elif delta_h > 50:
+                energy_part = ", absorbing energy from the surroundings"
+            elif delta_h > 0:
+                energy_part = ", with slight energy absorption"
+
+        # Vigor description
+        vigor = ""
+        if delta_h is not None and abs(delta_h) > 150:
+            vigor = " vigorously"
+
+        reactant_str = " and ".join(reactant_names[:3]) if reactant_names else "The reactants"
+        product_str = " and ".join(product_names[:3]) if product_names else "products"
+
+        return (
+            f"{reactant_str} react{vigor} in {type_label}, "
+            f"producing {product_str}{energy_part}."
+        )
+
+    @staticmethod
+    def _build_observations(
+        effects: ReactionEffects,
+        delta_h: float | None,
+    ) -> list[str]:
+        """Generate observation strings from effects data."""
+        observations: list[str] = []
+
+        # Gas observations
+        if effects.gas is not None:
+            rate = effects.gas.get("rate", "gentle")
+            gas_type = effects.gas.get("type", "gas")
+            if rate == "vigorous":
+                observations.append(
+                    f"Vigorous effervescence as {gas_type} gas is produced"
+                )
+            elif rate == "moderate":
+                observations.append(f"Gas bubbles observed ({gas_type})")
+            else:
+                observations.append(f"Gentle bubbling as {gas_type} gas evolves")
+
+        # Precipitate observations
+        if effects.precipitate is not None:
+            color = effects.precipitate.get("color", "white")
+            observations.append(
+                f"A {color} precipitate forms and settles"
+            )
+
+        # Color change observations
+        if effects.color is not None:
+            from_color = effects.color.get("from", "")
+            to_color = effects.color.get("to", "")
+            if from_color and to_color:
+                observations.append(
+                    f"Solution changes from {from_color} to {to_color}"
+                )
+            elif to_color:
+                observations.append(f"Solution turns {to_color}")
+
+        # Heat observations
+        if delta_h is not None:
+            abs_dh = abs(delta_h)
+            if delta_h < 0:
+                if abs_dh > 200:
+                    observations.append(
+                        "Violent exothermic reaction, exercise extreme caution"
+                    )
+                elif abs_dh > 100:
+                    observations.append(
+                        "Significant heat released, temperature rises noticeably"
+                    )
+                elif abs_dh > 30:
+                    observations.append("Container feels warm to the touch")
+            else:
+                if abs_dh > 30:
+                    observations.append(
+                        "Solution cools as heat is absorbed"
+                    )
+
+        # Special effects
+        if "flame" in effects.special or "sparks" in effects.special:
+            observations.append("Sparks or flame observed")
+
+        return observations
+
+    @staticmethod
+    def _build_safety_notes(
+        reactants: list[dict],
+        products: list[dict],
+        effects: ReactionEffects,
+        delta_h: float | None,
+    ) -> list[str]:
+        """Generate safety warnings based on products and effects."""
+        notes: list[str] = []
+        product_formulas = {p.get("formula", "") for p in products}
+        reactant_formulas = {r.get("formula", "") for r in reactants}
+        all_formulas = product_formulas | reactant_formulas
+
+        if "H2" in product_formulas:
+            notes.append(
+                "Hydrogen gas is flammable -- keep away from flames"
+            )
+        if "Cl2" in product_formulas:
+            notes.append("Chlorine gas is toxic -- use fume hood")
+        if "SO2" in product_formulas:
+            notes.append("Sulfur dioxide is toxic -- use fume hood")
+        if "NH3" in product_formulas:
+            notes.append("Ammonia gas is irritating -- ensure ventilation")
+
+        if "HCl" in all_formulas:
+            notes.append("Hydrochloric acid is corrosive")
+        if "H2SO4" in all_formulas:
+            notes.append("Sulfuric acid is highly corrosive -- use proper PPE")
+        if "HNO3" in all_formulas:
+            notes.append("Nitric acid is corrosive and oxidizing")
+        if "NaOH" in all_formulas or "KOH" in all_formulas:
+            notes.append("Strong base is corrosive -- avoid skin contact")
+
+        # Check for alkali metals + water
+        for r in reactants:
+            f = r.get("formula", "")
+            if f in _ALKALI_METALS:
+                notes.append(
+                    "Never use large quantities -- reaction can be explosive"
+                )
+                break
+
+        # Vigorous reaction warning
+        if delta_h is not None and abs(delta_h) > 150:
+            notes.append("Add reagents slowly to control reaction rate")
+
+        return notes
+
+    @staticmethod
+    def _build_equation_with_states(
+        equation: str,
+        reactants: list[dict],
+        products: list[dict],
+    ) -> str:
+        """Build a balanced equation string with state symbols appended.
+
+        Uses phase info from reactants and products to annotate the
+        equation, e.g. ``2Na(s) + 2H2O(l) -> 2NaOH(aq) + H2(g)``.
+        """
+        if not equation or "No reaction" in equation or "mixture" in equation:
+            return ""
+
+        # Build a lookup: formula -> phase symbol
+        phase_map: dict[str, str] = {}
+        for r in reactants:
+            f = r.get("formula", "")
+            phase = r.get("phase", "")
+            if f and phase:
+                phase_map[f] = _PHASE_SYMBOLS.get(phase, "")
+        for p in products:
+            f = p.get("formula", "")
+            phase = p.get("phase", "")
+            if f and phase:
+                phase_map[f] = _PHASE_SYMBOLS.get(phase, "")
+
+        # Split the equation into LHS and RHS on " -> "
+        if " -> " not in equation:
+            return equation
+
+        lhs, rhs = equation.split(" -> ", 1)
+
+        def _annotate_side(side: str) -> str:
+            terms = side.split(" + ")
+            annotated: list[str] = []
+            for term in terms:
+                term = term.strip()
+                # Extract coefficient prefix (digits at start)
+                i = 0
+                while i < len(term) and term[i].isdigit():
+                    i += 1
+                coeff = term[:i]
+                formula = term[i:]
+                state = phase_map.get(formula, "")
+                annotated.append(f"{coeff}{formula}{state}")
+            return " + ".join(annotated)
+
+        return f"{_annotate_side(lhs)} -> {_annotate_side(rhs)}"
 
     @staticmethod
     def _format_equation(

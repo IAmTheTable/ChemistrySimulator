@@ -22,6 +22,10 @@ export interface ReactionResult {
   spontaneous: boolean;
   temp_change: number;
   effects: ReactionEffects;
+  description: string;
+  observations: string[];
+  safety_notes: string[];
+  balanced_with_states: string;
 }
 
 export interface ReactionEvent {

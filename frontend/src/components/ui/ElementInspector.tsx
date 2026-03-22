@@ -3,6 +3,7 @@ import { useElement } from "../../api/elements";
 import { useChemicalName } from "../../api/nomenclature";
 import { CATEGORY_COLORS } from "../../types/element";
 import type { ContainerSubstance } from "../../stores/labStore";
+import type { ReactionLogEntry } from "../../types/reaction";
 
 const CONTAINER_LABELS: Record<string, string> = {
   beaker: "Beaker",
@@ -44,11 +45,25 @@ function ContainerInspector() {
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
   const updateBenchItemContents = useLabStore((s) => s.updateBenchItemContents);
   const openStructureViewer = useLabStore((s) => s.openStructureViewer);
+  const reactionLog = useLabStore((s) => s.reactionLog);
 
   const item = benchItems.find((b) => b.id === selectedBenchItem);
   if (!item) return null;
 
   const label = CONTAINER_LABELS[item.type] ?? item.type;
+
+  // Compute total volume
+  const totalVolume = item.contents.reduce((sum, s) => sum + s.amount_ml, 0);
+
+  // Mixed color swatch — use the first substance color as representative
+  const mixedColor = item.contents.length > 0 ? item.contents[0].color : null;
+
+  // Find the last reaction that involved this container's current contents
+  const lastReaction: ReactionLogEntry | undefined = reactionLog.find((entry) => {
+    const productFormulas = entry.products.map((p) => p.formula).sort().join(",");
+    const contentFormulas = item.contents.map((c) => c.formula).sort().join(",");
+    return productFormulas === contentFormulas && contentFormulas !== "";
+  });
 
   return (
     <div className="space-y-4">
@@ -62,8 +77,18 @@ function ContainerInspector() {
         </button>
       </div>
 
-      <div className="text-xs text-gray-400">
-        Temperature: <span className="text-gray-200">{item.temperature}&deg;C</span>
+      <div className="flex items-center gap-3 text-xs text-gray-400">
+        <span>Temperature: <span className="text-gray-200">{item.temperature}&deg;C</span></span>
+        {item.contents.length > 0 && (
+          <span>Volume: <span className="text-gray-200">{totalVolume.toFixed(1)} mL</span></span>
+        )}
+        {mixedColor && (
+          <span
+            className="inline-block w-3 h-3 rounded border border-gray-600"
+            style={{ backgroundColor: mixedColor }}
+            title="Solution color"
+          />
+        )}
       </div>
 
       <div>
@@ -82,6 +107,22 @@ function ContainerInspector() {
           </div>
         )}
       </div>
+
+      {/* Last reaction details inline */}
+      {lastReaction && (
+        <div className="bg-gray-800 rounded p-2 space-y-1">
+          <h4 className="text-[10px] font-semibold text-gray-500 uppercase">Last Reaction</h4>
+          <p className="text-[10px] font-mono text-gray-300 break-all">{lastReaction.equation}</p>
+          {lastReaction.description && (
+            <p className="text-[10px] text-gray-400 italic">{lastReaction.description}</p>
+          )}
+          {lastReaction.balanced_with_states && (
+            <div className="text-[10px] font-mono text-gray-300 bg-gray-900 rounded p-1">
+              {lastReaction.balanced_with_states}
+            </div>
+          )}
+        </div>
+      )}
 
       {item.contents.length > 0 && (
         <button

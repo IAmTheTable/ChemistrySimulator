@@ -25,6 +25,10 @@ class ReactionResult(BaseModel):
     spontaneous: bool = False
     temp_change: float = 0.0
     effects: ReactionEffects = ReactionEffects()
+    description: str = ""
+    observations: list[str] = []
+    safety_notes: list[str] = []
+    balanced_with_states: str = ""
 
 
 class ReactionEvent(BaseModel):

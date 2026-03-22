@@ -143,6 +143,42 @@ function ReactionDetails({ entry }: { entry: ReactionLogEntry }) {
         </div>
       )}
 
+      {/* Observations */}
+      {entry.observations && entry.observations.length > 0 && (
+        <div>
+          <div className="text-[10px] font-semibold text-gray-400 mb-0.5">Observations</div>
+          <ul className="list-disc list-inside space-y-px">
+            {entry.observations.map((obs, i) => (
+              <li key={i} className="text-[10px] text-gray-400">{obs}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Safety Notes */}
+      {entry.safety_notes && entry.safety_notes.length > 0 && (
+        <div>
+          <div className="text-[10px] font-semibold text-yellow-500 mb-0.5">Safety</div>
+          <ul className="list-disc list-inside space-y-px">
+            {entry.safety_notes.map((note, i) => (
+              <li key={i} className="text-[10px] text-yellow-400">{note}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Description */}
+      {entry.description && (
+        <p className="text-[10px] text-gray-400 italic">{entry.description}</p>
+      )}
+
+      {/* Balanced equation with states */}
+      {entry.balanced_with_states && (
+        <div className="text-[10px] font-mono text-gray-300 bg-gray-900 rounded p-1.5 mt-1">
+          {entry.balanced_with_states}
+        </div>
+      )}
+
       {/* Energy diagram */}
       <EnergyDiagram deltaH={entry.delta_h} />
     </div>
