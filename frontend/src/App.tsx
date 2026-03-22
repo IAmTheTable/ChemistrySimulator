@@ -14,78 +14,49 @@ import StructurePanel from "./components/ui/StructurePanel";
 import ResizeHandle from "./components/ui/ResizeHandle";
 import { useLabStore } from "./stores/labStore";
 
+const TAB_CLASS =
+  "flex-1 px-2 py-1.5 text-[10px] font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors";
+
 export default function App() {
-  const activeRightTab = useLabStore((s) => s.activeRightTab);
-  const setActiveRightTab = useLabStore((s) => s.setActiveRightTab);
+  const activeTab = useLabStore((s) => s.activeRightTab);
+  const setActiveTab = useLabStore((s) => s.setActiveRightTab);
 
-  const [leftWidth, setLeftWidth] = useState(192);
-  const [rightWidth, setRightWidth] = useState(288);
+  const [sidebarWidth, setSidebarWidth] = useState(280);
 
-  const handleLeftResize = useCallback((delta: number) => {
-    setLeftWidth((w) => {
-      const maxLeft = window.innerWidth - rightWidth - 100;
-      return Math.max(120, Math.min(maxLeft, w + delta));
-    });
-  }, [rightWidth]);
-
-  const handleRightResize = useCallback((delta: number) => {
-    setRightWidth((w) => {
-      const maxRight = window.innerWidth - leftWidth - 100;
-      return Math.max(200, Math.min(maxRight, w + delta));
-    });
-  }, [leftWidth]);
+  const handleResize = useCallback((delta: number) => {
+    setSidebarWidth((w) => Math.max(200, Math.min(window.innerWidth - 300, w + delta)));
+  }, []);
 
   return (
     <div className="h-screen w-screen bg-gray-950 text-white flex flex-col overflow-hidden">
-      {/* Station tabs */}
       <StationTabs />
 
-      {/* Main content area */}
       <div className="flex-1 flex min-h-0">
-        {/* Left panel: equipment palette + substance inventory + simulation toggle */}
-        <div style={{ width: leftWidth }} className="bg-gray-900 border-r border-gray-800 p-3 overflow-y-auto space-y-4 flex-shrink-0">
-          <EquipmentPalette />
-          <div className="border-t border-gray-800 pt-3">
-            <SubstanceInventory />
-          </div>
-          <div className="border-t border-gray-800 pt-3">
-            <SimulationToggle />
-          </div>
-          <div className="border-t border-gray-800 pt-3">
-            <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">Inspector</h3>
-            <ElementInspector />
-          </div>
-        </div>
-
-        <ResizeHandle side="left" onResize={handleLeftResize} />
-
-        {/* Center: 3D lab scene */}
-        <div className="flex-1 bg-gray-950">
-          <LabScene />
-        </div>
-
-        <ResizeHandle side="right" onResize={handleRightResize} />
-
-        {/* Right panel: tabbed Inspector | Reactions */}
-        <div style={{ width: rightWidth }} className="bg-gray-900 border-l border-gray-800 overflow-hidden flex-shrink-0">
-          <Tabs.Root value={activeRightTab} onValueChange={setActiveRightTab} className="flex flex-col h-full">
+        {/* Left sidebar — all panels in tabs */}
+        <div style={{ width: sidebarWidth }} className="bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0 overflow-hidden">
+          <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <Tabs.List className="flex border-b border-gray-800 shrink-0">
-              <Tabs.Trigger
-                value="reactions"
-                className="flex-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors"
-              >
-                Reactions
-              </Tabs.Trigger>
-              <Tabs.Trigger
-                value="structure"
-                className="flex-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors"
-              >
-                Structure
-              </Tabs.Trigger>
+              <Tabs.Trigger value="lab" className={TAB_CLASS}>Lab</Tabs.Trigger>
+              <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
+              <Tabs.Trigger value="reactions" className={TAB_CLASS}>Reactions</Tabs.Trigger>
+              <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
             </Tabs.List>
 
+            <Tabs.Content value="lab" className="flex-1 p-3 overflow-y-auto space-y-4">
+              <EquipmentPalette />
+              <div className="border-t border-gray-800 pt-3">
+                <SubstanceInventory />
+              </div>
+              <div className="border-t border-gray-800 pt-3">
+                <SimulationToggle />
+              </div>
+            </Tabs.Content>
+
+            <Tabs.Content value="inspector" className="flex-1 p-3 overflow-y-auto">
+              <ElementInspector />
+            </Tabs.Content>
+
             <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
-              <h2 className="text-sm font-semibold text-gray-400 mb-1">Reaction Log</h2>
               <ReactionLog />
             </Tabs.Content>
 
@@ -93,6 +64,13 @@ export default function App() {
               <StructurePanel />
             </Tabs.Content>
           </Tabs.Root>
+        </div>
+
+        <ResizeHandle side="left" onResize={handleResize} />
+
+        {/* Center: 3D lab scene */}
+        <div className="flex-1 bg-gray-950">
+          <LabScene />
         </div>
       </div>
 
@@ -104,7 +82,6 @@ export default function App() {
       </div>
       <EnvironmentBar />
 
-      {/* DOM-level context menu overlay for 3D lab containers */}
       <ContainerContextMenu />
     </div>
   );
