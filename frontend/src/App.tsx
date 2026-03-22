@@ -30,7 +30,7 @@ export default function App() {
   }, []);
 
   const handleBottomResize = useCallback((delta: number) => {
-    setBottomHeight((h) => Math.max(80, Math.min(400, h - delta)));
+    setBottomHeight((h) => Math.max(80, Math.min(window.innerHeight - 150, h - delta)));
   }, []);
 
   return (
@@ -86,7 +86,7 @@ export default function App() {
         {/* Right side: 3D lab on top, periodic table on bottom */}
         <div className="flex-1 flex flex-col min-h-0">
           {/* 3D lab scene */}
-          <div className="flex-1 bg-gray-950">
+          <div className="flex-1 bg-gray-950 min-h-0 overflow-hidden">
             <LabScene />
           </div>
 
