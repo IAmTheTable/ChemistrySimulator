@@ -22,12 +22,18 @@ export default function App() {
   const [rightWidth, setRightWidth] = useState(288);
 
   const handleLeftResize = useCallback((delta: number) => {
-    setLeftWidth((w) => Math.max(120, Math.min(400, w + delta)));
-  }, []);
+    setLeftWidth((w) => {
+      const maxLeft = window.innerWidth - rightWidth - 200;
+      return Math.max(120, Math.min(maxLeft, w + delta));
+    });
+  }, [rightWidth]);
 
   const handleRightResize = useCallback((delta: number) => {
-    setRightWidth((w) => Math.max(200, Math.min(500, w + delta)));
-  }, []);
+    setRightWidth((w) => {
+      const maxRight = window.innerWidth - leftWidth - 200;
+      return Math.max(200, Math.min(maxRight, w + delta));
+    });
+  }, [leftWidth]);
 
   return (
     <div className="h-screen w-screen bg-gray-950 text-white flex flex-col overflow-hidden">
