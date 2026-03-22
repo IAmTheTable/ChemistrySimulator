@@ -184,11 +184,9 @@ class SpectroscopyEngine:
         elements = parse_formula(formula)
         groups = _detect_functional_groups(elements)
 
-        # Build x axis: 4000 to 400 cm^-1
         n_points = 1800
         x_vals = [4000 - i * 2 for i in range(n_points)]
 
-        # Start with baseline transmittance near 1.0
         y_vals = [0.95 + self._rng.uniform(-0.01, 0.01) for _ in range(n_points)]
 
         peaks: list[dict] = []
@@ -211,7 +209,6 @@ class SpectroscopyEngine:
                     peaks.append({"position": round(center), "label": label})
                     seen_labels.add(label)
 
-        # Clamp values
         y_vals = [max(0.0, min(1.0, v)) for v in y_vals]
 
         return {
@@ -243,11 +240,9 @@ class SpectroscopyEngine:
         br = elements.get("Br", 0)
         s = elements.get("S", 0)
 
-        # Build x axis: 190 to 800 nm
         n_points = 610
         x_vals = [190 + i for i in range(n_points)]
 
-        # Baseline
         y_vals = [0.02 + self._rng.uniform(-0.005, 0.005) for _ in range(n_points)]
 
         absorption_peaks: list[dict] = []
@@ -296,7 +291,6 @@ class SpectroscopyEngine:
 
             peak_labels.append({"position": round(center), "label": label})
 
-        # Find lambda_max
         for i, v in enumerate(y_vals):
             if v > max_abs:
                 max_abs = v
@@ -327,7 +321,6 @@ class SpectroscopyEngine:
         mw = _molecular_weight(elements)
         mw_int = round(mw)
 
-        # Build x axis: 0 to mw + 20
         max_mz = mw_int + 20
         x_vals = list(range(0, max_mz + 1))
         y_vals = [0.0] * len(x_vals)
@@ -358,14 +351,10 @@ class SpectroscopyEngine:
                     base_peak_intensity = frag_intensity
                     base_peak_mz = frag_mz
 
-        # Normalize to base peak = 100
         if base_peak_intensity > 0:
             scale = 100.0 / base_peak_intensity
             y_vals = [v * scale for v in y_vals]
-            for p in peaks:
-                pass  # positions don't change
 
-        # Add minor noise peaks
         for i in range(len(y_vals)):
             if y_vals[i] < 1.0 and self._rng.random() < 0.05:
                 y_vals[i] = self._rng.uniform(0.5, 3.0)

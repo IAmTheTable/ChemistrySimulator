@@ -3,6 +3,7 @@ import { useLabStore } from "../../../stores/labStore";
 import Beaker from "../equipment/Beaker";
 import TestTube from "../equipment/TestTube";
 import ErlenmeyerFlask from "../equipment/ErlenmeyerFlask";
+import StationShell from "./StationShell";
 
 const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   beaker: Beaker,
@@ -12,19 +13,7 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
 
 export default function MainBench() {
   return (
-    <group>
-      {/* Bench back wall / shelf */}
-      <mesh position={[0, 0.6, -1.25]} castShadow>
-        <boxGeometry args={[4, 1.1, 0.05]} />
-        <meshStandardMaterial color="#3f3f46" roughness={0.9} />
-      </mesh>
-
-      {/* Shelf */}
-      <mesh position={[0, 0.35, -1.1]} castShadow>
-        <boxGeometry args={[3.8, 0.04, 0.3]} />
-        <meshStandardMaterial color="#44403c" roughness={0.8} />
-      </mesh>
-
+    <StationShell>
       {/* Test tube rack on shelf */}
       <mesh position={[-1.2, 0.42, -1.05]}>
         <boxGeometry args={[0.4, 0.1, 0.15]} />
@@ -45,7 +34,7 @@ export default function MainBench() {
 
       {/* ── All items from store ── */}
       <DynamicItems />
-    </group>
+    </StationShell>
   );
 }
 

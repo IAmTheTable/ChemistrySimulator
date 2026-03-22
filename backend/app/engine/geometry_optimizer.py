@@ -11,6 +11,7 @@ import math
 from rdkit import Chem
 from rdkit.Chem import AllChem, rdMolTransforms
 
+from app.engine.rdkit_utils import prepare_molecule
 from app.engine.structure_generator import FORMULA_TO_SMILES
 
 
@@ -63,23 +64,11 @@ class GeometryOptimizer:
             Dictionary with bond_lengths, bond_angles, dihedral_angles,
             geometry, and energy.
         """
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            raise ValueError(f"Invalid SMILES: {smiles}")
+        mol = prepare_molecule(smiles)
 
-        mol = Chem.AddHs(mol)
-
-        # Generate 3D coordinates
-        result = AllChem.EmbedMolecule(mol, AllChem.ETKDGv3())
-        if result != 0:
-            # Try without random seed constraint
-            AllChem.EmbedMolecule(mol, randomSeed=42)
-
-        # Optimize with MMFF force field
+        # Get the force field energy from the already-optimized molecule
         energy = 0.0
         try:
-            ff_result = AllChem.MMFFOptimizeMolecule(mol, maxIters=500)
-            # Get the force field for energy
             ff = AllChem.MMFFGetMoleculeForceField(mol, AllChem.MMFFGetMoleculeProperties(mol))
             if ff is not None:
                 energy = ff.CalcEnergy()

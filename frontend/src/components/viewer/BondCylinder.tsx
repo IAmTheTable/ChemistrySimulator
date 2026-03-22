@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import * as THREE from "three";
 import type { AtomData } from "../../types/structure";
 
@@ -52,19 +53,21 @@ function Stick({ mid, quaternion, length, radius, color, offset }: StickProps) {
 }
 
 export default function BondCylinder({ atom1, atom2, order, mode }: BondCylinderProps) {
-  const mid = new THREE.Vector3(
-    (atom1.x + atom2.x) / 2,
-    (atom1.y + atom2.y) / 2,
-    (atom1.z + atom2.z) / 2,
-  );
-
-  const dir = new THREE.Vector3(
-    atom2.x - atom1.x,
-    atom2.y - atom1.y,
-    atom2.z - atom1.z,
-  );
-  const length = dir.length();
-  const quaternion = computeQuaternion(dir);
+  const { mid, dir, quaternion, length } = useMemo(() => {
+    const m = new THREE.Vector3(
+      (atom1.x + atom2.x) / 2,
+      (atom1.y + atom2.y) / 2,
+      (atom1.z + atom2.z) / 2,
+    );
+    const d = new THREE.Vector3(
+      atom2.x - atom1.x,
+      atom2.y - atom1.y,
+      atom2.z - atom1.z,
+    );
+    const l = d.length();
+    const q = computeQuaternion(d);
+    return { mid: m, dir: d, quaternion: q, length: l };
+  }, [atom1.x, atom1.y, atom1.z, atom2.x, atom2.y, atom2.z]);
 
   const bondColor = "#808080";
   const baseRadius = mode === "wireframe" ? 0.02 : order === 1 ? 0.05 : order === 2 ? 0.03 : 0.025;

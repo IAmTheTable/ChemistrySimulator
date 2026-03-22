@@ -1,12 +1,8 @@
+import StationShell from "./StationShell";
+
 export default function InstrumentRoom() {
   return (
-    <group>
-      {/* Back wall */}
-      <mesh position={[0, 0.6, -1.25]} castShadow>
-        <boxGeometry args={[4, 1.1, 0.05]} />
-        <meshStandardMaterial color="#2d3142" roughness={0.9} />
-      </mesh>
-
+    <StationShell wallColor="#2d3142" showShelf={false}>
       {/* Long counter along back wall */}
       <mesh position={[0, 0.06, -1.0]} receiveShadow castShadow>
         <boxGeometry args={[3.8, 0.08, 0.7]} />
@@ -162,6 +158,6 @@ export default function InstrumentRoom() {
         <boxGeometry args={[3.5, 0.03, 0.1]} />
         <meshStandardMaterial color="#161b2e" roughness={0.8} />
       </mesh>
-    </group>
+    </StationShell>
   );
 }

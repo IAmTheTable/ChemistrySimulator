@@ -1,20 +1,25 @@
+import { useMemo } from "react";
 import { useLabStore } from "../../stores/labStore";
 import { useCommonStructure, useOrbitals } from "../../api/structures";
-import { useCharges, useEnergy, useGeometryByFormula } from "../../api/quantum";
+import { useAnalysis } from "../../api/quantum";
 import type { BondLengthInfo, BondAngleInfo } from "../../api/quantum";
 import MoleculeViewer from "../viewer/MoleculeViewer";
 
 /** Show unique bond lengths (deduplicate by atom pair type) */
 function BondLengthsTable({ lengths }: { lengths: BondLengthInfo[] }) {
-  const seen = new Set<string>();
-  const unique: BondLengthInfo[] = [];
-  for (const bl of lengths) {
-    const key = [bl.atom1_symbol, bl.atom2_symbol].sort().join("-");
-    if (!seen.has(key)) {
-      seen.add(key);
-      unique.push(bl);
+  const unique = useMemo(() => {
+    const seen = new Set<string>();
+    const result: BondLengthInfo[] = [];
+    for (const bl of lengths) {
+      const key = [bl.atom1_symbol, bl.atom2_symbol].sort().join("-");
+      if (!seen.has(key)) {
+        seen.add(key);
+        result.push(bl);
+      }
     }
-  }
+    return result;
+  }, [lengths]);
+
   if (unique.length === 0) return null;
 
   return (
@@ -32,25 +37,30 @@ function BondLengthsTable({ lengths }: { lengths: BondLengthInfo[] }) {
   );
 }
 
-/** Show unique bond angles (deduplicate by atom triple type) */
+/** Show unique bond angles (deduplicate by atom triple type, limited to 6) */
 function BondAnglesTable({ angles }: { angles: BondAngleInfo[] }) {
-  const heavyAngles = angles.filter((a) => !a.atoms.startsWith("H-") || a.atoms.split("-")[1] !== "H");
-  const seen = new Set<string>();
-  const unique: BondAngleInfo[] = [];
-  for (const ba of heavyAngles) {
-    const key = ba.atoms;
-    if (!seen.has(key)) {
-      seen.add(key);
-      unique.push(ba);
+  const unique = useMemo(() => {
+    const seen = new Set<string>();
+    const result: BondAngleInfo[] = [];
+    for (const ba of angles) {
+      if (ba.atoms.startsWith("H-") && ba.atoms.split("-")[1] === "H") continue;
+      const key = ba.atoms;
+      if (!seen.has(key)) {
+        seen.add(key);
+        result.push(ba);
+      }
+      if (result.length >= 6) break;
     }
-  }
+    return result;
+  }, [angles]);
+
   if (unique.length === 0) return null;
 
   return (
     <div>
       <div className="text-[10px] font-semibold text-gray-400 mb-0.5">Bond Angles</div>
       <div className="space-y-px">
-        {unique.slice(0, 6).map((ba, i) => (
+        {unique.map((ba, i) => (
           <div key={i} className="flex justify-between text-[10px] text-gray-500 font-mono">
             <span>{ba.atoms}</span>
             <span>{ba.angle_degrees.toFixed(1)} deg</span>
@@ -69,9 +79,10 @@ export default function StructurePanel() {
 
   const { data: molecule } = useCommonStructure(formula);
   const { data: orbitalData } = useOrbitals(atomicNumber);
-  const { data: chargesData } = useCharges(showCharges ? formula : null);
-  const { data: energyData } = useEnergy(formula);
-  const { data: geometryData } = useGeometryByFormula(formula);
+  const { data: analysisData } = useAnalysis(formula);
+  const chargesData = analysisData?.charges ?? null;
+  const energyData = analysisData?.energy ?? null;
+  const geometryData = analysisData?.geometry ?? null;
 
   const modes = [
     { id: "ball-and-stick", label: "Ball & Stick" },

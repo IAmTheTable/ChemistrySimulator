@@ -1,12 +1,8 @@
+import StationShell from "./StationShell";
+
 export default function StorageSafety() {
   return (
-    <group>
-      {/* Back wall */}
-      <mesh position={[0, 0.6, -1.25]} castShadow>
-        <boxGeometry args={[4, 1.1, 0.05]} />
-        <meshStandardMaterial color="#2a2820" roughness={0.9} />
-      </mesh>
-
+    <StationShell wallColor="#2a2820" showShelf={false}>
       {/* ── Chemical storage cabinet ── */}
       {/* Cabinet body */}
       <mesh position={[-1.55, 0.5, -0.85]} castShadow>
@@ -193,6 +189,6 @@ export default function StorageSafety() {
         <boxGeometry args={[0.28, 0.01, 0.2]} />
         <meshStandardMaterial color="#cc4400" roughness={0.5} />
       </mesh>
-    </group>
+    </StationShell>
   );
 }

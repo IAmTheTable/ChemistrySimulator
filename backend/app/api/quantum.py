@@ -1,6 +1,7 @@
 """Quantum chemistry API endpoints.
 
-Provides geometry optimization, partial charges, and molecular energy.
+Provides geometry optimization, partial charges, molecular energy,
+and a combined analysis endpoint that returns all three in a single call.
 """
 
 from fastapi import APIRouter, HTTPException
@@ -17,6 +18,36 @@ _density_calc = ElectronDensityCalculator()
 
 class OptimizeRequest(BaseModel):
     smiles: str
+
+
+@router.get("/analyze/{formula}")
+def analyze_formula(formula: str):
+    """Combined endpoint: charges + energy + geometry in one call.
+
+    Avoids three separate RDKit molecule preparations for the same formula.
+    """
+    try:
+        charges = _density_calc.calculate(formula)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Charge calculation failed: {str(e)}")
+
+    try:
+        energy = _density_calc.get_molecular_energy(formula)
+    except Exception:
+        energy = {"formula": formula, "energy": 0.0, "unit": "kcal/mol", "method": "MMFF94"}
+
+    try:
+        geometry = _optimizer.optimize_from_formula(formula)
+    except Exception:
+        geometry = None
+
+    return {
+        "charges": charges,
+        "energy": energy,
+        "geometry": geometry,
+    }
 
 
 @router.post("/optimize")

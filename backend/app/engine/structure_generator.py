@@ -7,9 +7,10 @@ with 3D coordinates, CPK colors, covalent radii, and bond information.
 from __future__ import annotations
 
 from rdkit import Chem
-from rdkit.Chem import AllChem, rdMolDescriptors
+from rdkit.Chem import rdMolDescriptors
 
 from app.engine.nomenclature import name_compound
+from app.engine.rdkit_utils import prepare_molecule
 from app.models.structure import AtomData, BondData, MoleculeData
 
 # ---------------------------------------------------------------------------
@@ -82,21 +83,10 @@ class StructureGenerator:
 
     def _from_smiles(self, smiles: str) -> MoleculeData | None:
         """Convert a SMILES string to a MoleculeData object."""
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            return None
-
-        # Add explicit hydrogens
-        mol = Chem.AddHs(mol)
-
-        # Generate 3D coordinates
-        AllChem.EmbedMolecule(mol, AllChem.ETKDGv3())
-
-        # Optimize geometry with MMFF force field
         try:
-            AllChem.MMFFOptimizeMolecule(mol)
-        except Exception:
-            pass
+            mol = prepare_molecule(smiles)
+        except ValueError:
+            return None
 
         conf = mol.GetConformer()
 

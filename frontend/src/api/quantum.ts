@@ -110,3 +110,24 @@ export function useEnergy(formula: string | null) {
     staleTime: Infinity,
   });
 }
+
+export interface AnalysisResult {
+  charges: ChargesResult;
+  energy: EnergyResult;
+  geometry: GeometryResult | null;
+}
+
+async function fetchAnalysis(formula: string): Promise<AnalysisResult> {
+  const response = await fetch(`/api/quantum/analyze/${encodeURIComponent(formula)}`);
+  if (!response.ok) throw new Error("Failed to fetch analysis");
+  return response.json();
+}
+
+export function useAnalysis(formula: string | null) {
+  return useQuery({
+    queryKey: ["analysis", formula],
+    queryFn: () => fetchAnalysis(formula!),
+    enabled: formula !== null,
+    staleTime: Infinity,
+  });
+}

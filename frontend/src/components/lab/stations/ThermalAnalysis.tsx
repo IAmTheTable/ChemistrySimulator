@@ -1,18 +1,8 @@
+import StationShell from "./StationShell";
+
 export default function ThermalAnalysis() {
   return (
-    <group>
-      {/* Back wall */}
-      <mesh position={[0, 0.6, -1.25]} castShadow>
-        <boxGeometry args={[4, 1.1, 0.05]} />
-        <meshStandardMaterial color="#2e2820" roughness={0.9} />
-      </mesh>
-
-      {/* Shelf */}
-      <mesh position={[0, 0.35, -1.1]} castShadow>
-        <boxGeometry args={[3.8, 0.04, 0.3]} />
-        <meshStandardMaterial color="#44403c" roughness={0.8} />
-      </mesh>
-
+    <StationShell wallColor="#2e2820">
       {/* ── Calorimeter ── */}
       {/* Outer cylinder */}
       <mesh position={[-0.8, 0.25, 0.2]} castShadow>
@@ -174,6 +164,6 @@ export default function ThermalAnalysis() {
           roughness={0.2}
         />
       </mesh>
-    </group>
+    </StationShell>
   );
 }

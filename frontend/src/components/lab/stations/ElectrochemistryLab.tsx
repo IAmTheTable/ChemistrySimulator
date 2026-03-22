@@ -1,18 +1,8 @@
+import StationShell from "./StationShell";
+
 export default function ElectrochemistryLab() {
   return (
-    <group>
-      {/* Back wall */}
-      <mesh position={[0, 0.6, -1.25]} castShadow>
-        <boxGeometry args={[4, 1.1, 0.05]} />
-        <meshStandardMaterial color="#2a3028" roughness={0.9} />
-      </mesh>
-
-      {/* Shelf */}
-      <mesh position={[0, 0.35, -1.1]} castShadow>
-        <boxGeometry args={[3.8, 0.04, 0.3]} />
-        <meshStandardMaterial color="#44403c" roughness={0.8} />
-      </mesh>
-
+    <StationShell wallColor="#2a3028">
       {/* ── Electrolysis cell (central) ── */}
       {/* Cell body — transparent box */}
       <mesh position={[0, 0.2, 0]}>
@@ -179,6 +169,6 @@ export default function ElectrochemistryLab() {
           transmission={0.78}
         />
       </mesh>
-    </group>
+    </StationShell>
   );
 }

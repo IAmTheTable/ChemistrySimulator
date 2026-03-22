@@ -1,12 +1,8 @@
+import StationShell from "./StationShell";
+
 export default function GloveBox() {
   return (
-    <group>
-      {/* Back wall */}
-      <mesh position={[0, 0.6, -1.25]} castShadow>
-        <boxGeometry args={[4, 1.1, 0.05]} />
-        <meshStandardMaterial color="#303035" roughness={0.9} />
-      </mesh>
-
+    <StationShell wallColor="#303035" showShelf={false}>
       {/* ── Main glove box body — frame ── */}
       {/* Bottom panel */}
       <mesh position={[0, 0.06, -0.4]} castShadow>
@@ -150,6 +146,6 @@ export default function GloveBox() {
           roughness={0.2}
         />
       </mesh>
-    </group>
+    </StationShell>
   );
 }

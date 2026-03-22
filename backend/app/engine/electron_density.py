@@ -7,8 +7,9 @@ potential visualization.
 from __future__ import annotations
 
 from rdkit import Chem
-from rdkit.Chem import AllChem, Descriptors
+from rdkit.Chem import AllChem
 
+from app.engine.rdkit_utils import prepare_molecule
 from app.engine.structure_generator import FORMULA_TO_SMILES
 
 
@@ -44,18 +45,7 @@ class ElectronDensityCalculator:
         Returns:
             Dictionary with atoms list containing positions and charges.
         """
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            raise ValueError(f"Invalid SMILES: {smiles}")
-
-        mol = Chem.AddHs(mol)
-
-        # Generate 3D coordinates
-        AllChem.EmbedMolecule(mol, AllChem.ETKDGv3())
-        try:
-            AllChem.MMFFOptimizeMolecule(mol)
-        except Exception:
-            pass
+        mol = prepare_molecule(smiles)
 
         # Compute Gasteiger charges
         AllChem.ComputeGasteigerCharges(mol)
@@ -106,16 +96,10 @@ class ElectronDensityCalculator:
         if smiles is None:
             raise ValueError(f"Unknown formula: {formula}")
 
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            raise ValueError(f"Invalid SMILES derived from formula: {formula}")
-
-        mol = Chem.AddHs(mol)
-        AllChem.EmbedMolecule(mol, AllChem.ETKDGv3())
+        mol = prepare_molecule(smiles)
 
         energy = 0.0
         try:
-            AllChem.MMFFOptimizeMolecule(mol, maxIters=500)
             props = AllChem.MMFFGetMoleculeProperties(mol)
             ff = AllChem.MMFFGetMoleculeForceField(mol, props)
             if ff is not None:

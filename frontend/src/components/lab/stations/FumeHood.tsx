@@ -1,12 +1,8 @@
+import StationShell from "./StationShell";
+
 export default function FumeHood() {
   return (
-    <group>
-      {/* Back wall */}
-      <mesh position={[0, 0.6, -1.25]} castShadow>
-        <boxGeometry args={[4, 1.1, 0.05]} />
-        <meshStandardMaterial color="#3a3a44" roughness={0.9} />
-      </mesh>
-
+    <StationShell wallColor="#3a3a44" showShelf={false}>
       {/* Hood enclosure — top panel */}
       <mesh position={[0, 1.5, -0.6]} castShadow>
         <boxGeometry args={[3.2, 0.06, 1.4]} />
@@ -127,6 +123,6 @@ export default function FumeHood() {
         <cylinderGeometry args={[0.018, 0.018, 0.05, 8]} />
         <meshStandardMaterial color="#667788" roughness={0.4} />
       </mesh>
-    </group>
+    </StationShell>
   );
 }
