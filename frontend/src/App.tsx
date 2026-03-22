@@ -23,17 +23,23 @@ export default function App() {
   const setActiveTab = useLabStore((s) => s.setActiveRightTab);
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
+  const [bottomHeight, setBottomHeight] = useState(180);
 
-  const handleResize = useCallback((delta: number) => {
+  const handleSidebarResize = useCallback((delta: number) => {
     setSidebarWidth((w) => Math.max(200, Math.min(window.innerWidth - 300, w + delta)));
+  }, []);
+
+  const handleBottomResize = useCallback((delta: number) => {
+    setBottomHeight((h) => Math.max(100, Math.min(window.innerHeight - 200, h - delta)));
   }, []);
 
   return (
     <div className="h-screen w-screen bg-gray-950 text-white flex flex-col overflow-hidden">
       <StationTabs />
 
+      {/* Main area: sidebar + lab */}
       <div className="flex-1 flex min-h-0">
-        {/* Left sidebar — all panels in tabs */}
+        {/* Left sidebar */}
         <div style={{ width: sidebarWidth }} className="bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0 overflow-hidden">
           <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <Tabs.List className="flex border-b border-gray-800 shrink-0">
@@ -67,27 +73,31 @@ export default function App() {
           </Tabs.Root>
         </div>
 
-        <ResizeHandle side="left" onResize={handleResize} />
+        <ResizeHandle direction="vertical" onResize={handleSidebarResize} />
 
-        {/* Center: 3D lab scene */}
+        {/* Center: lab scene */}
         <div className="flex-1 bg-gray-950">
           <LabScene />
         </div>
       </div>
 
-      {/* Bottom: Periodic table (left) + Inspector (right) side by side */}
-      <div className="bg-gray-900 border-t border-gray-800 flex min-h-0">
-        <div className="flex-1 px-4 py-2 flex justify-center">
+      {/* Horizontal resize handle */}
+      <ResizeHandle direction="horizontal" onResize={handleBottomResize} />
+
+      {/* Bottom: Inspector (left) + Periodic Table (right) — resizable height */}
+      <div style={{ height: bottomHeight }} className="bg-gray-900 flex min-h-0 flex-shrink-0 overflow-hidden">
+        <div className="w-64 border-r border-gray-800 px-3 py-2 overflow-y-auto flex-shrink-0">
+          <h3 className="text-[10px] font-semibold text-gray-500 uppercase mb-1">Inspector</h3>
+          <ElementInspector />
+        </div>
+        <div className="flex-1 px-4 py-2 overflow-y-auto flex justify-center">
           <div className="max-w-3xl w-full">
             <PeriodicTable />
           </div>
         </div>
-        <div className="w-72 border-l border-gray-800 px-3 py-2 overflow-y-auto flex-shrink-0">
-          <ElementInspector />
-        </div>
       </div>
-      <EnvironmentBar />
 
+      <EnvironmentBar />
       <ContainerContextMenu />
     </div>
   );
