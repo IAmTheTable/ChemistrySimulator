@@ -11,6 +11,7 @@ export default function ResizeHandle({ side, onResize }: ResizeHandleProps) {
 
   const onMouseDown = useCallback(
     (e: React.MouseEvent) => {
+      e.preventDefault();
       dragging.current = true;
       lastX.current = e.clientX;
       document.body.style.cursor = "col-resize";
@@ -20,8 +21,6 @@ export default function ResizeHandle({ side, onResize }: ResizeHandleProps) {
         if (!dragging.current) return;
         const delta = e.clientX - lastX.current;
         lastX.current = e.clientX;
-        // Left panel: dragging right increases width (positive delta)
-        // Right panel: dragging left increases width (negative delta)
         onResize(side === "left" ? delta : -delta);
       };
 
@@ -42,7 +41,10 @@ export default function ResizeHandle({ side, onResize }: ResizeHandleProps) {
   return (
     <div
       onMouseDown={onMouseDown}
-      className="w-1 cursor-col-resize hover:bg-blue-500 active:bg-blue-500 transition-colors flex-shrink-0"
-    />
+      className="w-2 cursor-col-resize flex-shrink-0 relative group"
+    >
+      <div className="absolute inset-y-0 -left-1 -right-1 group-hover:bg-blue-500/30 active:bg-blue-500/50 transition-colors" />
+      <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-gray-700 group-hover:bg-blue-500 transition-colors" />
+    </div>
   );
 }
