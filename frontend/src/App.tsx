@@ -23,14 +23,14 @@ export default function App() {
 
   const handleLeftResize = useCallback((delta: number) => {
     setLeftWidth((w) => {
-      const maxLeft = window.innerWidth - rightWidth - 200;
+      const maxLeft = window.innerWidth - rightWidth - 100;
       return Math.max(120, Math.min(maxLeft, w + delta));
     });
   }, [rightWidth]);
 
   const handleRightResize = useCallback((delta: number) => {
     setRightWidth((w) => {
-      const maxRight = window.innerWidth - leftWidth - 200;
+      const maxRight = window.innerWidth - leftWidth - 100;
       return Math.max(200, Math.min(maxRight, w + delta));
     });
   }, [leftWidth]);
