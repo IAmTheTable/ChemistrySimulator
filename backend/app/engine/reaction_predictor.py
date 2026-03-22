@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 _DATA_DIR = Path(__file__).parent.parent / "data"
@@ -295,6 +296,61 @@ class ReactionPredictor:
         products = [new_salt, salt_cation]
         return self._result("single_displacement", reactants, products)
 
+    def _try_combustion(self, reactants: list[str]) -> dict | None:
+        """Organic compound + O2 -> CO2 + H2O (combustion)."""
+        organic = None
+        has_o2 = False
+        for r in reactants:
+            if r == "O2":
+                has_o2 = True
+            elif self._is_organic(r):
+                organic = r
+
+        if organic is None or not has_o2:
+            return None
+
+        products = ["CO2", "H2O"]
+        return self._result("combustion", reactants, products)
+
+    def _try_thermal_decomposition(
+        self, reactants: list[str], conditions: dict | None = None
+    ) -> dict | None:
+        """Thermal decomposition when temperature > 100C.
+
+        Known decompositions:
+        - Carbonates -> metal oxide + CO2
+        - H2O2 -> H2O + O2
+        """
+        if conditions is None:
+            return None
+        temp = conditions.get("temperature", 25)
+        if temp <= 100:
+            return None
+
+        if len(reactants) != 1:
+            return None
+
+        compound = reactants[0]
+
+        # Carbonate decomposition: MCO3 -> MO + CO2
+        if self._is_carbonate(compound):
+            cation, _ = _KNOWN_SALTS[compound]
+            oxide = f"{cation}O" if cation != "Ca" else "CaO"
+            products = [oxide, "CO2"]
+            return self._result("decomposition", reactants, products)
+
+        # H2O2 decomposition
+        if compound == "H2O2":
+            products = ["H2O", "O2"]
+            return self._result("decomposition", reactants, products)
+
+        return None
+
+    @staticmethod
+    def _is_organic(formula: str) -> bool:
+        """Check if a formula represents an organic compound (contains C and H)."""
+        return bool(re.search(r"C", formula) and re.search(r"H", formula))
+
     # ------------------------------------------------------------------
     # Result builder
     # ------------------------------------------------------------------
@@ -318,17 +374,31 @@ class ReactionPredictor:
     # Public API
     # ------------------------------------------------------------------
 
-    def predict(self, reactants: list[str]) -> dict | None:
+    def predict(
+        self, reactants: list[str], conditions: dict | None = None
+    ) -> dict | None:
         """Try each rule in priority order and return the first match,
-        or None if no known reaction pattern applies."""
+        or None if no known reaction pattern applies.
+
+        Args:
+            reactants: List of formula strings.
+            conditions: Optional dict with temperature, pressure, catalyst.
+        """
         for rule in (
             self._try_metal_acid,
             self._try_acid_base,
             self._try_acid_carbonate,
             self._try_precipitation,
             self._try_metal_salt_displacement,
+            self._try_combustion,
         ):
             result = rule(reactants)
             if result is not None:
                 return result
+
+        # Thermal decomposition needs conditions
+        result = self._try_thermal_decomposition(reactants, conditions)
+        if result is not None:
+            return result
+
         return None
