@@ -11,6 +11,7 @@ import SimulationToggle from "./components/ui/SimulationToggle";
 import ReactionLog from "./components/ui/ReactionLog";
 import ContainerContextMenu from "./components/ui/ContainerContextMenu";
 import StructurePanel from "./components/ui/StructurePanel";
+import SpectraPanel from "./components/ui/SpectraPanel";
 import ResizeHandle from "./components/ui/ResizeHandle";
 import { useLabStore } from "./stores/labStore";
 
@@ -40,6 +41,7 @@ export default function App() {
               <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
               <Tabs.Trigger value="reactions" className={TAB_CLASS}>Reactions</Tabs.Trigger>
               <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
+              <Tabs.Trigger value="spectra" className={TAB_CLASS}>Spectra</Tabs.Trigger>
             </Tabs.List>
 
             <Tabs.Content value="lab" className="flex-1 p-3 overflow-y-auto space-y-4">
@@ -62,6 +64,10 @@ export default function App() {
 
             <Tabs.Content value="structure" className="flex-1 p-3 flex flex-col min-h-0">
               <StructurePanel />
+            </Tabs.Content>
+
+            <Tabs.Content value="spectra" className="flex-1 p-3 overflow-y-auto">
+              <SpectraPanel />
             </Tabs.Content>
           </Tabs.Root>
         </div>
