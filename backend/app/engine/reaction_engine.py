@@ -15,6 +15,8 @@ from app.engine.nomenclature import name_compound
 from app.engine.constants import MIXTURE, NO_REACTION, AQUEOUS, GAS, SOLID, COMBUSTION
 from app.models.reaction import ReactionResult, ReactionEffects
 
+CONDITIONS_NOT_MET = "conditions_not_met"
+
 # Phase symbol labels for state notation
 _PHASE_SYMBOLS: dict[str, str] = {
     "s": "(s)",
@@ -70,6 +72,9 @@ class ReactionEngine:
         # 2. Try curated match
         curated = self._matcher.match(formulas)
         if curated is not None:
+            conditions_met, reason = self._check_conditions_met(curated, conditions)
+            if not conditions_met:
+                return self._build_conditions_not_met_result(curated, reactants, reason)
             result = self._build_curated_result(curated, reactants, total_volume_ml)
             blocked = self._check_atmosphere_block(result, atmosphere)
             if blocked is not None:
@@ -80,6 +85,9 @@ class ReactionEngine:
         # 3. Try predicted reaction
         predicted = self._predictor.predict(formulas, conditions)
         if predicted is not None:
+            conditions_met, reason = self._check_conditions_met(predicted, conditions)
+            if not conditions_met:
+                return self._build_conditions_not_met_result(predicted, reactants, reason)
             result = self._build_predicted_result(predicted, reactants, total_volume_ml)
             blocked = self._check_atmosphere_block(result, atmosphere)
             if blocked is not None:
@@ -93,6 +101,49 @@ class ReactionEngine:
 
         # 5. No reaction
         return self._build_no_reaction_result(reactants)
+
+    @staticmethod
+    def _check_conditions_met(reaction_data: dict, conditions: dict) -> tuple[bool, str]:
+        """Check if reaction conditions are met. Returns (met, reason)."""
+        required = reaction_data.get("conditions", {})
+        actual_temp = conditions.get("temperature", 25)
+        catalyst = conditions.get("catalyst")
+
+        # Check minimum temperature requirement
+        min_temp = required.get("min_temperature") or required.get("temperature")
+        if min_temp and isinstance(min_temp, (int, float)) and actual_temp < min_temp:
+            return False, (
+                f"Requires temperature above {min_temp}°C "
+                f"(current: {actual_temp}°C). Apply heat to initiate."
+            )
+
+        # Check catalyst requirement
+        required_catalyst = required.get("catalyst")
+        if required_catalyst and catalyst != required_catalyst:
+            return False, f"Requires {required_catalyst} catalyst to proceed."
+
+        return True, ""
+
+    @staticmethod
+    def _build_conditions_not_met_result(
+        reaction_data: dict,
+        reactants: list[dict],
+        reason: str,
+    ) -> ReactionResult:
+        """Return an informative result when conditions aren't met yet."""
+        equation = reaction_data.get("equation", "")
+        return ReactionResult(
+            equation=equation,
+            reaction_type=CONDITIONS_NOT_MET,
+            source="curated",
+            reactants=reactants,
+            products=[],
+            effects=ReactionEffects(),
+            description=reason,
+            observations=["No visible reaction at current conditions", reason],
+            safety_notes=[],
+            balanced_with_states="",
+        )
 
     def _build_curated_result(
         self,

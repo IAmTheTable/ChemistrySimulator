@@ -63,12 +63,12 @@ def test_mixing_without_reaction():
 
 
 def test_synthesis_metal_nonmetal():
-    """Fe + S -> FeS (synthesis reaction)."""
+    """Fe + S -> FeS (synthesis reaction, requires heat >= 300°C)."""
     engine = ReactionEngine()
     result = engine.run(
         reactants=[{"formula": "Fe", "amount_g": 5.6, "phase": "s"},
                    {"formula": "S", "amount_g": 3.2, "phase": "s"}],
-        conditions={"temperature": 25, "pressure": 1, "catalyst": None},
+        conditions={"temperature": 350, "pressure": 1, "catalyst": None},
     )
     assert result.reaction_type == "synthesis"
     assert any("FeS" in p.get("formula", "") for p in result.products)
@@ -123,12 +123,12 @@ def test_acid_metal_oxide():
 
 
 def test_organic_combustion():
-    """C2H6 + O2 -> CO2 + H2O (combustion)."""
+    """C2H6 + O2 -> CO2 + H2O (combustion, requires ignition >= 200°C)."""
     engine = ReactionEngine()
     result = engine.run(
         reactants=[{"formula": "C2H6", "amount_g": 3.0, "phase": "g"},
                    {"formula": "O2", "amount_g": 11.2, "phase": "g"}],
-        conditions={"temperature": 25, "pressure": 1, "catalyst": None},
+        conditions={"temperature": 300, "pressure": 1, "catalyst": None},
     )
     assert result.reaction_type == "combustion"
 

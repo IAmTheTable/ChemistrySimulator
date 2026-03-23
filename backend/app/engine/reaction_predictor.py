@@ -378,7 +378,9 @@ class ReactionPredictor:
             return None
 
         products = ["CO2", "H2O"]
-        return self._result(COMBUSTION, reactants, products)
+        result = self._result(COMBUSTION, reactants, products)
+        result["conditions"] = {"min_temperature": 200}
+        return result
 
     # ------------------------------------------------------------------
     # NEW: Synthesis (combination) reactions

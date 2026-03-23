@@ -241,7 +241,7 @@
       {"formula": "CO2", "phase": "g", "color": null},
       {"formula": "H2O", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": null, "to": "#ff6600", "speed": "fast"},
       "gas": {"type": "CO2", "rate": "vigorous"},
@@ -261,7 +261,7 @@
     "products_detail": [
       {"formula": "MgO", "phase": "s", "color": "#ffffff"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": "#d0d0d0", "to": "#ffffff", "speed": "fast"},
       "gas": null,
@@ -282,7 +282,7 @@
       {"formula": "CO2", "phase": "g", "color": null},
       {"formula": "H2O", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": null, "to": "#ff9900", "speed": "fast"},
       "gas": {"type": "CO2", "rate": "vigorous"},
@@ -324,7 +324,7 @@
       {"formula": "CaO", "phase": "s", "color": "#f5f5f0"},
       {"formula": "CO2", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 840, "catalyst": null},
+    "conditions": {"temperature": 840, "min_temperature": 840, "catalyst": null},
     "effects": {
       "color": {"from": "#f5f5f0", "to": "#f0f0e8", "speed": "slow"},
       "gas": {"type": "CO2", "rate": "slow"},
@@ -344,7 +344,7 @@
     "products_detail": [
       {"formula": "FeS", "phase": "s", "color": "#3d3d3d"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 300, "catalyst": null},
     "effects": {
       "color": {"from": "#808080", "to": "#3d3d3d", "speed": "medium"},
       "gas": null,
@@ -364,7 +364,7 @@
     "products_detail": [
       {"formula": "NaCl", "phase": "s", "color": "#ffffff"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": "#c0c0c0", "to": "#ffffff", "speed": "fast"},
       "gas": null,
@@ -448,7 +448,7 @@
       {"formula": "Mg(OH)2", "phase": "aq", "color": "#f0f0f0"},
       {"formula": "H2", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 100, "catalyst": null},
+    "conditions": {"temperature": 100, "min_temperature": 100, "catalyst": null},
     "effects": {
       "color": {"from": "#cce5ff", "to": "#f0f0f0", "speed": "slow"},
       "gas": {"type": "H2", "rate": "slow"},
@@ -489,7 +489,7 @@
     "products_detail": [
       {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": null, "to": "#cce5ff", "speed": "fast"},
       "gas": null,
@@ -888,7 +888,7 @@
       {"formula": "CO2", "phase": "g", "color": null},
       {"formula": "H2O", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": null, "to": "#ff6600", "speed": "fast"},
       "gas": {"type": "CO2", "rate": "vigorous"},
@@ -909,7 +909,7 @@
       {"formula": "CO2", "phase": "g", "color": null},
       {"formula": "H2O", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": "#f5f5dc", "to": "#ff6600", "speed": "fast"},
       "gas": {"type": "CO2", "rate": "vigorous"},
@@ -930,7 +930,7 @@
       {"formula": "CO2", "phase": "g", "color": null},
       {"formula": "H2O", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": null, "to": "#ffffff", "speed": "fast"},
       "gas": {"type": "CO2", "rate": "vigorous"},
@@ -950,7 +950,7 @@
     "products_detail": [
       {"formula": "SO2", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": "#ffff00", "to": "#4169e1", "speed": "fast"},
       "gas": {"type": "SO2", "rate": "moderate"},
@@ -1056,7 +1056,7 @@
       {"formula": "H2O", "phase": "g", "color": null},
       {"formula": "CO2", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 270, "catalyst": null},
+    "conditions": {"temperature": 270, "min_temperature": 270, "catalyst": null},
     "effects": {
       "color": {"from": "#ffffff", "to": "#f8f8f8", "speed": "slow"},
       "gas": {"type": "CO2", "rate": "moderate"},
@@ -1077,7 +1077,7 @@
       {"formula": "KCl", "phase": "s", "color": "#ffffff"},
       {"formula": "O2", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 400, "catalyst": "MnO2"},
+    "conditions": {"temperature": 400, "min_temperature": 400, "catalyst": "MnO2"},
     "effects": {
       "color": {"from": "#ffffff", "to": "#ffffff", "speed": "slow"},
       "gas": {"type": "O2", "rate": "vigorous"},
@@ -1098,7 +1098,7 @@
       {"formula": "N2O", "phase": "g", "color": null},
       {"formula": "H2O", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 250, "catalyst": null},
+    "conditions": {"temperature": 250, "min_temperature": 250, "catalyst": null},
     "effects": {
       "color": {"from": "#ffffff", "to": null, "speed": "fast"},
       "gas": {"type": "N2O", "rate": "vigorous"},
@@ -1118,7 +1118,7 @@
     "products_detail": [
       {"formula": "NH3", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 450, "catalyst": "Fe"},
+    "conditions": {"temperature": 450, "min_temperature": 400, "catalyst": "Fe"},
     "effects": {
       "color": {"from": null, "to": null, "speed": "slow"},
       "gas": {"type": "NH3", "rate": "slow"},
@@ -1331,7 +1331,7 @@
     "products_detail": [
       {"formula": "Al2O3", "phase": "s", "color": "#f0f0f0"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 600, "catalyst": null},
     "effects": {
       "color": {"from": "#c0c0c0", "to": "#f0f0f0", "speed": "fast"},
       "gas": null,
@@ -1351,7 +1351,7 @@
     "products_detail": [
       {"formula": "P4O10", "phase": "s", "color": "#ffffff"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": "#ffffff", "to": "#ffffff", "speed": "fast"},
       "gas": null,
@@ -1435,7 +1435,7 @@
       {"formula": "Al2O3", "phase": "s", "color": "#f0f0f0"},
       {"formula": "Fe", "phase": "l", "color": "#ff4500"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 800, "catalyst": null},
     "effects": {
       "color": {"from": "#8b0000", "to": "#ff4500", "speed": "fast"},
       "gas": null,
@@ -1602,7 +1602,7 @@
     "products_detail": [
       {"formula": "FeCl3", "phase": "s", "color": "#b8860b"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": "#808080", "to": "#b8860b", "speed": "fast"},
       "gas": null,
@@ -1644,7 +1644,7 @@
       {"formula": "MgO", "phase": "s", "color": "#ffffff"},
       {"formula": "CO2", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 540, "catalyst": null},
+    "conditions": {"temperature": 540, "min_temperature": 540, "catalyst": null},
     "effects": {
       "color": {"from": "#f5f5f0", "to": "#ffffff", "speed": "slow"},
       "gas": {"type": "CO2", "rate": "slow"},
@@ -1687,7 +1687,7 @@
       {"formula": "CuO", "phase": "s", "color": "#2d2d2d"},
       {"formula": "H2O", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 185, "catalyst": null},
+    "conditions": {"temperature": 185, "min_temperature": 185, "catalyst": null},
     "effects": {
       "color": {"from": "#87ceeb", "to": "#2d2d2d", "speed": "slow"},
       "gas": null,
@@ -1851,7 +1851,7 @@
     "products_detail": [
       {"formula": "Mg3N2", "phase": "s", "color": "#c8c878"}
     ],
-    "conditions": {"temperature": 800, "catalyst": null},
+    "conditions": {"temperature": 800, "min_temperature": 800, "catalyst": null},
     "effects": {
       "color": {"from": "#d0d0d0", "to": "#c8c878", "speed": "slow"},
       "gas": null,
@@ -1914,7 +1914,7 @@
       {"formula": "Al2O3", "phase": "s", "color": "#f0f0f0"},
       {"formula": "Fe", "phase": "l", "color": "#ff4500"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 800, "catalyst": null},
     "effects": {
       "color": {"from": "#8b0000", "to": "#ff4500", "speed": "fast"},
       "gas": null,
@@ -1935,7 +1935,7 @@
       {"formula": "KNO2", "phase": "s", "color": "#f0f0f0"},
       {"formula": "O2", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 400, "catalyst": null},
+    "conditions": {"temperature": 400, "min_temperature": 400, "catalyst": null},
     "effects": {
       "color": {"from": "#ffffff", "to": "#f0f0f0", "speed": "slow"},
       "gas": {"type": "O2", "rate": "moderate"},
@@ -1978,7 +1978,7 @@
       {"formula": "CO2", "phase": "g", "color": null},
       {"formula": "H2O", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": null, "to": "#ff9900", "speed": "fast"},
       "gas": {"type": "CO2", "rate": "vigorous"},
@@ -1999,7 +1999,7 @@
       {"formula": "CO2", "phase": "g", "color": null},
       {"formula": "H2O", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": null, "to": "#ff6600", "speed": "fast"},
       "gas": {"type": "CO2", "rate": "vigorous"},
@@ -2019,7 +2019,7 @@
     "products_detail": [
       {"formula": "Na2O2", "phase": "s", "color": "#ffffcc"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null},
     "effects": {
       "color": {"from": "#c0c0c0", "to": "#ffffcc", "speed": "fast"},
       "gas": null,
