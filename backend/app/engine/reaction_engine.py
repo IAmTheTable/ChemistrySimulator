@@ -112,6 +112,16 @@ class ReactionEngine:
             if "formula" in product and "name" not in product:
                 product["name"] = name_compound(product["formula"])
 
+        # Compute temperature change from delta_h and volume
+        temp_change = 0.0
+        if delta_h is not None and total_volume_ml > 0:
+            # Q = delta_h * 1000 (J) / (volume_ml * 4.184 J/(g*C))
+            temp_change = abs(delta_h) * 1000 / (total_volume_ml * 4.184)
+            if delta_h < 0:
+                temp_change = temp_change  # exothermic — temp rises
+            else:
+                temp_change = -temp_change  # endothermic — temp drops
+
         # Map effects using curated effects data
         effects = self._effects_mapper.map_effects(
             reaction_type=reaction_type,
@@ -140,6 +150,7 @@ class ReactionEngine:
             reactants=reactants,
             products=products_detail,
             delta_h=delta_h,
+            temp_change=temp_change,
             effects=effects,
             description=description,
             observations=observations,
