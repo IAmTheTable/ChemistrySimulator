@@ -11,6 +11,7 @@ import SmokeEffect from "../effects/SmokeEffect";
 import SparkEffect from "../effects/SparkEffect";
 import GasReleaseEffect from "../effects/GasReleaseEffect";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import PhaseFill from "./PhaseFill";
 import ContentsLabel from "./ContentsLabel";
 
 const CAPACITY_ML = 250;
@@ -142,18 +143,20 @@ export default function ErlenmeyerFlask({
         />
       </mesh>
 
-      {/* Liquid fill (in conical body only) */}
-      {fillLevel > 0 && (
+      {/* Phase-aware fill (conical body only) */}
+      {contents && contents.length > 0 ? (
+        <PhaseFill
+          contents={contents}
+          capacityMl={CAPACITY_ML}
+          height={bodyHeight}
+          radiusBottom={fillBottomRadius}
+          radiusTop={shoulderRadius - 0.005}
+          radialSegments={radialSegments}
+        />
+      ) : fillLevel > 0 && (
         <mesh position={[0, fillY, 0]}>
-          <cylinderGeometry
-            args={[fillTopRadius, fillBottomRadius, fillHeight, radialSegments]}
-          />
-          <meshStandardMaterial
-            color={fillColor}
-            transparent
-            opacity={0.75}
-            roughness={0.1}
-          />
+          <cylinderGeometry args={[fillTopRadius, fillBottomRadius, fillHeight, radialSegments]} />
+          <meshStandardMaterial color={fillColor} transparent opacity={0.75} roughness={0.1} />
         </mesh>
       )}
 

@@ -3,6 +3,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import type { ContainerSubstance } from "../../../stores/labStore";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import PhaseFill from "./PhaseFill";
 import ContentsLabel from "./ContentsLabel";
 import SteamEffect from "../effects/SteamEffect";
 import GasReleaseEffect from "../effects/GasReleaseEffect";
@@ -109,8 +110,17 @@ export default function Crucible({
         />
       </mesh>
 
-      {/* Liquid / solid fill */}
-      {fillLevel > 0 && (
+      {/* Phase-aware fill */}
+      {contents && contents.length > 0 ? (
+        <PhaseFill
+          contents={contents}
+          capacityMl={CAPACITY_ML}
+          height={height}
+          radiusBottom={fillBottomRadius}
+          radiusTop={fillBottomRadius + (topRadius - bottomRadius - wallThickness)}
+          radialSegments={radialSegments}
+        />
+      ) : fillLevel > 0 && (
         <mesh position={[0, fillY, 0]}>
           <cylinderGeometry args={[fillTopRadius, fillBottomRadius, fillHeight, radialSegments]} />
           <meshStandardMaterial color={fillColor} transparent opacity={0.85} roughness={0.3} />

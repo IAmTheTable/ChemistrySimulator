@@ -21,6 +21,55 @@ export function computeFillState(contents: ContainerSubstance[], capacityMl: num
   };
 }
 
+// ---------------------------------------------------------------------------
+// Phase-aware rendering
+// ---------------------------------------------------------------------------
+
+const METALS = new Set([
+  "Fe", "Cu", "Na", "K", "Li", "Zn", "Al", "Mg", "Ca", "Ag", "Au",
+  "Pt", "Sn", "Pb", "Ni", "Co", "Mn", "Cr", "Ti", "W", "Ba",
+]);
+
+export function isMetallic(formula: string): boolean {
+  return METALS.has(formula);
+}
+
+export interface FillRenderData {
+  solidLevel: number;
+  liquidLevel: number;
+  gasLevel: number;
+  solidColor: string;
+  liquidColor: string;
+  gasColor: string;
+  hasSolid: boolean;
+  hasLiquid: boolean;
+  hasGas: boolean;
+  solidFormula: string;
+}
+
+export function computePhaseRendering(contents: ContainerSubstance[], capacityMl: number): FillRenderData {
+  const solids  = contents.filter(s => s.phase === "s");
+  const liquids = contents.filter(s => s.phase === "l" || s.phase === "aq");
+  const gases   = contents.filter(s => s.phase === "g");
+
+  const solidVol  = solids.reduce((sum, s) => sum + s.amount_ml, 0);
+  const liquidVol = liquids.reduce((sum, s) => sum + s.amount_ml, 0);
+  const gasVol    = gases.reduce((sum, s) => sum + s.amount_ml, 0);
+
+  return {
+    solidLevel:  Math.min(1, solidVol  / capacityMl),
+    liquidLevel: Math.min(1, liquidVol / capacityMl),
+    gasLevel:    gasVol > 0 ? 0.1 : 0,
+    solidColor:  solids.length  > 0 ? blendColors(solids.map(s => s.color))  : "#888888",
+    liquidColor: liquids.length > 0 ? blendColors(liquids.map(s => s.color)) : "#4fc3f7",
+    gasColor:    gases.length   > 0 ? blendColors(gases.map(s => s.color))   : "#cccccc",
+    hasSolid:  solids.length  > 0,
+    hasLiquid: liquids.length > 0,
+    hasGas:    gases.length   > 0,
+    solidFormula: solids.length > 0 ? solids[0].formula : "",
+  };
+}
+
 // Pre-allocated Color objects for temperature tiers — avoids GC pressure
 const TEMP_TIERS = {
   extreme:  { glassColor: "#ff4400", glassEmissive: new THREE.Color("#ff2200"), glassEmissiveIntensity: 0.6 },

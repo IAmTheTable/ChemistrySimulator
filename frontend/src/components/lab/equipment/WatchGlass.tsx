@@ -3,6 +3,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import type { ContainerSubstance } from "../../../stores/labStore";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import PhaseFill from "./PhaseFill";
 import ContentsLabel from "./ContentsLabel";
 import GasReleaseEffect from "../effects/GasReleaseEffect";
 
@@ -80,18 +81,21 @@ export default function WatchGlass({
         />
       </mesh>
 
-      {/* Substance on the watch glass — thin disk */}
-      {fillLevel > 0 && (
+      {/* Phase-aware fill — thin shallow layer on dish surface */}
+      {contents && contents.length > 0 ? (
+        <PhaseFill
+          contents={contents}
+          capacityMl={CAPACITY_ML}
+          height={0.012}
+          radiusBottom={radius * 0.75}
+          radialSegments={radialSegments}
+        />
+      ) : fillLevel > 0 && (
         <mesh position={[0, 0.003, 0]}>
           <cylinderGeometry
             args={[radius * 0.7 * fillLevel, radius * 0.8 * fillLevel, 0.005, radialSegments]}
           />
-          <meshStandardMaterial
-            color={fillColor}
-            transparent
-            opacity={0.8}
-            roughness={0.3}
-          />
+          <meshStandardMaterial color={fillColor} transparent opacity={0.8} roughness={0.3} />
         </mesh>
       )}
 

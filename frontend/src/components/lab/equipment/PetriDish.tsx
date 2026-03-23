@@ -3,6 +3,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import type { ContainerSubstance } from "../../../stores/labStore";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import PhaseFill from "./PhaseFill";
 import ContentsLabel from "./ContentsLabel";
 import GasReleaseEffect from "../effects/GasReleaseEffect";
 
@@ -107,18 +108,23 @@ export default function PetriDish({
         />
       </mesh>
 
-      {/* Contents fill — flat disk inside */}
-      {fillLevel > 0 && (
+      {/* Phase-aware fill — flat inside dish */}
+      {contents && contents.length > 0 ? (
+        <group position={[0, 0.003, 0]}>
+          <PhaseFill
+            contents={contents}
+            capacityMl={CAPACITY_ML}
+            height={wallHeight}
+            radiusBottom={radius - wallThickness - 0.002}
+            radialSegments={radialSegments}
+          />
+        </group>
+      ) : fillLevel > 0 && (
         <mesh position={[0, 0.006, 0]}>
           <cylinderGeometry
             args={[radius - wallThickness - 0.002, radius - wallThickness - 0.002, 0.003 + fillLevel * (wallHeight - 0.008), radialSegments]}
           />
-          <meshStandardMaterial
-            color={fillColor}
-            transparent
-            opacity={0.8}
-            roughness={0.2}
-          />
+          <meshStandardMaterial color={fillColor} transparent opacity={0.8} roughness={0.2} />
         </mesh>
       )}
 

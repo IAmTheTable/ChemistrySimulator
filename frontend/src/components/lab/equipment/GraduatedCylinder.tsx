@@ -11,6 +11,7 @@ import SmokeEffect from "../effects/SmokeEffect";
 import SparkEffect from "../effects/SparkEffect";
 import GasReleaseEffect from "../effects/GasReleaseEffect";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import PhaseFill from "./PhaseFill";
 import ContentsLabel from "./ContentsLabel";
 
 const CAPACITY_ML = 100;
@@ -142,18 +143,19 @@ export default function GraduatedCylinder({
         </mesh>
       ))}
 
-      {/* Liquid fill */}
-      {fillLevel > 0 && (
+      {/* Phase-aware fill */}
+      {contents && contents.length > 0 ? (
+        <PhaseFill
+          contents={contents}
+          capacityMl={CAPACITY_ML}
+          height={height}
+          radiusBottom={fillRadius}
+          radialSegments={radialSegments}
+        />
+      ) : fillLevel > 0 && (
         <mesh position={[0, fillY, 0]}>
-          <cylinderGeometry
-            args={[fillRadius, fillRadius, fillHeight, radialSegments]}
-          />
-          <meshStandardMaterial
-            color={fillColor}
-            transparent
-            opacity={0.75}
-            roughness={0.1}
-          />
+          <cylinderGeometry args={[fillRadius, fillRadius, fillHeight, radialSegments]} />
+          <meshStandardMaterial color={fillColor} transparent opacity={0.75} roughness={0.1} />
         </mesh>
       )}
 

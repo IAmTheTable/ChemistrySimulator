@@ -11,6 +11,7 @@ import SmokeEffect from "../effects/SmokeEffect";
 import SparkEffect from "../effects/SparkEffect";
 import GasReleaseEffect from "../effects/GasReleaseEffect";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import PhaseFill from "./PhaseFill";
 import ContentsLabel from "./ContentsLabel";
 
 const CAPACITY_ML = 250;
@@ -114,18 +115,22 @@ export default function RoundBottomFlask({
         />
       </mesh>
 
-      {/* Liquid fill */}
-      {fillLevel > 0 && (
+      {/* Phase-aware fill — approximate sphere interior as a short cylinder */}
+      {contents && contents.length > 0 ? (
+        <PhaseFill
+          contents={contents}
+          capacityMl={CAPACITY_ML}
+          height={sphereRadius * 2}
+          radiusBottom={sphereRadius * 0.5}
+          radiusTop={sphereRadius * 0.85}
+          radialSegments={radialSegments}
+        />
+      ) : fillLevel > 0 && (
         <mesh position={[0, fillY, 0]}>
           <sphereGeometry
             args={[fillRadius, radialSegments, radialSegments, 0, Math.PI * 2, Math.PI * 0.3, Math.PI * 0.7]}
           />
-          <meshStandardMaterial
-            color={fillColor}
-            transparent
-            opacity={0.75}
-            roughness={0.1}
-          />
+          <meshStandardMaterial color={fillColor} transparent opacity={0.75} roughness={0.1} />
         </mesh>
       )}
 

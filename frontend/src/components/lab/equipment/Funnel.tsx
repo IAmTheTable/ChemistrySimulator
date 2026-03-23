@@ -3,6 +3,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import type { ContainerSubstance } from "../../../stores/labStore";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import PhaseFill from "./PhaseFill";
 import ContentsLabel from "./ContentsLabel";
 
 const CAPACITY_ML = 50;
@@ -111,16 +112,22 @@ export default function Funnel({
         />
       </mesh>
 
-      {/* Liquid in cone */}
-      {fillLevel > 0 && (
+      {/* Phase-aware fill in cone body */}
+      {contents && contents.length > 0 ? (
+        <group position={[0, stemHeight / 2 - coneHeight / 2, 0]}>
+          <PhaseFill
+            contents={contents}
+            capacityMl={CAPACITY_ML}
+            height={coneHeight}
+            radiusBottom={coneBottomRadius + 0.002}
+            radiusTop={coneTopRadius - 0.005}
+            radialSegments={radialSegments}
+          />
+        </group>
+      ) : fillLevel > 0 && (
         <mesh position={[0, stemHeight / 2 + coneHeight / 2 - fillConeHeight / 2, 0]}>
           <coneGeometry args={[fillTopRadius, fillConeHeight, radialSegments]} />
-          <meshStandardMaterial
-            color={fillColor}
-            transparent
-            opacity={0.75}
-            roughness={0.1}
-          />
+          <meshStandardMaterial color={fillColor} transparent opacity={0.75} roughness={0.1} />
         </mesh>
       )}
 

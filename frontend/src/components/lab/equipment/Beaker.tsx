@@ -11,6 +11,7 @@ import SmokeEffect from "../effects/SmokeEffect";
 import SparkEffect from "../effects/SparkEffect";
 import GasReleaseEffect from "../effects/GasReleaseEffect";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import PhaseFill from "./PhaseFill";
 import ContentsLabel from "./ContentsLabel";
 
 const CAPACITY_ML = 250;
@@ -63,12 +64,12 @@ export default function Beaker({
   const radialSegments = 24;
   const wallThickness = 0.005;
 
-  // Derive fill level and color from contents if provided, else fall back to legacy props
+  // Derive fill level for legacy fallback (effects anchor, backward-compat props)
   const computed = contents && contents.length > 0 ? computeFillState(contents, CAPACITY_ML) : null;
   const fillLevel = computed ? computed.fillLevel : (fillLevelProp ?? 0);
   const fillColor = computed ? computed.fillColor : (fillColorProp ?? "#4fc3f7");
 
-  // Liquid fill dimensions
+  // Legacy fill dimensions (used only for effects anchor when no contents)
   const fillHeight = Math.max(0, fillLevel) * (height - 0.02);
   const fillRadiusBottom = radiusBottom - wallThickness;
   const fillRadiusTop =
@@ -128,18 +129,23 @@ export default function Beaker({
         />
       </mesh>
 
-      {/* Liquid fill */}
-      {fillLevel > 0 && (
+      {/* Phase-aware fill: solid chunks, liquid, gas cloud */}
+      {contents && contents.length > 0 ? (
+        <PhaseFill
+          contents={contents}
+          capacityMl={CAPACITY_ML}
+          height={height}
+          radiusBottom={fillRadiusBottom}
+          radiusTop={fillRadiusBottom + (radiusTop - radiusBottom - wallThickness)}
+          radialSegments={radialSegments}
+        />
+      ) : fillLevel > 0 && (
+        // Legacy fallback for static starter items using fillLevel/fillColor props
         <mesh position={[0, fillY, 0]}>
           <cylinderGeometry
             args={[fillRadiusTop, fillRadiusBottom, fillHeight, radialSegments]}
           />
-          <meshStandardMaterial
-            color={fillColor}
-            transparent
-            opacity={0.75}
-            roughness={0.1}
-          />
+          <meshStandardMaterial color={fillColor} transparent opacity={0.75} roughness={0.1} />
         </mesh>
       )}
 

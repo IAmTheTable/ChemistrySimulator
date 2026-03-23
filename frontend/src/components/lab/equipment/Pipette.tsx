@@ -3,6 +3,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import type { ContainerSubstance } from "../../../stores/labStore";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import PhaseFill from "./PhaseFill";
 import ContentsLabel from "./ContentsLabel";
 
 const CAPACITY_ML = 10;
@@ -134,8 +135,19 @@ export default function Pipette({
         />
       </mesh>
 
-      {/* Liquid fill in lower shaft */}
-      {fillLevel > 0 && fillHeight > 0 && (
+      {/* Phase-aware fill in lower shaft */}
+      {contents && contents.length > 0 ? (
+        <group position={[0, -totalHeight / 2, 0]}>
+          <PhaseFill
+            contents={contents}
+            capacityMl={CAPACITY_ML}
+            height={lowerShaftHeight}
+            radiusBottom={thinRadius * 0.5}
+            radiusTop={thinRadius - 0.001}
+            radialSegments={radialSegments}
+          />
+        </group>
+      ) : fillLevel > 0 && fillHeight > 0 && (
         <mesh position={[0, fillY, 0]}>
           <cylinderGeometry args={[thinRadius - 0.001, thinRadius * 0.5, fillHeight, radialSegments]} />
           <meshStandardMaterial color={fillColor} transparent opacity={0.8} roughness={0.1} />
