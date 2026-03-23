@@ -38,6 +38,58 @@ FORMULA_TO_SMILES: dict[str, str] = {
     "NO": "[N]=O", "NO2": "O=[N]=O", "N2O": "[N-]=[N+]=O", "SO2": "O=S=O", "SO3": "O=S(=O)=O",
     "HCl": "Cl", "HF": "F", "HBr": "Br", "HI": "I", "H2S": "S",
     "HCN": "C#N", "PH3": "P",
+    # Hydroxides and bases
+    "NaOH": "[Na+].[OH-]", "KOH": "[K+].[OH-]", "LiOH": "[Li+].[OH-]",
+    "Ca(OH)2": "[Ca+2].[OH-].[OH-]", "Ba(OH)2": "[Ba+2].[OH-].[OH-]",
+    "Mg(OH)2": "[Mg+2].[OH-].[OH-]", "Al(OH)3": "[Al+3].[OH-].[OH-].[OH-]",
+    "Fe(OH)3": "[Fe+3].[OH-].[OH-].[OH-]", "Fe(OH)2": "[Fe+2].[OH-].[OH-]",
+    "Cu(OH)2": "[Cu+2].[OH-].[OH-]",
+    # Common salts
+    "NaCl": "[Na+].[Cl-]", "KCl": "[K+].[Cl-]", "LiCl": "[Li+].[Cl-]",
+    "CaCl2": "[Ca+2].[Cl-].[Cl-]", "BaCl2": "[Ba+2].[Cl-].[Cl-]",
+    "MgCl2": "[Mg+2].[Cl-].[Cl-]", "FeCl2": "[Fe+2].[Cl-].[Cl-]",
+    "FeCl3": "[Fe+3].[Cl-].[Cl-].[Cl-]", "AlCl3": "[Al+3].[Cl-].[Cl-].[Cl-]",
+    "CuCl2": "[Cu+2].[Cl-].[Cl-]", "ZnCl2": "[Zn+2].[Cl-].[Cl-]",
+    "NaBr": "[Na+].[Br-]", "KBr": "[K+].[Br-]", "NaI": "[Na+].[I-]", "KI": "[K+].[I-]",
+    "NaF": "[Na+].[F-]", "KF": "[K+].[F-]", "CaF2": "[Ca+2].[F-].[F-]",
+    # Nitrates
+    "NaNO3": "[Na+].[O-][N+](=O)=O", "KNO3": "[K+].[O-][N+](=O)=O",
+    "AgNO3": "[Ag+].[N+](=O)([O-])[O-]", "Cu(NO3)2": "[Cu+2].[N+](=O)([O-])[O-].[N+](=O)([O-])[O-]",
+    "Fe(NO3)3": "[Fe+3].[N+](=O)([O-])[O-].[N+](=O)([O-])[O-].[N+](=O)([O-])[O-]",
+    "Pb(NO3)2": "[Pb+2].[N+](=O)([O-])[O-].[N+](=O)([O-])[O-]",
+    "Zn(NO3)2": "[Zn+2].[N+](=O)([O-])[O-].[N+](=O)([O-])[O-]",
+    "NH4NO3": "[NH4+].[O-][N+](=O)=O",
+    # Sulfates
+    "Na2SO4": "[Na+].[Na+].[O-]S(=O)(=O)[O-]", "K2SO4": "[K+].[K+].[O-]S(=O)(=O)[O-]",
+    "CuSO4": "[Cu+2].[O-]S(=O)(=O)[O-]", "FeSO4": "[Fe+2].[O-]S(=O)(=O)[O-]",
+    "ZnSO4": "[Zn+2].[O-]S(=O)(=O)[O-]", "MgSO4": "[Mg+2].[O-]S(=O)(=O)[O-]",
+    "BaSO4": "[Ba+2].[O-]S(=O)(=O)[O-]", "CaSO4": "[Ca+2].[O-]S(=O)(=O)[O-]",
+    "(NH4)2SO4": "[NH4+].[NH4+].[O-]S(=O)(=O)[O-]",
+    "PbSO4": "[Pb+2].[O-]S(=O)(=O)[O-]",
+    # Carbonates
+    "Na2CO3": "[Na+].[Na+].[O-]C(=O)[O-]", "K2CO3": "[K+].[K+].[O-]C(=O)[O-]",
+    "CaCO3": "[Ca+2].[O-]C(=O)[O-]", "MgCO3": "[Mg+2].[O-]C(=O)[O-]",
+    "NaHCO3": "[Na+].OC(=O)[O-]", "KHCO3": "[K+].OC(=O)[O-]",
+    # Phosphates
+    "Na3PO4": "[Na+].[Na+].[Na+].[O-]P(=O)([O-])[O-]",
+    "Ca3(PO4)2": "[Ca+2].[Ca+2].[Ca+2].[O-]P(=O)([O-])[O-].[O-]P(=O)([O-])[O-]",
+    # Oxides
+    "Na2O": "[Na+].[Na+].[O-2]", "K2O": "[K+].[K+].[O-2]",
+    "CaO": "[Ca+2].[O-2]", "MgO": "[Mg+2].[O-2]", "ZnO": "[Zn+2].[O-2]",
+    "CuO": "[Cu+2].[O-2]", "FeO": "[Fe+2].[O-2]", "Fe2O3": "[Fe+3].[Fe+3].[O-2].[O-2].[O-2]",
+    "Al2O3": "[Al+3].[Al+3].[O-2].[O-2].[O-2]", "MnO2": "[Mn+4].[O-2].[O-2]",
+    "TiO2": "[Ti+4].[O-2].[O-2]", "SiO2": "[Si](=O)=O",
+    "Cr2O3": "[Cr+3].[Cr+3].[O-2].[O-2].[O-2]",
+    # Sulfides
+    "Na2S": "[Na+].[Na+].[S-2]", "FeS": "[Fe+2].[S-2]", "ZnS": "[Zn+2].[S-2]",
+    "CuS": "[Cu+2].[S-2]", "PbS": "[Pb+2].[S-2]", "Ag2S": "[Ag+].[Ag+].[S-2]",
+    # Permanganates and chromates
+    "KMnO4": "[K+].[O-][Mn](=O)(=O)=O", "K2Cr2O7": "[K+].[K+].O=[Cr](=O)([O-])O[Cr](=O)(=O)[O-]",
+    "K2CrO4": "[K+].[K+].[O-][Cr](=O)(=O)[O-]",
+    # Ammonium salts
+    "NH4Cl": "[NH4+].[Cl-]", "NH4HCO3": "[NH4+].OC(=O)[O-]",
+    # Other salts
+    "AgCl": "[Ag+].[Cl-]", "PbI2": "[Pb+2].[I-].[I-]", "PbCl2": "[Pb+2].[Cl-].[Cl-]",
     # Acids
     "H2SO4": "OS(=O)(=O)O", "HNO3": "O[N+](=O)[O-]", "H3PO4": "OP(=O)(O)O",
     "H2CO3": "OC(=O)O", "HClO4": "OCl(=O)(=O)=O", "HClO": "OCl",
