@@ -36,7 +36,7 @@ export default function PeriodicTable() {
   if (!elements) return null;
 
   return (
-    <div className="grid gap-px" style={{ gridTemplateColumns: "repeat(18, 1fr)", gridTemplateRows: "repeat(10, 1fr)" }}>
+    <div className="inline-grid gap-px" style={{ gridTemplateColumns: "repeat(18, 28px)", gridTemplateRows: "repeat(10, 28px)" }}>
       {elements.map((el) => {
         const pos = LAYOUT[el.atomic_number];
         if (!pos) return null;
@@ -48,7 +48,7 @@ export default function PeriodicTable() {
           <button
             key={el.atomic_number}
             onClick={() => selectElement(isSelected ? null : el.atomic_number)}
-            className="flex flex-col items-center justify-center p-0.5 rounded-sm transition-all hover:scale-110 hover:z-10 cursor-pointer border"
+            className="flex flex-col items-center justify-center rounded-sm transition-all hover:scale-125 hover:z-10 cursor-pointer border group relative"
             style={{
               gridRow: row + 1,
               gridColumn: col + 1,
@@ -58,8 +58,11 @@ export default function PeriodicTable() {
             }}
             title={`${el.name} (${el.symbol}) — ${el.atomic_number}`}
           >
-            <span className="text-[7px] leading-none opacity-60">{el.atomic_number}</span>
-            <span className="text-[10px] font-bold leading-tight">{el.symbol}</span>
+            <span className="text-[6px] leading-none opacity-60">{el.atomic_number}</span>
+            <span className="text-[9px] font-bold leading-tight">{el.symbol}</span>
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-1.5 py-0.5 bg-gray-800 text-gray-200 text-[8px] rounded shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 border border-gray-600">
+              {el.name}
+            </div>
           </button>
         );
       })}
