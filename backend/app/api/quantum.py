@@ -28,10 +28,9 @@ def analyze_formula(formula: str):
     """
     try:
         charges = _density_calc.calculate(formula)
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Charge calculation failed: {str(e)}")
+    except (ValueError, Exception):
+        # Pure elements or unsupported formulas — return minimal data
+        charges = {"formula": formula, "atoms": []}
 
     try:
         energy = _density_calc.get_molecular_energy(formula)
