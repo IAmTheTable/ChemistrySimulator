@@ -51,6 +51,7 @@ interface LabState {
   selectedBenchItem: string | null;
   placingEquipment: string | null;
   pouringFrom: string | null;
+  substanceAmount: number;
   simulationMode: "instant" | "realistic";
   reactionLog: ReactionLogEntry[];
   contextMenu: ContextMenuState | null;
@@ -75,6 +76,7 @@ interface LabState {
   moveBenchItem: (id: string, position: [number, number, number]) => void;
   selectBenchItem: (id: string | null) => void;
   setPlacingEquipment: (type: string | null) => void;
+  setSubstanceAmount: (amount: number) => void;
   setSimulationMode: (mode: "instant" | "realistic") => void;
   addReactionLogEntry: (entry: ReactionLogEntry) => void;
   updateBenchItemContents: (id: string, contents: ContainerSubstance[], temperature?: number) => void;
@@ -101,6 +103,7 @@ export const useLabStore = create<LabState>()((set) => ({
   selectedBenchItem: null,
   placingEquipment: null,
   pouringFrom: null,
+  substanceAmount: 50,
   simulationMode: "instant",
   reactionLog: [],
   contextMenu: null,
@@ -140,6 +143,7 @@ export const useLabStore = create<LabState>()((set) => ({
     })),
   selectBenchItem: (id) => set({ selectedBenchItem: id }),
   setPlacingEquipment: (type) => set({ placingEquipment: type }),
+  setSubstanceAmount: (amount) => set({ substanceAmount: Math.max(1, Math.min(1000, amount)) }),
   setSimulationMode: (mode) => set({ simulationMode: mode }),
   addReactionLogEntry: (entry) =>
     set((state) => ({ reactionLog: [entry, ...state.reactionLog] })),
@@ -183,11 +187,19 @@ export const useLabStore = create<LabState>()((set) => ({
     const target = state.benchItems.find((i) => i.id === targetId);
     if (!source || !target || source.contents.length === 0) return;
 
-    const reactants = [...source.contents, ...target.contents].map((s) => ({
-      formula: s.formula,
-      amount_ml: s.amount_ml,
-      phase: s.phase,
-    }));
+    // Stir case: source and target are the same container
+    const isSelfCombine = sourceId === targetId;
+    const reactants = isSelfCombine
+      ? source.contents.map((s) => ({
+          formula: s.formula,
+          amount_ml: s.amount_ml,
+          phase: s.phase,
+        }))
+      : [...source.contents, ...target.contents].map((s) => ({
+          formula: s.formula,
+          amount_ml: s.amount_ml,
+          phase: s.phase,
+        }));
 
     try {
       const result = await runReaction(reactants, {
@@ -216,7 +228,7 @@ export const useLabStore = create<LabState>()((set) => ({
           if (item.id === targetId) {
             return { ...item, contents: newContents, temperature: item.temperature + result.temp_change, activeEffects: effectNames };
           }
-          if (item.id === sourceId) {
+          if (!isSelfCombine && item.id === sourceId) {
             return { ...item, contents: [] };
           }
           return item;

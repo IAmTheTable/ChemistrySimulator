@@ -56,6 +56,7 @@ function DynamicItems() {
   const combineContainers = useLabStore((s) => s.combineContainers);
   const placingEquipment = useLabStore((s) => s.placingEquipment);
   const addSubstanceToContainer = useLabStore((s) => s.addSubstanceToContainer);
+  const substanceAmount = useLabStore((s) => s.substanceAmount);
   const pouringFrom = useLabStore((s) => s.pouringFrom);
   const cancelPouring = useLabStore((s) => s.cancelPouring);
 
@@ -69,12 +70,25 @@ function DynamicItems() {
           // Substance placement: add substance to clicked container
           if (placingEquipment?.startsWith("substance:")) {
             const formula = placingEquipment.replace("substance:", "");
-            addSubstanceToContainer(item.id, {
-              formula,
-              amount_ml: 50,
-              phase: "aq",
-              color: "#cccccc",
-            });
+            // Fetch substance info from the lookup endpoint for accurate phase/color
+            fetch(`/api/substances/lookup?formula=${encodeURIComponent(formula)}`, { method: "POST" })
+              .then((res) => res.ok ? res.json() : null)
+              .then((info) => {
+                addSubstanceToContainer(item.id, {
+                  formula,
+                  amount_ml: substanceAmount,
+                  phase: info?.phase ?? "aq",
+                  color: info?.color ?? "#cccccc",
+                });
+              })
+              .catch(() => {
+                addSubstanceToContainer(item.id, {
+                  formula,
+                  amount_ml: substanceAmount,
+                  phase: "aq",
+                  color: "#cccccc",
+                });
+              });
             return;
           }
 

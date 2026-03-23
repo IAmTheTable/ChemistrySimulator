@@ -7,6 +7,7 @@ import ElementInspector from "./components/ui/ElementInspector";
 import LabScene from "./components/lab/LabScene";
 import EquipmentPalette from "./components/ui/EquipmentPalette";
 import SubstanceInventory from "./components/ui/SubstanceInventory";
+import CustomSubstanceInput from "./components/ui/CustomSubstanceInput";
 import SimulationToggle from "./components/ui/SimulationToggle";
 import ReactionLog from "./components/ui/ReactionLog";
 import ContainerContextMenu from "./components/ui/ContainerContextMenu";
@@ -59,6 +60,7 @@ export default function App() {
               <Tabs.Content value="lab" className="flex-1 p-3 overflow-y-auto space-y-4">
                 <EquipmentPalette />
                 <div className="border-t border-gray-800 pt-3"><SubstanceInventory /></div>
+                <div className="border-t border-gray-800 pt-3"><CustomSubstanceInput /></div>
                 <div className="border-t border-gray-800 pt-3"><SimulationToggle /></div>
               </Tabs.Content>
               <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">

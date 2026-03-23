@@ -180,6 +180,7 @@ function SubstanceRow({
 function ElementInfo() {
   const selectedElement = useLabStore((s) => s.selectedElement);
   const openOrbitalViewer = useLabStore((s) => s.openOrbitalViewer);
+  const setPlacingEquipment = useLabStore((s) => s.setPlacingEquipment);
   const { data: element, isLoading } = useElement(selectedElement);
 
   if (!selectedElement) {
@@ -200,12 +201,20 @@ function ElementInfo() {
         <div className="text-xs text-gray-400">
           #{element.atomic_number} &middot; {element.category}
         </div>
-        <button
-          onClick={() => openOrbitalViewer(element.atomic_number)}
-          className="mt-2 w-full px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
-        >
-          View Orbitals
-        </button>
+        <div className="mt-2 flex gap-1">
+          <button
+            onClick={() => openOrbitalViewer(element.atomic_number)}
+            className="flex-1 px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+          >
+            View Orbitals
+          </button>
+          <button
+            onClick={() => setPlacingEquipment(`substance:${element.symbol}`)}
+            className="flex-1 px-2 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
+          >
+            Add to Lab
+          </button>
+        </div>
       </div>
 
       <Section title="Properties">

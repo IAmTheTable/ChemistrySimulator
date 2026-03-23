@@ -18,6 +18,8 @@ export default function ContainerContextMenu() {
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
   const setActiveRightTab = useLabStore((s) => s.setActiveRightTab);
   const startPouring = useLabStore((s) => s.startPouring);
+  const combineContainers = useLabStore((s) => s.combineContainers);
+  const benchItems = useLabStore((s) => s.benchItems);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close when clicking outside
@@ -64,7 +66,31 @@ export default function ContainerContextMenu() {
     closeContextMenu();
   };
 
-  const FUTURE_ACTIONS = ["Heat", "Stir", "Weigh", "Measure Temp"];
+  const item = benchItems.find((b) => b.id === itemId);
+
+  const handleHeat = () => {
+    if (item) {
+      updateBenchItemContents(itemId, item.contents, item.temperature + 25);
+    }
+    closeContextMenu();
+  };
+
+  const handleCool = () => {
+    if (item) {
+      updateBenchItemContents(itemId, item.contents, Math.max(-273, item.temperature - 25));
+    }
+    closeContextMenu();
+  };
+
+  const handleStir = () => {
+    if (item && item.contents.length > 1) {
+      // Re-run reaction check by combining container with itself
+      combineContainers(itemId, itemId);
+    }
+    closeContextMenu();
+  };
+
+  const FUTURE_ACTIONS = ["Weigh", "Measure Temp"];
 
   return createPortal(
     <div
@@ -73,6 +99,13 @@ export default function ContainerContextMenu() {
       className="min-w-[160px] rounded-md bg-gray-800 border border-gray-700 p-1 shadow-xl text-sm"
       onContextMenu={(e) => e.preventDefault()}
     >
+      {/* Temperature header */}
+      {item && (
+        <div className="px-2 py-1 text-[10px] text-gray-500 border-b border-gray-700 mb-1">
+          Temp: {item.temperature}&deg;C &middot; {item.contents.length} substance{item.contents.length !== 1 ? "s" : ""}
+        </div>
+      )}
+
       <button
         onClick={handleInspect}
         className="w-full text-left flex items-center px-2 py-1.5 rounded text-gray-200 hover:bg-gray-700 transition-colors"
@@ -84,6 +117,24 @@ export default function ContainerContextMenu() {
         className="w-full text-left flex items-center px-2 py-1.5 rounded text-gray-200 hover:bg-gray-700 transition-colors"
       >
         Pour into...
+      </button>
+      <button
+        onClick={handleHeat}
+        className="w-full text-left flex items-center px-2 py-1.5 rounded text-orange-400 hover:bg-gray-700 transition-colors"
+      >
+        Heat (+25&deg;C)
+      </button>
+      <button
+        onClick={handleCool}
+        className="w-full text-left flex items-center px-2 py-1.5 rounded text-blue-400 hover:bg-gray-700 transition-colors"
+      >
+        Cool (-25&deg;C)
+      </button>
+      <button
+        onClick={handleStir}
+        className="w-full text-left flex items-center px-2 py-1.5 rounded text-gray-200 hover:bg-gray-700 transition-colors"
+      >
+        Stir
       </button>
       <button
         onClick={handleEmpty}

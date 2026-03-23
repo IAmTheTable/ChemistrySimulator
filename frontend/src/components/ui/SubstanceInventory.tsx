@@ -53,6 +53,12 @@ export default function SubstanceInventory() {
                 : "bg-gray-800 text-gray-300 hover:bg-gray-700"
             }`}
           >
+            {sub.color && (
+              <span
+                className="inline-block w-2 h-2 rounded-full mr-1 flex-shrink-0"
+                style={{ backgroundColor: sub.color }}
+              />
+            )}
             <span className="font-mono text-xs">{sub.formula}</span>
             <span className={`ml-1 text-[10px] ${isActive ? "text-blue-200" : "text-gray-400"}`}>{sub.name}</span>
             <span
