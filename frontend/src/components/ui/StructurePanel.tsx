@@ -172,6 +172,7 @@ export default function StructurePanel() {
           mode={mode}
           showLabels={showLabels}
           chargeAtoms={showCharges ? chargesData?.atoms ?? null : null}
+          isOrbitalView={atomicNumber !== null && !formula}
         />
       </div>
 

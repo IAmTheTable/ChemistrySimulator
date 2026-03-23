@@ -70,6 +70,7 @@ interface LabState {
     showCharges: boolean;
   };
   activeRightTab: string;
+  activeBottomTab: string;
 
   selectElement: (atomicNumber: number | null) => void;
   setStation: (station: StationId) => void;
@@ -97,6 +98,7 @@ interface LabState {
   closeStructureViewer: () => void;
   setEnvironment: (env: Partial<LabState["environment"]>) => void;
   setActiveRightTab: (tab: string) => void;
+  setActiveBottomTab: (tab: string) => void;
 }
 
 export const useLabStore = create<LabState>()((set) => ({
@@ -119,8 +121,9 @@ export const useLabStore = create<LabState>()((set) => ({
   },
   structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS },
   activeRightTab: "lab",
+  activeBottomTab: "inspector",
 
-  selectElement: (atomicNumber) => set({ selectedElement: atomicNumber }),
+  selectElement: (atomicNumber) => set({ selectedElement: atomicNumber, selectedBenchItem: null }),
   setStation: (station) => set({ activeStation: station }),
   addBenchItem: (item) =>
     set((state) => ({
@@ -146,7 +149,7 @@ export const useLabStore = create<LabState>()((set) => ({
         item.id === id ? { ...item, position } : item
       ),
     })),
-  selectBenchItem: (id) => set({ selectedBenchItem: id }),
+  selectBenchItem: (id) => set({ selectedBenchItem: id, ...(id ? { selectedElement: null } : {}) }),
   setPlacingEquipment: (type) => set({ placingEquipment: type }),
   setSubstanceAmount: (amount) => set({ substanceAmount: Math.max(1, Math.min(1000, amount)) }),
   setSimulationMode: (mode) => set({ simulationMode: mode }),
@@ -179,14 +182,15 @@ export const useLabStore = create<LabState>()((set) => ({
   cancelPouring: () => set({ pouringFrom: null }),
   openContextMenu: (state) => set({ contextMenu: state }),
   closeContextMenu: () => set({ contextMenu: null }),
-  openStructureViewer: (formula) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, formula }, activeRightTab: "structure" }),
-  openOrbitalViewer: (atomicNumber) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, atomicNumber, mode: "orbital" }, activeRightTab: "structure" }),
+  openStructureViewer: (formula) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, formula }, activeBottomTab: "structure" }),
+  openOrbitalViewer: (atomicNumber) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, atomicNumber, mode: "orbital" }, activeBottomTab: "structure" }),
   setStructureMode: (mode) => set((state) => ({ structureViewer: { ...state.structureViewer, mode } })),
   toggleStructureLabels: () => set((state) => ({ structureViewer: { ...state.structureViewer, showLabels: !state.structureViewer.showLabels } })),
   toggleStructureCharges: () => set((state) => ({ structureViewer: { ...state.structureViewer, showCharges: !state.structureViewer.showCharges } })),
   closeStructureViewer: () => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS } }),
   setEnvironment: (env) => set((state) => ({ environment: { ...state.environment, ...env } })),
   setActiveRightTab: (tab) => set({ activeRightTab: tab }),
+  setActiveBottomTab: (tab) => set({ activeBottomTab: tab }),
   combineContainers: async (sourceId: string, targetId: string) => {
     const state = useLabStore.getState();
     const source = state.benchItems.find((i) => i.id === sourceId);

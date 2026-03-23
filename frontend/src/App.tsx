@@ -31,6 +31,8 @@ const TAB_CLASS =
 export default function App() {
   const activeTab = useLabStore((s) => s.activeRightTab);
   const setActiveTab = useLabStore((s) => s.setActiveRightTab);
+  const activeBottomTab = useLabStore((s) => s.activeBottomTab);
+  const setActiveBottomTab = useLabStore((s) => s.setActiveBottomTab);
 
   const [sidebarWidth, setSidebarWidth] = useState<number>(LAYOUT.SIDEBAR_DEFAULT);
   const [bottomHeight, setBottomHeight] = useState<number>(LAYOUT.BOTTOM_DEFAULT);
@@ -73,7 +75,7 @@ export default function App() {
           </div>
 
           <div className="flex-1 flex flex-col min-h-0">
-            <Tabs.Root defaultValue="inspector" className="flex flex-col h-full">
+            <Tabs.Root value={activeBottomTab} onValueChange={setActiveBottomTab} className="flex flex-col h-full">
               <Tabs.List className="flex border-b border-gray-800 shrink-0">
                 <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
                 <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>

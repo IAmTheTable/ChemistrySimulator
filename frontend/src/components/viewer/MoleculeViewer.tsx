@@ -14,6 +14,7 @@ interface MoleculeViewerProps {
   mode: string;
   showLabels: boolean;
   chargeAtoms?: ChargeAtom[] | null;
+  isOrbitalView?: boolean;
 }
 
 export default function MoleculeViewer({
@@ -22,6 +23,7 @@ export default function MoleculeViewer({
   mode,
   showLabels,
   chargeAtoms,
+  isOrbitalView = false,
 }: MoleculeViewerProps) {
   const { centeredAtoms, cameraZ } = useMemo(() => {
     if (!molecule) return { centeredAtoms: [], cameraZ: 5 };
@@ -77,7 +79,7 @@ export default function MoleculeViewer({
       <MoleculeLabels atoms={centeredAtoms} visible={showLabels} />
 
       {/* Bohr model -- nucleus + shell rings + orbiting electrons */}
-      {mode === "orbital" && orbitalData && (
+      {isOrbitalView && mode === "orbital" && orbitalData && (
         <BohrModel orbitalData={orbitalData} position={[0, 0, 0]} />
       )}
     </Canvas>
