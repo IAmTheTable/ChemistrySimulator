@@ -86,8 +86,14 @@ function BenchSurface() {
   const moveBenchItem = useLabStore((s) => s.moveBenchItem);
   const stopDragItem = useLabStore((s) => s.stopDragItem);
   const benchItems = useLabStore((s) => s.benchItems);
+  const pouringFrom = useLabStore((s) => s.pouringFrom);
+  const selectBenchItem = useLabStore((s) => s.selectBenchItem);
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    if (!placingEquipment && !pouringFrom) {
+      selectBenchItem(null);
+      return;
+    }
     if (!placingEquipment) return;
     // Substances go into existing containers, not onto the bench surface
     if (placingEquipment.startsWith("substance:")) return;

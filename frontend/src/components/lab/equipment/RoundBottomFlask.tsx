@@ -20,7 +20,13 @@ interface RoundBottomFlaskProps {
   selected?: boolean;
   damaged?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
+  onDoubleClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
+  onPointerDown?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerMove?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerUp?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerOut?: (e: ThreeEvent<PointerEvent>) => void;
   contents?: ContainerSubstance[];
   activeEffects?: string[];
   temperature?: number;
@@ -31,7 +37,13 @@ export default function RoundBottomFlask({
   selected = false,
   damaged = false,
   onClick,
+  onDoubleClick,
   onContextMenu,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerOver,
+  onPointerOut,
   contents,
   activeEffects = [],
   temperature = 25,
@@ -66,7 +78,7 @@ export default function RoundBottomFlask({
   };
 
   return (
-    <group ref={groupRef} position={position} onClick={handleClick} onContextMenu={onContextMenu}>
+    <group ref={groupRef} position={position} onClick={handleClick} onDoubleClick={onDoubleClick} onContextMenu={onContextMenu} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut}>
       {/* Spherical body */}
       <mesh castShadow>
         <sphereGeometry args={[sphereRadius, radialSegments, radialSegments]} />
@@ -120,15 +132,18 @@ export default function RoundBottomFlask({
 
       {/* Selection highlight */}
       {selected && (
-        <mesh>
-          <sphereGeometry args={[sphereRadius + 0.005, radialSegments, radialSegments]} />
-          <meshBasicMaterial
-            color="#facc15"
-            wireframe
-            transparent
-            opacity={0.8}
-          />
-        </mesh>
+        <>
+          <mesh>
+            <sphereGeometry args={[sphereRadius + 0.008, radialSegments, radialSegments]} />
+            <meshBasicMaterial
+              color="#facc15"
+              wireframe
+              transparent
+              opacity={0.6}
+            />
+          </mesh>
+          <pointLight color="#facc15" intensity={0.3} distance={0.5} />
+        </>
       )}
 
       {/* Active effects */}

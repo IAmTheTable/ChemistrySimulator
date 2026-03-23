@@ -20,7 +20,13 @@ interface BeakerProps {
   selected?: boolean;
   damaged?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
+  onDoubleClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
+  onPointerDown?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerMove?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerUp?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerOut?: (e: ThreeEvent<PointerEvent>) => void;
   // Legacy direct props (used by static starter items)
   fillLevel?: number;
   fillColor?: string;
@@ -35,7 +41,13 @@ export default function Beaker({
   selected = false,
   damaged = false,
   onClick,
+  onDoubleClick,
   onContextMenu,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerOver,
+  onPointerOut,
   fillLevel: fillLevelProp,
   fillColor: fillColorProp,
   contents,
@@ -81,7 +93,7 @@ export default function Beaker({
   };
 
   return (
-    <group ref={groupRef} position={position} onClick={handleClick} onContextMenu={onContextMenu}>
+    <group ref={groupRef} position={position} onClick={handleClick} onDoubleClick={onDoubleClick} onContextMenu={onContextMenu} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut}>
       {/* Glass body */}
       <mesh castShadow>
         <cylinderGeometry
@@ -132,24 +144,27 @@ export default function Beaker({
 
       {/* Selection highlight — wireframe outline */}
       {selected && (
-        <mesh>
-          <cylinderGeometry
-            args={[
-              radiusTop + 0.005,
-              radiusBottom + 0.005,
-              height + 0.01,
-              radialSegments,
-              1,
-              true,
-            ]}
-          />
-          <meshBasicMaterial
-            color="#facc15"
-            wireframe
-            transparent
-            opacity={0.8}
-          />
-        </mesh>
+        <>
+          <mesh>
+            <cylinderGeometry
+              args={[
+                radiusTop + 0.008,
+                radiusBottom + 0.008,
+                height + 0.01,
+                radialSegments,
+                1,
+                true,
+              ]}
+            />
+            <meshBasicMaterial
+              color="#facc15"
+              wireframe
+              transparent
+              opacity={0.6}
+            />
+          </mesh>
+          <pointLight color="#facc15" intensity={0.3} distance={0.5} />
+        </>
       )}
 
       {/* Active effects */}

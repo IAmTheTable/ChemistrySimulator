@@ -125,6 +125,8 @@ function DynamicItems() {
   const startDragItem = useLabStore((s) => s.startDragItem);
   const stopDragItem = useLabStore((s) => s.stopDragItem);
   const moveBenchItem = useLabStore((s) => s.moveBenchItem);
+  const setHoveredItem = useLabStore((s) => s.setHoveredItem);
+  const setActiveBottomTab = useLabStore((s) => s.setActiveBottomTab);
 
   return (
     <>
@@ -210,6 +212,23 @@ function DynamicItems() {
           openContextMenu({ itemId: item.id, x: e.nativeEvent.clientX, y: e.nativeEvent.clientY });
         };
 
+        const onItemDoubleClick = (e: ThreeEvent<MouseEvent>) => {
+          e.stopPropagation();
+          selectBenchItem(item.id);
+          setActiveBottomTab("inspector");
+        };
+
+        const onPointerOver = (e: ThreeEvent<PointerEvent>) => {
+          e.stopPropagation();
+          setHoveredItem(item.id);
+          document.body.style.cursor = "pointer";
+        };
+
+        const onPointerOut = () => {
+          setHoveredItem(null);
+          document.body.style.cursor = "default";
+        };
+
         const Component = COMPONENT_MAP[item.type];
         if (!Component) return null;
         return (
@@ -219,10 +238,13 @@ function DynamicItems() {
               selected={isSelected}
               damaged={item.damaged}
               onClick={onItemClick}
+              onDoubleClick={onItemDoubleClick}
               onContextMenu={onCtxMenu}
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
+              onPointerOver={onPointerOver}
+              onPointerOut={onPointerOut}
               contents={item.contents}
               activeEffects={item.activeEffects}
               temperature={item.temperature}

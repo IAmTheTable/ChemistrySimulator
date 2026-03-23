@@ -20,7 +20,13 @@ interface ErlenmeyerFlaskProps {
   selected?: boolean;
   damaged?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
+  onDoubleClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
+  onPointerDown?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerMove?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerUp?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerOut?: (e: ThreeEvent<PointerEvent>) => void;
   // Legacy direct props
   fillLevel?: number;
   fillColor?: string;
@@ -35,7 +41,13 @@ export default function ErlenmeyerFlask({
   selected = false,
   damaged = false,
   onClick,
+  onDoubleClick,
   onContextMenu,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerOver,
+  onPointerOut,
   fillLevel: fillLevelProp,
   fillColor: fillColorProp,
   contents,
@@ -79,7 +91,7 @@ export default function ErlenmeyerFlask({
   };
 
   return (
-    <group ref={groupRef} position={position} onClick={handleClick} onContextMenu={onContextMenu}>
+    <group ref={groupRef} position={position} onClick={handleClick} onDoubleClick={onDoubleClick} onContextMenu={onContextMenu} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut}>
       {/* Conical body — wide at bottom, narrow at top */}
       <mesh castShadow>
         <cylinderGeometry
@@ -149,24 +161,27 @@ export default function ErlenmeyerFlask({
 
       {/* Selection highlight — wireframe around conical body */}
       {selected && (
-        <mesh>
-          <cylinderGeometry
-            args={[
-              shoulderRadius + 0.005,
-              baseRadius + 0.005,
-              bodyHeight + 0.01,
-              radialSegments,
-              1,
-              true,
-            ]}
-          />
-          <meshBasicMaterial
-            color="#facc15"
-            wireframe
-            transparent
-            opacity={0.8}
-          />
-        </mesh>
+        <>
+          <mesh>
+            <cylinderGeometry
+              args={[
+                shoulderRadius + 0.008,
+                baseRadius + 0.008,
+                bodyHeight + 0.01,
+                radialSegments,
+                1,
+                true,
+              ]}
+            />
+            <meshBasicMaterial
+              color="#facc15"
+              wireframe
+              transparent
+              opacity={0.6}
+            />
+          </mesh>
+          <pointLight color="#facc15" intensity={0.3} distance={0.5} />
+        </>
       )}
 
       {/* Active effects */}

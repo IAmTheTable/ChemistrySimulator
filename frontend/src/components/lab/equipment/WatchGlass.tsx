@@ -13,7 +13,13 @@ interface WatchGlassProps {
   selected?: boolean;
   damaged?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
+  onDoubleClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
+  onPointerDown?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerMove?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerUp?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
+  onPointerOut?: (e: ThreeEvent<PointerEvent>) => void;
   contents?: ContainerSubstance[];
   activeEffects?: string[];
   temperature?: number;
@@ -24,7 +30,13 @@ export default function WatchGlass({
   selected = false,
   damaged = false,
   onClick,
+  onDoubleClick,
   onContextMenu,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerOver,
+  onPointerOut,
   contents,
   activeEffects: _activeEffects = [],
   temperature = 25,
@@ -48,7 +60,7 @@ export default function WatchGlass({
   };
 
   return (
-    <group ref={groupRef} position={position} onClick={handleClick} onContextMenu={onContextMenu}>
+    <group ref={groupRef} position={position} onClick={handleClick} onDoubleClick={onDoubleClick} onContextMenu={onContextMenu} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut}>
       {/* Shallow curved dish — upper hemisphere, very flat */}
       <mesh castShadow rotation={[Math.PI, 0, 0]}>
         <sphereGeometry
@@ -85,17 +97,20 @@ export default function WatchGlass({
 
       {/* Selection highlight */}
       {selected && (
-        <mesh rotation={[Math.PI, 0, 0]}>
-          <sphereGeometry
-            args={[radius + 0.005, radialSegments, 8, 0, Math.PI * 2, 0, Math.PI * 0.15]}
-          />
-          <meshBasicMaterial
-            color="#facc15"
-            wireframe
-            transparent
-            opacity={0.8}
-          />
-        </mesh>
+        <>
+          <mesh rotation={[Math.PI, 0, 0]}>
+            <sphereGeometry
+              args={[radius + 0.008, radialSegments, 8, 0, Math.PI * 2, 0, Math.PI * 0.15]}
+            />
+            <meshBasicMaterial
+              color="#facc15"
+              wireframe
+              transparent
+              opacity={0.6}
+            />
+          </mesh>
+          <pointLight color="#facc15" intensity={0.3} distance={0.5} />
+        </>
       )}
 
       {/* Floating contents label */}

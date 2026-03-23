@@ -73,6 +73,7 @@ interface LabState {
   };
   activeRightTab: string;
   activeBottomTab: string;
+  hoveredItem: string | null;
 
   selectElement: (atomicNumber: number | null) => void;
   setStation: (station: StationId) => void;
@@ -103,6 +104,7 @@ interface LabState {
   setEnvironment: (env: Partial<LabState["environment"]>) => void;
   setActiveRightTab: (tab: string) => void;
   setActiveBottomTab: (tab: string) => void;
+  setHoveredItem: (id: string | null) => void;
   resetAllDamage: () => void;
   clearAllEffects: () => void;
   notification: string | null;
@@ -132,6 +134,7 @@ export const useLabStore = create<LabState>()((set) => ({
   structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS },
   activeRightTab: "lab",
   activeBottomTab: "inspector",
+  hoveredItem: null,
   notification: null,
 
   selectElement: (atomicNumber) => set({ selectedElement: atomicNumber, selectedBenchItem: null }),
@@ -181,7 +184,7 @@ export const useLabStore = create<LabState>()((set) => ({
         item.id === id ? { ...item, activeEffects: effects } : item
       ),
     })),
-  addSubstanceToContainer: (containerId, substance) =>
+  addSubstanceToContainer: (containerId, substance) => {
     set((state) => ({
       benchItems: state.benchItems.map((item) =>
         item.id === containerId
@@ -189,7 +192,16 @@ export const useLabStore = create<LabState>()((set) => ({
           : item
       ),
       placingEquipment: null,
-    })),
+    }));
+    // In realistic mode, auto-trigger reaction when a second substance is added
+    const state = useLabStore.getState();
+    if (state.simulationMode === "realistic") {
+      const item = state.benchItems.find((b) => b.id === containerId);
+      if (item && item.contents.length >= 2) {
+        useLabStore.getState().combineContainers(containerId, containerId);
+      }
+    }
+  },
   startPouring: (containerId) => set({ pouringFrom: containerId }),
   cancelPouring: () => set({ pouringFrom: null }),
   startDragItem: (id) => set({ draggingItem: id }),
@@ -205,6 +217,7 @@ export const useLabStore = create<LabState>()((set) => ({
   setEnvironment: (env) => set((state) => ({ environment: { ...state.environment, ...env } })),
   setActiveRightTab: (tab) => set({ activeRightTab: tab }),
   setActiveBottomTab: (tab) => set({ activeBottomTab: tab }),
+  setHoveredItem: (id) => set({ hoveredItem: id }),
   resetAllDamage: () =>
     set((state) => ({
       benchItems: state.benchItems.map((item) => ({ ...item, damaged: false })),

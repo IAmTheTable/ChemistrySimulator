@@ -1,4 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import * as Tabs from "@radix-ui/react-tabs";
 import StationTabs from "./components/ui/StationTabs";
 import EnvironmentBar from "./components/ui/EnvironmentBar";
@@ -114,6 +115,40 @@ export default function App() {
       <EnvironmentBar />
       <ContainerContextMenu />
       <NotificationToast />
+      <HoverTooltip />
     </div>
+  );
+}
+
+function HoverTooltip() {
+  const hoveredItem = useLabStore((s) => s.hoveredItem);
+  const benchItems = useLabStore((s) => s.benchItems);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    if (hoveredItem) window.addEventListener("mousemove", handler);
+    return () => window.removeEventListener("mousemove", handler);
+  }, [hoveredItem]);
+
+  if (!hoveredItem) return null;
+  const item = benchItems.find((b) => b.id === hoveredItem);
+  if (!item) return null;
+
+  return createPortal(
+    <div
+      style={{ position: "fixed", left: pos.x + 12, top: pos.y - 10, zIndex: 9999, pointerEvents: "none" }}
+      className="bg-gray-800 border border-gray-600 text-gray-200 text-[10px] px-2 py-1 rounded shadow-lg max-w-48"
+    >
+      <div className="font-semibold capitalize">{item.type}</div>
+      <div className="text-gray-400">{item.temperature}°C</div>
+      {item.contents.length > 0 ? (
+        <div className="text-gray-400">{item.contents.map((s) => s.formula).join(", ")}</div>
+      ) : (
+        <div className="text-gray-500 italic">Empty</div>
+      )}
+      {item.damaged && <div className="text-red-400">Damaged</div>}
+    </div>,
+    document.body
   );
 }

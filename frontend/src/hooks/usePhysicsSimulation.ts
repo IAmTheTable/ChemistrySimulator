@@ -111,6 +111,21 @@ export function usePhysicsSimulation() {
 
       if (anyChanged) {
         useLabStore.setState({ benchItems: updatedItems });
+
+        // In realistic mode, check for heat-activated reactions
+        const { simulationMode } = useLabStore.getState();
+        if (simulationMode === "realistic") {
+          for (const item of updatedItems) {
+            if (item.contents.length >= 2) {
+              const original = benchItems.find((b) => b.id === item.id);
+              if (original && Math.abs(item.temperature - original.temperature) > 10) {
+                setTimeout(() => {
+                  useLabStore.getState().combineContainers(item.id, item.id);
+                }, 100);
+              }
+            }
+          }
+        }
       }
     }, TICK_INTERVAL);
 
