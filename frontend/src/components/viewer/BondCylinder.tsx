@@ -69,8 +69,14 @@ export default function BondCylinder({ atom1, atom2, order, mode }: BondCylinder
     return { mid: m, dir: d, quaternion: q, length: l };
   }, [atom1.x, atom1.y, atom1.z, atom2.x, atom2.y, atom2.z]);
 
-  const bondColor = "#808080";
-  const baseRadius = mode === "wireframe" ? 0.02 : order === 1 ? 0.05 : order === 2 ? 0.03 : 0.025;
+  const bondColor = mode === "ball-and-stick" ? "#666666" : "#555555";
+  let baseRadius: number;
+  if (mode === "wireframe") {
+    baseRadius = 0.01;
+  } else {
+    // Ball-and-stick: prominent bonds
+    baseRadius = order === 1 ? 0.06 : order === 2 ? 0.04 : 0.03;
+  }
 
   if (order === 1 || mode === "wireframe") {
     return (
