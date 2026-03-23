@@ -151,6 +151,27 @@ FORMULA_TO_SMILES: dict[str, str] = {
     # Halogenated
     "C2H3Cl": "C=CCl",         # Vinyl chloride
     "C2HCl3": "ClC=C(Cl)Cl",   # Trichloroethylene
+    # More oxides
+    "P2O5": "O=P(=O)OP(=O)=O",
+    "B2O3": "B1OB(O1)=O",
+    # More organics
+    "C4H10O": "CCCCO",          # Butanol
+    "C6H12": "C1CCCCC1",        # Cyclohexane
+    "C5H10O": "CCCCC=O",        # Pentanal
+    "C5H12O": "CCCCCO",         # Pentanol
+    "C6H12O": "CCCCCC=O",       # Hexanal
+    "C7H14": "CCCCCCC",         # Heptene approx
+    "C8H16": "CCCCCCCC",        # Octene approx
+    "C10H20": "CCCCCCCCCC",     # Decene approx
+    "C6H5COOH": "OC(=O)c1ccccc1",  # Benzoic acid
+    "C7H6O2": "OC(=O)c1ccccc1",    # Benzoic acid alt
+    "C6H5NH2": "Nc1ccccc1",        # Aniline
+    "C7H9N": "NCc1ccccc1",         # Benzylamine
+    "C4H8O2": "CCCC(=O)O",         # Butanoic acid
+    "C5H10O2": "CCCCC(=O)O",       # Pentanoic acid
+    "C2H3N": "CC#N",               # Acetonitrile
+    "C3H5N": "CCC#N",              # Propionitrile
+    "C4H9OH": "CCCCO",             # Butanol (1-)
 }
 
 # RDKit bond type to integer order mapping
@@ -198,9 +219,8 @@ class StructureGenerator:
     def _guess_smiles(self, formula: str) -> str | None:
         """Try to construct a SMILES string from a molecular formula.
 
-        For organic formulas (containing C), builds a simple linear carbon chain
-        with appropriate bonds. For inorganics, tries RDKit's MolFromSmiles
-        with element-only SMILES.
+        Uses degree of unsaturation and element counts to build a plausible
+        SMILES. Falls back to a simple carbon chain if heuristics fail.
         """
         from app.engine.equation_balancer import parse_formula as pf
 
@@ -215,30 +235,62 @@ class StructureGenerator:
         n = counts.get("N", 0)
 
         if c == 0:
-            # Inorganic — try simple concatenation for diatomics
+            # Inorganic — try simple representations for single-element formulas
             if len(counts) == 1:
                 sym = next(iter(counts))
                 return f"[{sym}]"
-            if len(counts) == 2 and counts.get("Na") and counts.get("Cl"):
-                return "[Na+].[Cl-]"
+            # Two-element ionic compound guess
+            if len(counts) == 2:
+                symbols = list(counts.keys())
+                s1, s2 = symbols
+                c1, c2 = counts[s1], counts[s2]
+                parts = [f"[{s1}]"] * c1 + [f"[{s2}]"] * c2
+                return ".".join(parts)
             return None
 
-        # Build a simple linear alkane chain and let RDKit add Hs
-        smiles = "C" * c
+        # Degree of unsaturation: DoU = (2C + 2 + N - H) / 2
+        dou = (2 * c + 2 + n - h) / 2
 
-        # Add oxygen as OH groups or =O
-        for _ in range(min(o, c)):
-            smiles += "O"
+        if dou >= 4 and c >= 6:
+            # Likely aromatic — use benzene ring as core
+            remaining_c = c - 6
+            smiles = "c1ccccc1" + "C" * remaining_c
+        elif dou >= 1 and o == 0 and n == 0:
+            # Unsaturated hydrocarbon
+            if dou == 1:
+                smiles = "C" * max(c - 2, 0) + "C=C"
+            elif dou == 2:
+                smiles = "C#C" + "C" * max(c - 2, 0)
+            else:
+                smiles = "C" * c
+        else:
+            # Saturated or has functional groups
+            chain = "C" * c
 
-        # Add nitrogen as NH2
-        for _ in range(min(n, c)):
-            smiles += "N"
+            if o == 1 and h == 2 * c + 2:
+                # Primary alcohol: CnH(2n+2)O
+                chain = "C" * max(c - 1, 0) + "CO"
+            elif o == 2 and h == 2 * c:
+                # Carboxylic acid: CnH(2n)O2
+                chain = "C" * max(c - 1, 0) + "C(=O)O"
+            elif o == 1 and h == 2 * c:
+                # Aldehyde or ketone: CnH(2n)O
+                chain = "C" * max(c - 1, 0) + "C=O"
+            elif o == 2 and h == 2 * c + 2:
+                # Ester: CnH(2n+2)O2
+                chain = "C" * max(c - 2, 1) + "C(=O)OC"
+            elif n == 1 and h == 2 * c + 3:
+                # Primary amine: CnH(2n+3)N
+                chain = "C" * c + "N"
+            elif n == 1:
+                chain = "C" * c + "N"
 
-        # Validate with RDKit
+            smiles = chain
+
+        # Validate with RDKit; fall back to plain chain on failure
         mol = Chem.MolFromSmiles(smiles)
         if mol is None:
-            # Fallback: just a carbon chain
-            smiles = "C" * c
+            smiles = "C" * max(c, 1)
             mol = Chem.MolFromSmiles(smiles)
             if mol is None:
                 return None
