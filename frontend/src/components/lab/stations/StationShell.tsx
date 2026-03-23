@@ -1,12 +1,12 @@
 import React from "react";
 
 export const LABEL_STYLE: React.CSSProperties = {
-  color: "#d1d5db",
-  fontSize: "8px",
+  color: "#9ca3af",
+  fontSize: "6px",
   whiteSpace: "nowrap",
-  background: "rgba(0,0,0,0.6)",
-  padding: "1px 5px",
-  borderRadius: "3px",
+  background: "rgba(0,0,0,0.4)",
+  padding: "0px 3px",
+  borderRadius: "2px",
   pointerEvents: "none",
 };
 

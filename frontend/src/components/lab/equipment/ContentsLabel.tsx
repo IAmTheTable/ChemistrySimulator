@@ -11,7 +11,7 @@ export default function ContentsLabel({ contents, yOffset }: ContentsLabelProps)
   return (
     <Html position={[0, yOffset, 0]} center distanceFactor={8}>
       <div style={{ background: "rgba(0,0,0,0.7)", padding: "2px 6px", borderRadius: "4px", whiteSpace: "nowrap", pointerEvents: "none" }}>
-        <span style={{ color: "#e2e8f0", fontSize: "8px" }}>
+        <span style={{ color: "#e2e8f0", fontSize: "7px" }}>
           {contents.map(s => s.formula).join(" + ")}
         </span>
       </div>

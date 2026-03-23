@@ -12,61 +12,48 @@ import ContentsLabel from "./ContentsLabel";
 const CAPACITY_ML = 250;
 const COLD_GLASS_COLOR = "#c8e6ff";
 
-interface ErlenmeyerFlaskProps {
+interface RoundBottomFlaskProps {
   position: [number, number, number];
   selected?: boolean;
   damaged?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
-  // Legacy direct props
-  fillLevel?: number;
-  fillColor?: string;
-  // Dynamic props from store
   contents?: ContainerSubstance[];
   activeEffects?: string[];
   temperature?: number;
 }
 
-export default function ErlenmeyerFlask({
+export default function RoundBottomFlask({
   position,
   selected = false,
   damaged = false,
   onClick,
   onContextMenu,
-  fillLevel: fillLevelProp,
-  fillColor: fillColorProp,
   contents,
   activeEffects = [],
   temperature = 25,
-}: ErlenmeyerFlaskProps) {
+}: RoundBottomFlaskProps) {
   const groupRef = useRef<THREE.Group>(null);
 
-  const bodyHeight = 0.18;
-  const neckHeight = 0.08;
-  const baseRadius = 0.1;
-  const shoulderRadius = 0.025;
+  const sphereRadius = 0.1;
+  const neckHeight = 0.12;
   const neckRadius = 0.02;
   const radialSegments = 24;
 
-  // Derive fill from contents if provided
   const computed = contents && contents.length > 0 ? computeFillState(contents, CAPACITY_ML) : null;
-  const fillLevel = computed ? computed.fillLevel : (fillLevelProp ?? 0);
-  const fillColor = computed ? computed.fillColor : (fillColorProp ?? "#ffb74d");
+  const fillLevel = computed ? computed.fillLevel : 0;
+  const fillColor = computed ? computed.fillColor : "#4fc3f7";
 
-  // Total height for fill calculations
-  const totalFillableHeight = bodyHeight - 0.01;
-  const fillHeight = Math.max(0, fillLevel) * totalFillableHeight;
-  const fillTopRadius =
-    baseRadius - (baseRadius - shoulderRadius) * Math.min(1, fillLevel);
-  const fillBottomRadius = baseRadius - 0.005;
-  const fillY = -bodyHeight / 2 + fillHeight / 2 + 0.005;
-
-  // Hot glow; darken if damaged
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
   const glassOpacity = damaged ? 0.4 : 0.22;
 
-  const effectAnchorY = -bodyHeight / 2 + fillHeight + 0.01;
+  // Fill: liquid sits in the bottom of the sphere
+  const fillHeight = fillLevel * sphereRadius * 1.6;
+  const fillY = -sphereRadius + fillHeight / 2 + 0.01;
+  const fillRadius = sphereRadius * 0.85 * Math.min(1, fillLevel * 1.2);
+
+  const effectAnchorY = -sphereRadius + fillHeight + 0.01;
   const effectPos: [number, number, number] = [0, effectAnchorY, 0];
   const precipColor = contents && contents.length > 0 ? contents[0].color : "#ffffff";
 
@@ -77,11 +64,9 @@ export default function ErlenmeyerFlask({
 
   return (
     <group ref={groupRef} position={position} onClick={handleClick} onContextMenu={onContextMenu}>
-      {/* Conical body — wide at bottom, narrow at top */}
+      {/* Spherical body */}
       <mesh castShadow>
-        <cylinderGeometry
-          args={[shoulderRadius, baseRadius, bodyHeight, radialSegments, 1, true]}
-        />
+        <sphereGeometry args={[sphereRadius, radialSegments, radialSegments]} />
         <meshPhysicalMaterial
           transparent
           opacity={glassOpacity}
@@ -93,27 +78,13 @@ export default function ErlenmeyerFlask({
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
-        />
-      </mesh>
-
-      {/* Bottom disk */}
-      <mesh position={[0, -bodyHeight / 2, 0]} castShadow>
-        <cylinderGeometry args={[baseRadius, baseRadius, 0.008, radialSegments]} />
-        <meshPhysicalMaterial
-          transparent
-          opacity={0.28}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.88}
-          thickness={0.3}
-          color={glassColor}
         />
       </mesh>
 
       {/* Neck cylinder */}
-      <mesh position={[0, bodyHeight / 2 + neckHeight / 2, 0]} castShadow>
+      <mesh position={[0, sphereRadius + neckHeight / 2, 0]} castShadow>
         <cylinderGeometry
-          args={[neckRadius, shoulderRadius, neckHeight, radialSegments, 1, true]}
+          args={[neckRadius, neckRadius * 1.5, neckHeight, radialSegments, 1, true]}
         />
         <meshPhysicalMaterial
           transparent
@@ -129,11 +100,11 @@ export default function ErlenmeyerFlask({
         />
       </mesh>
 
-      {/* Liquid fill (in conical body only) */}
+      {/* Liquid fill */}
       {fillLevel > 0 && (
         <mesh position={[0, fillY, 0]}>
-          <cylinderGeometry
-            args={[fillTopRadius, fillBottomRadius, fillHeight, radialSegments]}
+          <sphereGeometry
+            args={[fillRadius, radialSegments, radialSegments, 0, Math.PI * 2, Math.PI * 0.3, Math.PI * 0.7]}
           />
           <meshStandardMaterial
             color={fillColor}
@@ -144,19 +115,10 @@ export default function ErlenmeyerFlask({
         </mesh>
       )}
 
-      {/* Selection highlight — wireframe around conical body */}
+      {/* Selection highlight */}
       {selected && (
         <mesh>
-          <cylinderGeometry
-            args={[
-              shoulderRadius + 0.005,
-              baseRadius + 0.005,
-              bodyHeight + 0.01,
-              radialSegments,
-              1,
-              true,
-            ]}
-          />
+          <sphereGeometry args={[sphereRadius + 0.005, radialSegments, radialSegments]} />
           <meshBasicMaterial
             color="#facc15"
             wireframe
@@ -171,17 +133,17 @@ export default function ErlenmeyerFlask({
         <BubbleEffect position={effectPos} rate="moderate" />
       )}
       {activeEffects.includes("steam") && (
-        <SteamEffect position={[0, bodyHeight / 2 + neckHeight, 0]} />
+        <SteamEffect position={[0, sphereRadius + neckHeight, 0]} />
       )}
       {activeEffects.includes("flame") && (
-        <FlameEffect position={[0, -bodyHeight / 2 - 0.04, 0]} />
+        <FlameEffect position={[0, -sphereRadius - 0.04, 0]} />
       )}
       {activeEffects.includes("precipitate") && (
         <PrecipitateEffect position={effectPos} color={precipColor} />
       )}
 
       {/* Floating contents label */}
-      <ContentsLabel contents={contents ?? []} yOffset={bodyHeight / 2 + neckHeight + 0.1} />
+      <ContentsLabel contents={contents ?? []} yOffset={sphereRadius + neckHeight + 0.1} />
     </group>
   );
 }

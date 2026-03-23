@@ -15,6 +15,7 @@ const COLD_GLASS_COLOR = "#c8e6ff";
 interface BeakerProps {
   position: [number, number, number];
   selected?: boolean;
+  damaged?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
   // Legacy direct props (used by static starter items)
@@ -29,6 +30,7 @@ interface BeakerProps {
 export default function Beaker({
   position,
   selected = false,
+  damaged = false,
   onClick,
   onContextMenu,
   fillLevel: fillLevelProp,
@@ -58,8 +60,10 @@ export default function Beaker({
     (radiusTop - radiusBottom - wallThickness) * Math.min(1, fillLevel);
   const fillY = -height / 2 + fillHeight / 2 + 0.01;
 
-  // Emissive glow when hot
-  const { glassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
+  // Emissive glow when hot; darken if damaged
+  const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
+  const glassColor = damaged ? "#5c4033" : baseGlassColor;
+  const glassOpacity = damaged ? 0.4 : 0.25;
 
   // Effect anchor: top of the liquid, centered
   const effectAnchorY = -height / 2 + fillHeight + 0.02;
@@ -82,7 +86,7 @@ export default function Beaker({
         />
         <meshPhysicalMaterial
           transparent
-          opacity={0.25}
+          opacity={glassOpacity}
           roughness={0.0}
           metalness={0.0}
           transmission={0.9}

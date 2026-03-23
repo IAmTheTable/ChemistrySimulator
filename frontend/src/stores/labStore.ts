@@ -25,6 +25,7 @@ export interface BenchItem {
   contents: ContainerSubstance[];
   temperature: number;
   activeEffects: string[];
+  damaged: boolean;
 }
 
 export interface ContextMenuState {
@@ -36,12 +37,12 @@ export interface ContextMenuState {
 const STRUCTURE_VIEWER_DEFAULTS = { formula: null, atomicNumber: null, mode: "ball-and-stick" as const, showLabels: false, showCharges: false };
 
 const STARTER_ITEMS: BenchItem[] = [
-  { id: "beaker-1", type: "beaker", position: [-0.6, 0.20, 0.3], contents: [], temperature: 25, activeEffects: [] },
-  { id: "beaker-2", type: "beaker", position: [0.2, 0.20, -0.2], contents: [], temperature: 25, activeEffects: [] },
-  { id: "flask-1", type: "erlenmeyer", position: [0.8, 0.14, 0.4], contents: [], temperature: 25, activeEffects: [] },
-  { id: "tube-1", type: "test-tube", position: [-1.35, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
-  { id: "tube-2", type: "test-tube", position: [-1.25, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
-  { id: "tube-3", type: "test-tube", position: [-1.15, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [] },
+  { id: "beaker-1", type: "beaker", position: [-0.6, 0.20, 0.3], contents: [], temperature: 25, activeEffects: [], damaged: false },
+  { id: "beaker-2", type: "beaker", position: [0.2, 0.20, -0.2], contents: [], temperature: 25, activeEffects: [], damaged: false },
+  { id: "flask-1", type: "erlenmeyer", position: [0.8, 0.14, 0.4], contents: [], temperature: 25, activeEffects: [], damaged: false },
+  { id: "tube-1", type: "test-tube", position: [-1.35, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [], damaged: false },
+  { id: "tube-2", type: "test-tube", position: [-1.25, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [], damaged: false },
+  { id: "tube-3", type: "test-tube", position: [-1.15, 0.495, -1.05], contents: [], temperature: 25, activeEffects: [], damaged: false },
 ];
 
 interface LabState {
@@ -51,6 +52,7 @@ interface LabState {
   selectedBenchItem: string | null;
   placingEquipment: string | null;
   pouringFrom: string | null;
+  draggingItem: string | null;
   substanceAmount: number;
   simulationMode: "instant" | "realistic";
   reactionLog: ReactionLogEntry[];
@@ -87,6 +89,8 @@ interface LabState {
   addSubstanceToContainer: (containerId: string, substance: ContainerSubstance) => void;
   startPouring: (containerId: string) => void;
   cancelPouring: () => void;
+  startDragItem: (id: string) => void;
+  stopDragItem: () => void;
   openContextMenu: (state: ContextMenuState) => void;
   closeContextMenu: () => void;
   combineContainers: (sourceId: string, targetId: string) => Promise<void>;
@@ -108,6 +112,7 @@ export const useLabStore = create<LabState>()((set) => ({
   selectedBenchItem: null,
   placingEquipment: null,
   pouringFrom: null,
+  draggingItem: null,
   substanceAmount: 50,
   simulationMode: "instant",
   reactionLog: [],
@@ -133,6 +138,7 @@ export const useLabStore = create<LabState>()((set) => ({
           ...item,
           temperature: item.temperature ?? 25,
           activeEffects: item.activeEffects ?? [],
+          damaged: item.damaged ?? false,
         },
       ],
       placingEquipment: null,
@@ -180,6 +186,8 @@ export const useLabStore = create<LabState>()((set) => ({
     })),
   startPouring: (containerId) => set({ pouringFrom: containerId }),
   cancelPouring: () => set({ pouringFrom: null }),
+  startDragItem: (id) => set({ draggingItem: id }),
+  stopDragItem: () => set({ draggingItem: null }),
   openContextMenu: (state) => set({ contextMenu: state }),
   closeContextMenu: () => set({ contextMenu: null }),
   openStructureViewer: (formula) => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS, formula }, activeBottomTab: "structure" }),
@@ -233,12 +241,19 @@ export const useLabStore = create<LabState>()((set) => ({
       if (result.effects.gas) effectNames.push("bubbles");
       if (result.effects.heat === "exothermic") effectNames.push("steam");
       if (result.effects.precipitate) effectNames.push("precipitate");
+      const isExplosion = result.effects.special?.includes("explosion") ?? false;
 
       // Merge contents, temperature, and effects into a single set() call
       set((state) => ({
         benchItems: state.benchItems.map((item) => {
           if (item.id === targetId) {
-            return { ...item, contents: newContents, temperature: item.temperature + result.temp_change, activeEffects: effectNames };
+            return {
+              ...item,
+              contents: newContents,
+              temperature: item.temperature + result.temp_change,
+              activeEffects: effectNames,
+              damaged: item.damaged || isExplosion,
+            };
           }
           if (!isSelfCombine && item.id === sourceId) {
             return { ...item, contents: [] };

@@ -99,10 +99,17 @@ export default function ContainerContextMenu() {
       className="min-w-[160px] rounded-md bg-gray-800 border border-gray-700 p-1 shadow-xl text-sm"
       onContextMenu={(e) => e.preventDefault()}
     >
-      {/* Temperature header */}
+      {/* Container summary header */}
       {item && (
         <div className="px-2 py-1 text-[10px] text-gray-500 border-b border-gray-700 mb-1">
-          Temp: {item.temperature}&deg;C &middot; {item.contents.length} substance{item.contents.length !== 1 ? "s" : ""}
+          <div>{item.type.replace("-", " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}{item.damaged ? " (damaged)" : ""}</div>
+          <div>
+            Temp: {item.temperature}&deg;C
+            {item.contents.length > 0 && (
+              <> &middot; {item.contents.map((s) => s.formula).join(", ")}</>
+            )}
+            {item.contents.length === 0 && <> &middot; empty</>}
+          </div>
         </div>
       )}
 

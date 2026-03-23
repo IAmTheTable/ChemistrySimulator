@@ -4,6 +4,9 @@ const EQUIPMENT = [
   { type: "beaker", label: "Beaker" },
   { type: "erlenmeyer", label: "Erlenmeyer Flask" },
   { type: "test-tube", label: "Test Tube" },
+  { type: "round-bottom", label: "Round-Bottom Flask" },
+  { type: "watch-glass", label: "Watch Glass" },
+  { type: "graduated-cylinder", label: "Graduated Cylinder" },
 ];
 
 export default function EquipmentPalette() {

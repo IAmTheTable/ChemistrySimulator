@@ -9,64 +9,53 @@ import PrecipitateEffect from "../effects/PrecipitateEffect";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
 import ContentsLabel from "./ContentsLabel";
 
-const CAPACITY_ML = 250;
+const CAPACITY_ML = 100;
 const COLD_GLASS_COLOR = "#c8e6ff";
 
-interface ErlenmeyerFlaskProps {
+interface GraduatedCylinderProps {
   position: [number, number, number];
   selected?: boolean;
   damaged?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
-  // Legacy direct props
-  fillLevel?: number;
-  fillColor?: string;
-  // Dynamic props from store
   contents?: ContainerSubstance[];
   activeEffects?: string[];
   temperature?: number;
 }
 
-export default function ErlenmeyerFlask({
+export default function GraduatedCylinder({
   position,
   selected = false,
   damaged = false,
   onClick,
   onContextMenu,
-  fillLevel: fillLevelProp,
-  fillColor: fillColorProp,
   contents,
   activeEffects = [],
   temperature = 25,
-}: ErlenmeyerFlaskProps) {
+}: GraduatedCylinderProps) {
   const groupRef = useRef<THREE.Group>(null);
 
-  const bodyHeight = 0.18;
-  const neckHeight = 0.08;
-  const baseRadius = 0.1;
-  const shoulderRadius = 0.025;
-  const neckRadius = 0.02;
-  const radialSegments = 24;
+  const height = 0.45;
+  const radius = 0.035;
+  const radialSegments = 20;
+  const wallThickness = 0.004;
+  const baseRadius = 0.05;
+  const baseHeight = 0.02;
 
-  // Derive fill from contents if provided
   const computed = contents && contents.length > 0 ? computeFillState(contents, CAPACITY_ML) : null;
-  const fillLevel = computed ? computed.fillLevel : (fillLevelProp ?? 0);
-  const fillColor = computed ? computed.fillColor : (fillColorProp ?? "#ffb74d");
+  const fillLevel = computed ? computed.fillLevel : 0;
+  const fillColor = computed ? computed.fillColor : "#4fc3f7";
 
-  // Total height for fill calculations
-  const totalFillableHeight = bodyHeight - 0.01;
-  const fillHeight = Math.max(0, fillLevel) * totalFillableHeight;
-  const fillTopRadius =
-    baseRadius - (baseRadius - shoulderRadius) * Math.min(1, fillLevel);
-  const fillBottomRadius = baseRadius - 0.005;
-  const fillY = -bodyHeight / 2 + fillHeight / 2 + 0.005;
-
-  // Hot glow; darken if damaged
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
   const glassOpacity = damaged ? 0.4 : 0.22;
 
-  const effectAnchorY = -bodyHeight / 2 + fillHeight + 0.01;
+  // Fill dimensions
+  const fillHeight = Math.max(0, fillLevel) * (height - 0.02);
+  const fillRadius = radius - wallThickness;
+  const fillY = -height / 2 + fillHeight / 2 + 0.01;
+
+  const effectAnchorY = -height / 2 + fillHeight + 0.01;
   const effectPos: [number, number, number] = [0, effectAnchorY, 0];
   const precipColor = contents && contents.length > 0 ? contents[0].color : "#ffffff";
 
@@ -75,12 +64,20 @@ export default function ErlenmeyerFlask({
     onClick?.(e);
   };
 
+  // Graduation marks (white lines along the side)
+  const graduations: [number, number, number][] = [];
+  const numMarks = 10;
+  for (let i = 1; i <= numMarks; i++) {
+    const y = -height / 2 + (i / numMarks) * (height - 0.02);
+    graduations.push([0, y, 0]);
+  }
+
   return (
     <group ref={groupRef} position={position} onClick={handleClick} onContextMenu={onContextMenu}>
-      {/* Conical body — wide at bottom, narrow at top */}
+      {/* Glass cylinder body */}
       <mesh castShadow>
         <cylinderGeometry
-          args={[shoulderRadius, baseRadius, bodyHeight, radialSegments, 1, true]}
+          args={[radius, radius, height, radialSegments, 1, true]}
         />
         <meshPhysicalMaterial
           transparent
@@ -88,7 +85,7 @@ export default function ErlenmeyerFlask({
           roughness={0.0}
           metalness={0.0}
           transmission={0.9}
-          thickness={0.5}
+          thickness={0.4}
           side={THREE.DoubleSide}
           color={glassColor}
           emissive={glassEmissive}
@@ -96,44 +93,47 @@ export default function ErlenmeyerFlask({
         />
       </mesh>
 
-      {/* Bottom disk */}
-      <mesh position={[0, -bodyHeight / 2, 0]} castShadow>
-        <cylinderGeometry args={[baseRadius, baseRadius, 0.008, radialSegments]} />
+      {/* Wide base for stability */}
+      <mesh position={[0, -height / 2 - baseHeight / 2, 0]} castShadow>
+        <cylinderGeometry args={[baseRadius, baseRadius, baseHeight, radialSegments]} />
         <meshPhysicalMaterial
           transparent
-          opacity={0.28}
+          opacity={0.3}
           roughness={0.0}
           metalness={0.0}
-          transmission={0.88}
+          transmission={0.85}
           thickness={0.3}
           color={glassColor}
         />
       </mesh>
 
-      {/* Neck cylinder */}
-      <mesh position={[0, bodyHeight / 2 + neckHeight / 2, 0]} castShadow>
-        <cylinderGeometry
-          args={[neckRadius, shoulderRadius, neckHeight, radialSegments, 1, true]}
-        />
+      {/* Bottom disk */}
+      <mesh position={[0, -height / 2, 0]} castShadow>
+        <cylinderGeometry args={[radius, radius, 0.006, radialSegments]} />
         <meshPhysicalMaterial
           transparent
-          opacity={glassOpacity}
+          opacity={0.3}
           roughness={0.0}
           metalness={0.0}
-          transmission={0.9}
-          thickness={0.5}
-          side={THREE.DoubleSide}
+          transmission={0.85}
+          thickness={0.3}
           color={glassColor}
-          emissive={glassEmissive}
-          emissiveIntensity={glassEmissiveIntensity}
         />
       </mesh>
 
-      {/* Liquid fill (in conical body only) */}
+      {/* Graduation marks */}
+      {graduations.map((pos, i) => (
+        <mesh key={i} position={[0, pos[1], radius + 0.001]}>
+          <boxGeometry args={[0.01, 0.001, 0.001]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.5} />
+        </mesh>
+      ))}
+
+      {/* Liquid fill */}
       {fillLevel > 0 && (
         <mesh position={[0, fillY, 0]}>
           <cylinderGeometry
-            args={[fillTopRadius, fillBottomRadius, fillHeight, radialSegments]}
+            args={[fillRadius, fillRadius, fillHeight, radialSegments]}
           />
           <meshStandardMaterial
             color={fillColor}
@@ -144,14 +144,14 @@ export default function ErlenmeyerFlask({
         </mesh>
       )}
 
-      {/* Selection highlight — wireframe around conical body */}
+      {/* Selection highlight */}
       {selected && (
         <mesh>
           <cylinderGeometry
             args={[
-              shoulderRadius + 0.005,
-              baseRadius + 0.005,
-              bodyHeight + 0.01,
+              radius + 0.004,
+              radius + 0.004,
+              height + 0.01,
               radialSegments,
               1,
               true,
@@ -168,20 +168,20 @@ export default function ErlenmeyerFlask({
 
       {/* Active effects */}
       {activeEffects.includes("bubbles") && (
-        <BubbleEffect position={effectPos} rate="moderate" />
+        <BubbleEffect position={effectPos} rate="gentle" />
       )}
       {activeEffects.includes("steam") && (
-        <SteamEffect position={[0, bodyHeight / 2 + neckHeight, 0]} />
+        <SteamEffect position={[0, height / 2, 0]} />
       )}
       {activeEffects.includes("flame") && (
-        <FlameEffect position={[0, -bodyHeight / 2 - 0.04, 0]} />
+        <FlameEffect position={[0, -height / 2 - baseHeight - 0.04, 0]} />
       )}
       {activeEffects.includes("precipitate") && (
         <PrecipitateEffect position={effectPos} color={precipColor} />
       )}
 
       {/* Floating contents label */}
-      <ContentsLabel contents={contents ?? []} yOffset={bodyHeight / 2 + neckHeight + 0.1} />
+      <ContentsLabel contents={contents ?? []} yOffset={height / 2 + 0.1} />
     </group>
   );
 }

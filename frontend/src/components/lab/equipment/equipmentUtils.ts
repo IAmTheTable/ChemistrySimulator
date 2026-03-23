@@ -37,4 +37,7 @@ export const EQUIPMENT_Y_OFFSETS: Record<string, number> = {
   beaker: 0.20,
   erlenmeyer: 0.14,
   "test-tube": 0.20,
+  "round-bottom": 0.16,
+  "watch-glass": 0.08,
+  "graduated-cylinder": 0.25,
 };

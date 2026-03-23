@@ -1,15 +1,22 @@
 import type { ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import { useLabStore } from "../../../stores/labStore";
+import { EQUIPMENT_Y_OFFSETS } from "../equipment/equipmentUtils";
 import Beaker from "../equipment/Beaker";
 import TestTube from "../equipment/TestTube";
 import ErlenmeyerFlask from "../equipment/ErlenmeyerFlask";
+import RoundBottomFlask from "../equipment/RoundBottomFlask";
+import WatchGlass from "../equipment/WatchGlass";
+import GraduatedCylinder from "../equipment/GraduatedCylinder";
 import StationShell, { LABEL_STYLE } from "./StationShell";
 
 const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   beaker: Beaker,
   erlenmeyer: ErlenmeyerFlask,
   "test-tube": TestTube,
+  "round-bottom": RoundBottomFlask,
+  "watch-glass": WatchGlass,
+  "graduated-cylinder": GraduatedCylinder,
 };
 
 export default function MainBench() {
@@ -59,11 +66,46 @@ function DynamicItems() {
   const substanceAmount = useLabStore((s) => s.substanceAmount);
   const pouringFrom = useLabStore((s) => s.pouringFrom);
   const cancelPouring = useLabStore((s) => s.cancelPouring);
+  const draggingItem = useLabStore((s) => s.draggingItem);
+  const startDragItem = useLabStore((s) => s.startDragItem);
+  const stopDragItem = useLabStore((s) => s.stopDragItem);
+  const moveBenchItem = useLabStore((s) => s.moveBenchItem);
 
   return (
     <>
       {benchItems.map((item) => {
         const isSelected = selectedBenchItem === item.id;
+        // Highlight containers as valid pour targets
+        const isPourTarget = !!(pouringFrom && pouringFrom !== item.id);
+        const isPlaceTarget = !!(placingEquipment?.startsWith("substance:"));
+        const showTargetGlow = isPourTarget || isPlaceTarget;
+
+        const onPointerDown = (e: ThreeEvent<PointerEvent>) => {
+          if (e.nativeEvent.button !== 0) return; // left click only
+          if (placingEquipment || pouringFrom) return; // don't drag while placing/pouring
+          e.stopPropagation();
+          startDragItem(item.id);
+        };
+
+        const onPointerMove = (e: ThreeEvent<PointerEvent>) => {
+          if (draggingItem !== item.id) return;
+          e.stopPropagation();
+          const point = e.point;
+          const yOffset = EQUIPMENT_Y_OFFSETS[item.type] ?? 0.20;
+          moveBenchItem(item.id, [
+            Math.round(point.x * 10) / 10,
+            yOffset,
+            Math.round(point.z * 10) / 10,
+          ]);
+        };
+
+        const onPointerUp = (e: ThreeEvent<PointerEvent>) => {
+          if (draggingItem === item.id) {
+            e.stopPropagation();
+            stopDragItem();
+          }
+        };
+
         const onItemClick = (e: ThreeEvent<MouseEvent>) => {
           e.stopPropagation();
 
@@ -108,7 +150,7 @@ function DynamicItems() {
             selectBenchItem(selectedBenchItem === item.id ? null : item.id);
           }
         };
-        const onContextMenu = (e: ThreeEvent<MouseEvent>) => {
+        const onCtxMenu = (e: ThreeEvent<MouseEvent>) => {
           e.stopPropagation();
           openContextMenu({ itemId: item.id, x: e.nativeEvent.clientX, y: e.nativeEvent.clientY });
         };
@@ -116,16 +158,28 @@ function DynamicItems() {
         const Component = COMPONENT_MAP[item.type];
         if (!Component) return null;
         return (
-          <Component
-            key={item.id}
-            position={item.position}
-            selected={isSelected}
-            onClick={onItemClick}
-            onContextMenu={onContextMenu}
-            contents={item.contents}
-            activeEffects={item.activeEffects}
-            temperature={item.temperature}
-          />
+          <group key={item.id}>
+            <Component
+              position={item.position}
+              selected={isSelected}
+              damaged={item.damaged}
+              onClick={onItemClick}
+              onContextMenu={onCtxMenu}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              contents={item.contents}
+              activeEffects={item.activeEffects}
+              temperature={item.temperature}
+            />
+            {/* Pulsing glow ring for valid pour/place targets */}
+            {showTargetGlow && (
+              <mesh position={[item.position[0], 0.06, item.position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
+                <ringGeometry args={[0.1, 0.14, 32]} />
+                <meshBasicMaterial color="#22d3ee" transparent opacity={0.5} />
+              </mesh>
+            )}
+          </group>
         );
       })}
     </>

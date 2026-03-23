@@ -15,6 +15,7 @@ const COLD_GLASS_COLOR = "#ddeeff";
 interface TestTubeProps {
   position: [number, number, number];
   selected?: boolean;
+  damaged?: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onContextMenu?: (e: ThreeEvent<MouseEvent>) => void;
   // Legacy direct props
@@ -29,6 +30,7 @@ interface TestTubeProps {
 export default function TestTube({
   position,
   selected = false,
+  damaged = false,
   onClick,
   onContextMenu,
   fillLevel: fillLevelProp,
@@ -54,8 +56,10 @@ export default function TestTube({
   const fillRadius = radius - wallThickness;
   const fillY = -height / 2 + fillHeight / 2 + 0.01;
 
-  // Hot glow
-  const { glassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
+  // Hot glow; darken if damaged
+  const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
+  const glassColor = damaged ? "#5c4033" : baseGlassColor;
+  const glassOpacity = damaged ? 0.4 : 0.2;
 
   const effectAnchorY = -height / 2 + fillHeight + 0.01;
   const effectPos: [number, number, number] = [0, effectAnchorY, 0];
@@ -75,7 +79,7 @@ export default function TestTube({
         />
         <meshPhysicalMaterial
           transparent
-          opacity={0.2}
+          opacity={glassOpacity}
           roughness={0.0}
           metalness={0.0}
           transmission={0.92}

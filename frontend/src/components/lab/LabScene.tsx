@@ -82,6 +82,10 @@ export default function LabScene() {
 function BenchSurface() {
   const placingEquipment = useLabStore((s) => s.placingEquipment);
   const addBenchItem = useLabStore((s) => s.addBenchItem);
+  const draggingItem = useLabStore((s) => s.draggingItem);
+  const moveBenchItem = useLabStore((s) => s.moveBenchItem);
+  const stopDragItem = useLabStore((s) => s.stopDragItem);
+  const benchItems = useLabStore((s) => s.benchItems);
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     if (!placingEquipment) return;
@@ -104,7 +108,26 @@ function BenchSurface() {
       contents: [],
       temperature: 25,
       activeEffects: [],
+      damaged: false,
     });
+  };
+
+  const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
+    if (!draggingItem) return;
+    const point = e.point;
+    const item = benchItems.find((i) => i.id === draggingItem);
+    const yOffset = EQUIPMENT_Y_OFFSETS[item?.type ?? ""] ?? 0.20;
+    moveBenchItem(draggingItem, [
+      Math.round(point.x * 10) / 10,
+      yOffset,
+      Math.round(point.z * 10) / 10,
+    ]);
+  };
+
+  const handlePointerUp = () => {
+    if (draggingItem) {
+      stopDragItem();
+    }
   };
 
   return (
@@ -112,8 +135,11 @@ function BenchSurface() {
       position={[0, 0, 0]}
       receiveShadow
       onClick={handleClick}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
       onPointerOver={() => {
         if (placingEquipment) document.body.style.cursor = "crosshair";
+        if (draggingItem) document.body.style.cursor = "grabbing";
       }}
       onPointerOut={() => {
         document.body.style.cursor = "default";

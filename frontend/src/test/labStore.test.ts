@@ -43,6 +43,7 @@ describe("labStore", () => {
       contents: [],
       temperature: 25,
       activeEffects: [],
+      damaged: false,
     });
     expect(useLabStore.getState().benchItems).toHaveLength(initialCount + 1);
     const added = useLabStore.getState().benchItems.find((b) => b.id === "test-beaker-new");
@@ -57,6 +58,7 @@ describe("labStore", () => {
       contents: [],
       temperature: 25,
       activeEffects: [],
+      damaged: false,
     });
     useLabStore.getState().moveBenchItem("test-beaker-move", [1, 0, 2]);
     const item = useLabStore.getState().benchItems.find((b) => b.id === "test-beaker-move")!;
@@ -72,6 +74,7 @@ describe("labStore", () => {
       contents: [],
       temperature: 25,
       activeEffects: [],
+      damaged: false,
     });
     expect(useLabStore.getState().benchItems).toHaveLength(initialCount + 1);
     useLabStore.getState().removeBenchItem("test-beaker-remove");
@@ -97,6 +100,7 @@ describe("labStore", () => {
       contents: [],
       temperature: 25,
       activeEffects: [],
+      damaged: false,
     });
     expect(useLabStore.getState().placingEquipment).toBeNull();
   });
@@ -151,6 +155,7 @@ describe("labStore", () => {
       contents: [],
       temperature: 25,
       activeEffects: [],
+      damaged: false,
     });
     useLabStore.getState().updateBenchItemContents(
       "test-b-1",
