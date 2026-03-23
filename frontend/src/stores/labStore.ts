@@ -257,13 +257,20 @@ export const useLabStore = create<LabState>()((set) => ({
         atmosphere: env.atmosphere,
       });
 
-      // Update target with products
-      const newContents = result.products.map((p) => ({
-        formula: p.formula,
-        amount_ml: p.amount || 50,
-        phase: p.phase,
-        color: p.color || "#cccccc",
-      }));
+      // If no actual reaction occurred, keep original contents
+      const noChange = result.reaction_type === "conditions_not_met"
+        || result.reaction_type === "mixture"
+        || result.reaction_type === "none"
+        || result.products.length === 0;
+
+      const newContents = noChange
+        ? (isSelfCombine ? source.contents : [...target.contents, ...source.contents])
+        : result.products.map((p) => ({
+            formula: p.formula,
+            amount_ml: p.amount || 50,
+            phase: p.phase,
+            color: p.color || "#cccccc",
+          }));
 
       // Build effects list
       const effectNames: string[] = [];
