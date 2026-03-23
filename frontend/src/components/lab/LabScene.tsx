@@ -11,7 +11,6 @@ import ElectrochemistryLab from "./stations/ElectrochemistryLab";
 import GloveBox from "./stations/GloveBox";
 import ThermalAnalysis from "./stations/ThermalAnalysis";
 import StorageSafety from "./stations/StorageSafety";
-import { EQUIPMENT_Y_OFFSETS } from "./equipment/equipmentUtils";
 
 export default function LabScene() {
   return (
@@ -77,58 +76,13 @@ export default function LabScene() {
 
 function BenchSurface() {
   const placingEquipment = useLabStore((s) => s.placingEquipment);
-  const addBenchItem = useLabStore((s) => s.addBenchItem);
-  const draggingItem = useLabStore((s) => s.draggingItem);
-  const moveBenchItem = useLabStore((s) => s.moveBenchItem);
-  const stopDragItem = useLabStore((s) => s.stopDragItem);
-  const benchItems = useLabStore((s) => s.benchItems);
   const pouringFrom = useLabStore((s) => s.pouringFrom);
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
 
-  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+  const handleClick = (_e: ThreeEvent<MouseEvent>) => {
     if (!placingEquipment && !pouringFrom) {
       selectBenchItem(null);
       return;
-    }
-    if (!placingEquipment) return;
-    // Substances go into existing containers, not onto the bench surface
-    if (placingEquipment.startsWith("substance:")) return;
-    e.stopPropagation();
-
-    const point = e.point;
-    // Y offset so equipment sits ON the bench (top at Y=0.05), not inside it
-    const position: [number, number, number] = [
-      Math.round(point.x * 10) / 10,
-      EQUIPMENT_Y_OFFSETS[placingEquipment] ?? 0.20,
-      Math.round(point.z * 10) / 10,
-    ];
-
-    addBenchItem({
-      id: `${placingEquipment}-${Date.now()}`,
-      type: placingEquipment,
-      position,
-      contents: [],
-      temperature: 25,
-      activeEffects: [],
-      damaged: false,
-    });
-  };
-
-  const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
-    if (!draggingItem) return;
-    const point = e.point;
-    const item = benchItems.find((i) => i.id === draggingItem);
-    const yOffset = EQUIPMENT_Y_OFFSETS[item?.type ?? ""] ?? 0.20;
-    moveBenchItem(draggingItem, [
-      Math.round(point.x * 10) / 10,
-      yOffset,
-      Math.round(point.z * 10) / 10,
-    ]);
-  };
-
-  const handlePointerUp = () => {
-    if (draggingItem) {
-      stopDragItem();
     }
   };
 
@@ -137,15 +91,6 @@ function BenchSurface() {
       position={[0, 0, 0]}
       receiveShadow
       onClick={handleClick}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerOver={() => {
-        if (placingEquipment) document.body.style.cursor = "crosshair";
-        if (draggingItem) document.body.style.cursor = "grabbing";
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = "default";
-      }}
     >
       <boxGeometry args={[4, 0.1, 2.5]} />
       <meshStandardMaterial

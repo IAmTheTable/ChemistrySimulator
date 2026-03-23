@@ -226,7 +226,10 @@ export const useLabStore = create<LabState>()((set) => ({
     set((state) => ({
       benchItems: state.benchItems.map((item) => ({ ...item, activeEffects: [] })),
     })),
-  showNotification: (msg) => set({ notification: msg }),
+  showNotification: (msg) => {
+    set({ notification: msg });
+    setTimeout(() => set({ notification: null }), 4000);
+  },
   clearNotification: () => set({ notification: null }),
   combineContainers: async (sourceId: string, targetId: string) => {
     const state = useLabStore.getState();
