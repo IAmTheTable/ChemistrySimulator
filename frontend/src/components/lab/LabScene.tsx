@@ -1,6 +1,8 @@
-import { Canvas } from "@react-three/fiber";
+import { useRef, useEffect } from "react";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import type { ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Grid, Environment } from "@react-three/drei";
+import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { useLabStore } from "../../stores/labStore";
 import MainBench from "./stations/MainBench";
 import FumeHood from "./stations/FumeHood";
@@ -33,13 +35,7 @@ export default function LabScene() {
       />
       <pointLight position={[-3, 4, -3]} intensity={0.3} color="#b4d4ff" />
 
-      <OrbitControls
-        target={[0, 0, 0]}
-        maxPolarAngle={Math.PI / 2.2}
-        minDistance={2}
-        maxDistance={12}
-        enablePan
-      />
+      <CameraControls />
 
       {/* Ground grid for spatial reference */}
       <Grid
@@ -157,6 +153,63 @@ function BenchSurface() {
         roughness={0.8}
       />
     </mesh>
+  );
+}
+
+function CameraControls() {
+  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const draggingItem = useLabStore((s) => s.draggingItem);
+  const { camera } = useThree();
+  const keys = useRef(new Set<string>());
+
+  // Disable orbit when dragging equipment
+  useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.enabled = !draggingItem;
+    }
+  }, [draggingItem]);
+
+  // WASD keyboard controls
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return;
+      keys.current.add(e.key.toLowerCase());
+    };
+    const onKeyUp = (e: KeyboardEvent) => {
+      keys.current.delete(e.key.toLowerCase());
+    };
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, []);
+
+  useFrame((_, delta) => {
+    if (!controlsRef.current || keys.current.size === 0) return;
+    const speed = 3 * delta;
+    const target = controlsRef.current.target;
+
+    if (keys.current.has("w")) { camera.position.z -= speed; target.z -= speed; }
+    if (keys.current.has("s")) { camera.position.z += speed; target.z += speed; }
+    if (keys.current.has("a")) { camera.position.x -= speed; target.x -= speed; }
+    if (keys.current.has("d")) { camera.position.x += speed; target.x += speed; }
+    if (keys.current.has("q")) { camera.position.y += speed; target.y += speed; }
+    if (keys.current.has("e")) { camera.position.y -= speed; target.y -= speed; }
+
+    controlsRef.current.update();
+  });
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      target={[0, 0, 0]}
+      maxPolarAngle={Math.PI / 2.2}
+      minDistance={2}
+      maxDistance={12}
+      enablePan
+    />
   );
 }
 
