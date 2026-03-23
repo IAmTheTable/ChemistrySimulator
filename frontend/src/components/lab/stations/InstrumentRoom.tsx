@@ -1,7 +1,57 @@
+import type { ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import StationShell, { LABEL_STYLE } from "./StationShell";
+import { useStationTool } from "./useStationTool";
 
 export default function InstrumentRoom() {
+  const { selectedItem, openStructureViewer, setActiveRightTab, showNotification } = useStationTool();
+
+  const handleMassSpec = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || selectedItem.contents.length === 0) {
+      showNotification("Select a container with contents first");
+      return;
+    }
+    const formula = selectedItem.contents[0].formula;
+    openStructureViewer(formula);
+    setActiveRightTab("spectra");
+    showNotification(`Mass spectrum analysis of ${formula}`);
+  };
+
+  const handleHPLC = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || selectedItem.contents.length === 0) {
+      showNotification("Select a container with contents first");
+      return;
+    }
+    const formula = selectedItem.contents[0].formula;
+    openStructureViewer(formula);
+    setActiveRightTab("spectra");
+    showNotification(`HPLC chromatogram of ${formula}`);
+  };
+
+  const handleUVVis = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || selectedItem.contents.length === 0) {
+      showNotification("Select a container with contents first");
+      return;
+    }
+    const formula = selectedItem.contents[0].formula;
+    openStructureViewer(formula);
+    setActiveRightTab("spectra");
+    showNotification(`UV-Vis spectrum of ${formula}`);
+  };
+
+  const handleNMR = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || selectedItem.contents.length === 0) {
+      showNotification("Select a container with contents first");
+      return;
+    }
+    const formula = selectedItem.contents[0].formula;
+    showNotification(`NMR spectrum -- analyzing ${formula} (coming soon)`);
+  };
+
   return (
     <StationShell wallColor="#2d3142" showShelf={false}>
       {/* Long counter along back wall */}
@@ -17,117 +67,125 @@ export default function InstrumentRoom() {
       </mesh>
 
       {/* ── Instrument 1: Mass spectrometer (large box, left) ── */}
-      <mesh position={[-1.4, 0.28, -0.95]} castShadow>
-        <boxGeometry args={[0.7, 0.4, 0.5]} />
-        <meshStandardMaterial color="#252a3d" roughness={0.4} metalness={0.4} />
-      </mesh>
+      <group onClick={handleMassSpec}>
+        <mesh position={[-1.4, 0.28, -0.95]} castShadow>
+          <boxGeometry args={[0.7, 0.4, 0.5]} />
+          <meshStandardMaterial color="#252a3d" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Screen on instrument 1 */}
+        <mesh position={[-1.4, 0.35, -0.69]}>
+          <boxGeometry args={[0.4, 0.2, 0.01]} />
+          <meshStandardMaterial
+            color="#001a33"
+            emissive="#0066cc"
+            emissiveIntensity={0.6}
+            roughness={0.2}
+          />
+        </mesh>
+        {/* Scan line on screen */}
+        <mesh position={[-1.4, 0.37, -0.688]}>
+          <boxGeometry args={[0.35, 0.01, 0.005]} />
+          <meshStandardMaterial
+            color="#00aaff"
+            emissive="#00aaff"
+            emissiveIntensity={1.2}
+          />
+        </mesh>
+        {/* Instrument 1 sample port */}
+        <mesh position={[-1.05, 0.28, -0.95]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.025, 0.025, 0.08, 10]} />
+          <meshStandardMaterial color="#444455" metalness={0.8} roughness={0.2} />
+        </mesh>
+      </group>
       <Html position={[-1.4, 0.56, -0.95]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Mass Spec</span>
       </Html>
-      {/* Screen on instrument 1 */}
-      <mesh position={[-1.4, 0.35, -0.69]}>
-        <boxGeometry args={[0.4, 0.2, 0.01]} />
-        <meshStandardMaterial
-          color="#001a33"
-          emissive="#0066cc"
-          emissiveIntensity={0.6}
-          roughness={0.2}
-        />
-      </mesh>
-      {/* Scan line on screen */}
-      <mesh position={[-1.4, 0.37, -0.688]}>
-        <boxGeometry args={[0.35, 0.01, 0.005]} />
-        <meshStandardMaterial
-          color="#00aaff"
-          emissive="#00aaff"
-          emissiveIntensity={1.2}
-        />
-      </mesh>
-      {/* Instrument 1 sample port */}
-      <mesh position={[-1.05, 0.28, -0.95]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.025, 0.025, 0.08, 10]} />
-        <meshStandardMaterial color="#444455" metalness={0.8} roughness={0.2} />
-      </mesh>
 
       {/* ── Instrument 2: HPLC / chromatograph (medium, center-left) ── */}
-      <mesh position={[-0.4, 0.22, -0.97]} castShadow>
-        <boxGeometry args={[0.55, 0.28, 0.45]} />
-        <meshStandardMaterial color="#1e2840" roughness={0.5} metalness={0.3} />
-      </mesh>
+      <group onClick={handleHPLC}>
+        <mesh position={[-0.4, 0.22, -0.97]} castShadow>
+          <boxGeometry args={[0.55, 0.28, 0.45]} />
+          <meshStandardMaterial color="#1e2840" roughness={0.5} metalness={0.3} />
+        </mesh>
+        {/* Screen */}
+        <mesh position={[-0.4, 0.28, -0.74]}>
+          <boxGeometry args={[0.28, 0.14, 0.01]} />
+          <meshStandardMaterial
+            color="#001100"
+            emissive="#00cc44"
+            emissiveIntensity={0.5}
+            roughness={0.2}
+          />
+        </mesh>
+        {/* Small knobs row */}
+        {([-0.55, -0.4, -0.25] as number[]).map((x, i) => (
+          <mesh key={i} position={[x, 0.13, -0.745]}>
+            <cylinderGeometry args={[0.018, 0.018, 0.02, 8]} />
+            <meshStandardMaterial color="#334466" metalness={0.6} roughness={0.4} />
+          </mesh>
+        ))}
+      </group>
       <Html position={[-0.4, 0.44, -0.97]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>HPLC</span>
       </Html>
-      {/* Screen */}
-      <mesh position={[-0.4, 0.28, -0.74]}>
-        <boxGeometry args={[0.28, 0.14, 0.01]} />
-        <meshStandardMaterial
-          color="#001100"
-          emissive="#00cc44"
-          emissiveIntensity={0.5}
-          roughness={0.2}
-        />
-      </mesh>
-      {/* Small knobs row */}
-      {([-0.55, -0.4, -0.25] as number[]).map((x, i) => (
-        <mesh key={i} position={[x, 0.13, -0.745]}>
-          <cylinderGeometry args={[0.018, 0.018, 0.02, 8]} />
-          <meshStandardMaterial color="#334466" metalness={0.6} roughness={0.4} />
-        </mesh>
-      ))}
 
       {/* ── Instrument 3: UV/Vis spectrophotometer (medium, center-right) ── */}
-      <mesh position={[0.55, 0.2, -0.97]} castShadow>
-        <boxGeometry args={[0.5, 0.24, 0.42]} />
-        <meshStandardMaterial color="#22273d" roughness={0.5} metalness={0.3} />
-      </mesh>
+      <group onClick={handleUVVis}>
+        <mesh position={[0.55, 0.2, -0.97]} castShadow>
+          <boxGeometry args={[0.5, 0.24, 0.42]} />
+          <meshStandardMaterial color="#22273d" roughness={0.5} metalness={0.3} />
+        </mesh>
+        {/* Lid/sample compartment */}
+        <mesh position={[0.55, 0.25, -0.84]}>
+          <boxGeometry args={[0.22, 0.06, 0.18]} />
+          <meshStandardMaterial color="#1a1f35" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Screen */}
+        <mesh position={[0.8, 0.22, -0.745]}>
+          <boxGeometry args={[0.12, 0.1, 0.01]} />
+          <meshStandardMaterial
+            color="#110011"
+            emissive="#cc44ff"
+            emissiveIntensity={0.4}
+            roughness={0.2}
+          />
+        </mesh>
+      </group>
       <Html position={[0.55, 0.42, -0.97]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>UV-Vis Spectrophotometer</span>
       </Html>
-      {/* Lid/sample compartment */}
-      <mesh position={[0.55, 0.25, -0.84]}>
-        <boxGeometry args={[0.22, 0.06, 0.18]} />
-        <meshStandardMaterial color="#1a1f35" roughness={0.4} metalness={0.4} />
-      </mesh>
-      {/* Screen */}
-      <mesh position={[0.8, 0.22, -0.745]}>
-        <boxGeometry args={[0.12, 0.1, 0.01]} />
-        <meshStandardMaterial
-          color="#110011"
-          emissive="#cc44ff"
-          emissiveIntensity={0.4}
-          roughness={0.2}
-        />
-      </mesh>
 
       {/* ── Instrument 4: NMR / large analyzer (right, tall) ── */}
-      <mesh position={[1.45, 0.35, -0.93]} castShadow>
-        <boxGeometry args={[0.55, 0.55, 0.5]} />
-        <meshStandardMaterial color="#1c2035" roughness={0.45} metalness={0.35} />
-      </mesh>
+      <group onClick={handleNMR}>
+        <mesh position={[1.45, 0.35, -0.93]} castShadow>
+          <boxGeometry args={[0.55, 0.55, 0.5]} />
+          <meshStandardMaterial color="#1c2035" roughness={0.45} metalness={0.35} />
+        </mesh>
+        {/* Circular display / port */}
+        <mesh position={[1.45, 0.38, -0.675]}>
+          <cylinderGeometry args={[0.1, 0.1, 0.015, 24]} />
+          <meshStandardMaterial
+            color="#000811"
+            emissive="#ff8800"
+            emissiveIntensity={0.45}
+            roughness={0.15}
+          />
+        </mesh>
+        {/* Status LEDs */}
+        {([0, 1, 2] as number[]).map((i) => (
+          <mesh key={i} position={[1.18, 0.52 - i * 0.08, -0.675]}>
+            <boxGeometry args={[0.02, 0.015, 0.01]} />
+            <meshStandardMaterial
+              color="#00ff44"
+              emissive="#00ff44"
+              emissiveIntensity={1.5}
+            />
+          </mesh>
+        ))}
+      </group>
       <Html position={[1.45, 0.68, -0.93]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>NMR</span>
       </Html>
-      {/* Circular display / port */}
-      <mesh position={[1.45, 0.38, -0.675]}>
-        <cylinderGeometry args={[0.1, 0.1, 0.015, 24]} />
-        <meshStandardMaterial
-          color="#000811"
-          emissive="#ff8800"
-          emissiveIntensity={0.45}
-          roughness={0.15}
-        />
-      </mesh>
-      {/* Status LEDs */}
-      {([0, 1, 2] as number[]).map((i) => (
-        <mesh key={i} position={[1.18, 0.52 - i * 0.08, -0.675]}>
-          <boxGeometry args={[0.02, 0.015, 0.01]} />
-          <meshStandardMaterial
-            color="#00ff44"
-            emissive="#00ff44"
-            emissiveIntensity={1.5}
-          />
-        </mesh>
-      ))}
 
       {/* ── Computer workstation ── */}
       <Html position={[0.05, 0.72, 0.6]} center distanceFactor={10}>

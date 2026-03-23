@@ -103,6 +103,11 @@ interface LabState {
   setEnvironment: (env: Partial<LabState["environment"]>) => void;
   setActiveRightTab: (tab: string) => void;
   setActiveBottomTab: (tab: string) => void;
+  resetAllDamage: () => void;
+  clearAllEffects: () => void;
+  notification: string | null;
+  showNotification: (msg: string) => void;
+  clearNotification: () => void;
 }
 
 export const useLabStore = create<LabState>()((set) => ({
@@ -127,6 +132,7 @@ export const useLabStore = create<LabState>()((set) => ({
   structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS },
   activeRightTab: "lab",
   activeBottomTab: "inspector",
+  notification: null,
 
   selectElement: (atomicNumber) => set({ selectedElement: atomicNumber, selectedBenchItem: null }),
   setStation: (station) => set({ activeStation: station }),
@@ -199,6 +205,16 @@ export const useLabStore = create<LabState>()((set) => ({
   setEnvironment: (env) => set((state) => ({ environment: { ...state.environment, ...env } })),
   setActiveRightTab: (tab) => set({ activeRightTab: tab }),
   setActiveBottomTab: (tab) => set({ activeBottomTab: tab }),
+  resetAllDamage: () =>
+    set((state) => ({
+      benchItems: state.benchItems.map((item) => ({ ...item, damaged: false })),
+    })),
+  clearAllEffects: () =>
+    set((state) => ({
+      benchItems: state.benchItems.map((item) => ({ ...item, activeEffects: [] })),
+    })),
+  showNotification: (msg) => set({ notification: msg }),
+  clearNotification: () => set({ notification: null }),
   combineContainers: async (sourceId: string, targetId: string) => {
     const state = useLabStore.getState();
     const source = state.benchItems.find((i) => i.id === sourceId);

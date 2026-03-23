@@ -1,12 +1,35 @@
+import { useState } from "react";
+import type { ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import StationShell, { LABEL_STYLE } from "./StationShell";
+import { useStationTool } from "./useStationTool";
 
 export default function GloveBox() {
+  const { selectedItem, showNotification } = useStationTool();
+  const [atmosphere, setAtmosphere] = useState<"Air" | "N2" | "Ar">("Air");
+
+  const handleAirlock = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem) {
+      showNotification("Select a container first to transfer through airlock");
+      return;
+    }
+    showNotification(
+      `Container transferred through airlock into ${atmosphere === "Air" ? "glove box" : atmosphere + " atmosphere"}`
+    );
+  };
+
+  const handleGasLine = (gas: "N2" | "Ar") => (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    setAtmosphere(gas);
+    showNotification(`Glove box purged -- atmosphere set to ${gas}`);
+  };
+
   return (
     <StationShell wallColor="#303035" showShelf={false}>
       {/* ── Main glove box body — frame ── */}
       <Html position={[0, 1.12, -0.4]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Inert Atmosphere Glove Box</span>
+        <span style={LABEL_STYLE}>Inert Atmosphere Glove Box ({atmosphere})</span>
       </Html>
       {/* Bottom panel */}
       <mesh position={[0, 0.06, -0.4]} castShadow>
@@ -98,32 +121,34 @@ export default function GloveBox() {
 
       {/* ── Airlock chamber — smaller box on right side ── */}
       <Html position={[1.52, 0.98, -0.4]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Airlock</span>
+        <span style={LABEL_STYLE}>Airlock (click to transfer)</span>
       </Html>
-      {/* Airlock body */}
-      <mesh position={[1.52, 0.51, -0.4]} castShadow>
-        <boxGeometry args={[0.45, 0.7, 0.7]} />
-        <meshStandardMaterial color="#343438" roughness={0.5} metalness={0.4} />
-      </mesh>
-      {/* Airlock inner door (left face) */}
-      <mesh position={[1.3, 0.51, -0.4]}>
-        <boxGeometry args={[0.03, 0.5, 0.5]} />
-        <meshStandardMaterial color="#505058" roughness={0.4} metalness={0.5} />
-      </mesh>
-      {/* Airlock outer door (right face) */}
-      <mesh position={[1.75, 0.51, -0.4]}>
-        <boxGeometry args={[0.03, 0.5, 0.5]} />
-        <meshStandardMaterial color="#505058" roughness={0.4} metalness={0.5} />
-      </mesh>
-      {/* Airlock handle */}
-      <mesh position={[1.77, 0.51, -0.55]}>
-        <boxGeometry args={[0.02, 0.06, 0.02]} />
-        <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
-      </mesh>
+      <group onClick={handleAirlock}>
+        {/* Airlock body */}
+        <mesh position={[1.52, 0.51, -0.4]} castShadow>
+          <boxGeometry args={[0.45, 0.7, 0.7]} />
+          <meshStandardMaterial color="#343438" roughness={0.5} metalness={0.4} />
+        </mesh>
+        {/* Airlock inner door (left face) */}
+        <mesh position={[1.3, 0.51, -0.4]}>
+          <boxGeometry args={[0.03, 0.5, 0.5]} />
+          <meshStandardMaterial color="#505058" roughness={0.4} metalness={0.5} />
+        </mesh>
+        {/* Airlock outer door (right face) */}
+        <mesh position={[1.75, 0.51, -0.4]}>
+          <boxGeometry args={[0.03, 0.5, 0.5]} />
+          <meshStandardMaterial color="#505058" roughness={0.4} metalness={0.5} />
+        </mesh>
+        {/* Airlock handle */}
+        <mesh position={[1.77, 0.51, -0.55]}>
+          <boxGeometry args={[0.02, 0.06, 0.02]} />
+          <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
+        </mesh>
+      </group>
 
       {/* ── Gas line connections at top ── */}
       <Html position={[0, 1.3, -0.4]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>N₂/Ar Gas Lines</span>
+        <span style={LABEL_STYLE}>N2/Ar Gas Lines</span>
       </Html>
       {/* Argon line pipe */}
       <mesh position={[-0.6, 1.02, -0.4]}>
@@ -135,14 +160,27 @@ export default function GloveBox() {
         <cylinderGeometry args={[0.018, 0.018, 0.25, 8]} />
         <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
       </mesh>
-      {/* Gas valve knobs */}
-      <mesh position={[-0.6, 1.16, -0.4]}>
+      {/* Gas valve knobs — Ar (orange, left) */}
+      <mesh position={[-0.6, 1.16, -0.4]} onClick={handleGasLine("Ar")}>
         <cylinderGeometry args={[0.032, 0.032, 0.025, 8]} />
-        <meshStandardMaterial color="#cc6600" roughness={0.4} metalness={0.3} />
+        <meshStandardMaterial
+          color={atmosphere === "Ar" ? "#ff8800" : "#cc6600"}
+          emissive={atmosphere === "Ar" ? "#ff6600" : "#000000"}
+          emissiveIntensity={atmosphere === "Ar" ? 0.5 : 0}
+          roughness={0.4}
+          metalness={0.3}
+        />
       </mesh>
-      <mesh position={[0.6, 1.16, -0.4]}>
+      {/* Gas valve knobs — N2 (blue, right) */}
+      <mesh position={[0.6, 1.16, -0.4]} onClick={handleGasLine("N2")}>
         <cylinderGeometry args={[0.032, 0.032, 0.025, 8]} />
-        <meshStandardMaterial color="#3366cc" roughness={0.4} metalness={0.3} />
+        <meshStandardMaterial
+          color={atmosphere === "N2" ? "#4488ff" : "#3366cc"}
+          emissive={atmosphere === "N2" ? "#2266ff" : "#000000"}
+          emissiveIntensity={atmosphere === "N2" ? 0.5 : 0}
+          roughness={0.4}
+          metalness={0.3}
+        />
       </mesh>
 
       {/* Pressure gauge on top */}

@@ -1,7 +1,80 @@
+import { useState } from "react";
+import type { ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import StationShell, { LABEL_STYLE } from "./StationShell";
+import { useStationTool } from "./useStationTool";
+
+// Simple electrolysis product mapping
+const ELECTROLYSIS_MAP: Record<string, { remove: string; products: Array<{ formula: string; phase: string; color: string }> }> = {
+  NaCl: { remove: "NaCl", products: [{ formula: "Na", phase: "s", color: "#cccccc" }, { formula: "Cl2", phase: "g", color: "#ccff66" }] },
+  "CuSO4": { remove: "CuSO4", products: [{ formula: "Cu", phase: "s", color: "#cc6633" }, { formula: "O2", phase: "g", color: "#ffffff" }, { formula: "H2SO4", phase: "aq", color: "#ffffff" }] },
+  KI: { remove: "KI", products: [{ formula: "K", phase: "s", color: "#cccccc" }, { formula: "I2", phase: "s", color: "#551166" }] },
+  H2O: { remove: "H2O", products: [{ formula: "H2", phase: "g", color: "#ffffff" }, { formula: "O2", phase: "g", color: "#ffffff" }] },
+};
+
+// Simple pH lookup
+const PH_MAP: Record<string, number> = {
+  HCl: 1, H2SO4: 0.5, HNO3: 1, "H3PO4": 1.5, HF: 2, HBr: 1,
+  NaOH: 14, KOH: 14, "Ca(OH)2": 12.5, "Ba(OH)2": 13, NH3: 11,
+  NaCl: 7, KCl: 7, "CaCl2": 7, KBr: 7, NaI: 7,
+  H2O: 7,
+  "CH3COOH": 3, "C6H8O7": 2.2,
+  "Na2CO3": 11.5, NaHCO3: 8.3,
+};
 
 export default function ElectrochemistryLab() {
+  const { selectedItem, selectedBenchItem, updateBenchItemContents, showNotification } = useStationTool();
+  const [powerOn, setPowerOn] = useState(false);
+
+  const handleElectrolysis = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container with an ionic solution first");
+      return;
+    }
+    if (selectedItem.contents.length === 0) {
+      showNotification("Container is empty");
+      return;
+    }
+    // Find the first substance that can be electrolyzed
+    const match = selectedItem.contents.find((s) => ELECTROLYSIS_MAP[s.formula]);
+    if (!match) {
+      showNotification("No electrolyzable substance found in container");
+      return;
+    }
+    const reaction = ELECTROLYSIS_MAP[match.formula];
+    const remaining = selectedItem.contents.filter((s) => s !== match);
+    const newProducts = reaction.products.map((p) => ({
+      formula: p.formula,
+      amount_ml: match.amount_ml / reaction.products.length,
+      phase: p.phase,
+      color: p.color,
+    }));
+    updateBenchItemContents(selectedBenchItem, [...remaining, ...newProducts]);
+    showNotification(`Electrolysis: ${match.formula} -> ${reaction.products.map((p) => p.formula).join(" + ")}`);
+  };
+
+  const handlePHMeter = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container first");
+      return;
+    }
+    if (selectedItem.contents.length === 0) {
+      showNotification("Container is empty -- cannot measure pH");
+      return;
+    }
+    const substance = selectedItem.contents[0];
+    const ph = PH_MAP[substance.formula] ?? 7;
+    showNotification(`pH Meter: ${substance.formula} -- pH = ${ph.toFixed(1)}`);
+  };
+
+  const handlePowerSupply = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    setPowerOn((prev) => !prev);
+    showNotification(powerOn ? "Power supply OFF" : "Power supply ON");
+  };
+
   return (
     <StationShell wallColor="#2a3028">
       {/* ── Electrolysis cell (central) ── */}
@@ -9,6 +82,7 @@ export default function ElectrochemistryLab() {
         <span style={LABEL_STYLE}>Electrolysis Cell</span>
       </Html>
       {/* Cell body — transparent box */}
+      <group onClick={handleElectrolysis}>
       <mesh position={[0, 0.2, 0]}>
         <boxGeometry args={[0.55, 0.32, 0.35]} />
         <meshPhysicalMaterial
@@ -51,11 +125,13 @@ export default function ElectrochemistryLab() {
           <meshStandardMaterial color="#ffffff" transparent opacity={0.5} />
         </mesh>
       ))}
+      </group>
 
       {/* ── Power supply box ── */}
       <Html position={[1.1, 0.5, 0.3]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>DC Power Supply</span>
       </Html>
+      <group onClick={handlePowerSupply}>
       <mesh position={[1.1, 0.18, 0.3]} castShadow>
         <boxGeometry args={[0.38, 0.28, 0.28]} />
         <meshStandardMaterial color="#2a2a2a" roughness={0.5} metalness={0.4} />
@@ -64,9 +140,9 @@ export default function ElectrochemistryLab() {
       <mesh position={[1.1, 0.22, 0.165]}>
         <boxGeometry args={[0.2, 0.1, 0.01]} />
         <meshStandardMaterial
-          color="#001100"
-          emissive="#00ff66"
-          emissiveIntensity={0.7}
+          color={powerOn ? "#002200" : "#001100"}
+          emissive={powerOn ? "#00ff66" : "#004422"}
+          emissiveIntensity={powerOn ? 1.2 : 0.3}
           roughness={0.2}
         />
       </mesh>
@@ -86,6 +162,7 @@ export default function ElectrochemistryLab() {
         <cylinderGeometry args={[0.012, 0.012, 0.06, 8]} />
         <meshStandardMaterial color="#111111" roughness={0.3} metalness={0.5} />
       </mesh>
+      </group>
 
       {/* ── Wire connections (thin cylinders) ── */}
       {/* Red wire from power supply to anode */}
@@ -103,6 +180,7 @@ export default function ElectrochemistryLab() {
       <Html position={[-1.0, 0.58, 0.4]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>pH Meter</span>
       </Html>
+      <group onClick={handlePHMeter}>
       {/* Body */}
       <mesh position={[-1.0, 0.2, 0.4]} castShadow>
         <boxGeometry args={[0.22, 0.3, 0.14]} />
@@ -123,6 +201,7 @@ export default function ElectrochemistryLab() {
         <cylinderGeometry args={[0.008, 0.005, 0.35, 8]} />
         <meshStandardMaterial color="#888888" roughness={0.4} metalness={0.5} />
       </mesh>
+      </group>
 
       {/* ── Burette on clamp stand ── */}
       <Html position={[-1.3, 0.95, -0.3]} center distanceFactor={10}>

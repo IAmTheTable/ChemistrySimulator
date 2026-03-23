@@ -1,7 +1,40 @@
+import { useState } from "react";
+import type { ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import StationShell, { LABEL_STYLE } from "./StationShell";
+import { useStationTool } from "./useStationTool";
 
 export default function FumeHood() {
+  const { selectedItem, selectedBenchItem, updateBenchItemContents, showNotification } = useStationTool();
+  const [sashOpen, setSashOpen] = useState(true);
+
+  const handleDistillation = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container first");
+      return;
+    }
+    if (selectedItem.contents.length < 2) {
+      showNotification("Need a mixture of at least 2 substances to distill");
+      return;
+    }
+    // Remove the substance with lowest boiling point (approximate: lighter molecules first)
+    const sorted = [...selectedItem.contents].sort((a, b) => a.amount_ml - b.amount_ml);
+    const distilled = sorted[0];
+    const remaining = selectedItem.contents.filter((s) => s !== distilled);
+    updateBenchItemContents(selectedBenchItem, remaining);
+    showNotification(`Distilled off ${distilled.formula} (${distilled.amount_ml} mL)`);
+  };
+
+  const handleSash = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    setSashOpen((prev) => !prev);
+    showNotification(sashOpen ? "Sash closed" : "Sash opened");
+  };
+
+  const sashY = sashOpen ? 0.8 : 1.25;
+  const sashBarY = sashOpen ? 1.27 : 1.72;
+
   return (
     <StationShell wallColor="#3a3a44" showShelf={false}>
       {/* Hood enclosure — top panel */}
@@ -25,8 +58,8 @@ export default function FumeHood() {
         <meshStandardMaterial color="#4a4a55" roughness={0.7} metalness={0.3} />
       </mesh>
 
-      {/* Glass sash panel — partially open (lower half visible) */}
-      <mesh position={[0, 0.8, 0.1]}>
+      {/* Glass sash panel — click to toggle open/closed */}
+      <mesh position={[0, sashY, 0.1]} onClick={handleSash}>
         <boxGeometry args={[3.1, 0.9, 0.03]} />
         <meshPhysicalMaterial
           color="#a8c8ff"
@@ -38,11 +71,11 @@ export default function FumeHood() {
         />
       </mesh>
       <Html position={[0, 1.32, 0.1]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Sash (adjustable)</span>
+        <span style={LABEL_STYLE}>Sash (click to toggle)</span>
       </Html>
 
       {/* Sash frame top bar */}
-      <mesh position={[0, 1.27, 0.1]} castShadow>
+      <mesh position={[0, sashBarY, 0.1]} castShadow onClick={handleSash}>
         <boxGeometry args={[3.15, 0.05, 0.04]} />
         <meshStandardMaterial color="#5a5a66" roughness={0.5} metalness={0.5} />
       </mesh>
@@ -61,56 +94,58 @@ export default function FumeHood() {
         </mesh>
       ))}
 
-      {/* Distillation flask (round bottom) */}
+      {/* Distillation flask (round bottom) — click to distill */}
       <Html position={[-0.1, 0.72, -0.75]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Distillation Setup</span>
       </Html>
-      <mesh position={[-0.5, 0.22, -0.75]} castShadow>
-        <sphereGeometry args={[0.12, 16, 16]} />
-        <meshPhysicalMaterial
-          color="#c8e0ff"
-          transparent
-          opacity={0.3}
-          roughness={0.05}
-          transmission={0.75}
-        />
-      </mesh>
+      <group onClick={handleDistillation}>
+        <mesh position={[-0.5, 0.22, -0.75]} castShadow>
+          <sphereGeometry args={[0.12, 16, 16]} />
+          <meshPhysicalMaterial
+            color="#c8e0ff"
+            transparent
+            opacity={0.3}
+            roughness={0.05}
+            transmission={0.75}
+          />
+        </mesh>
 
-      {/* Distillation neck */}
-      <mesh position={[-0.5, 0.42, -0.75]} castShadow>
-        <cylinderGeometry args={[0.025, 0.025, 0.24, 12]} />
-        <meshPhysicalMaterial
-          color="#c8e0ff"
-          transparent
-          opacity={0.3}
-          roughness={0.05}
-          transmission={0.75}
-        />
-      </mesh>
+        {/* Distillation neck */}
+        <mesh position={[-0.5, 0.42, -0.75]} castShadow>
+          <cylinderGeometry args={[0.025, 0.025, 0.24, 12]} />
+          <meshPhysicalMaterial
+            color="#c8e0ff"
+            transparent
+            opacity={0.3}
+            roughness={0.05}
+            transmission={0.75}
+          />
+        </mesh>
 
-      {/* Condenser tube (angled) — approximated as cylinder */}
-      <mesh position={[0.1, 0.45, -0.75]} rotation={[0, 0, -Math.PI / 5]} castShadow>
-        <cylinderGeometry args={[0.018, 0.018, 0.5, 12]} />
-        <meshPhysicalMaterial
-          color="#c8e0ff"
-          transparent
-          opacity={0.3}
-          roughness={0.05}
-          transmission={0.75}
-        />
-      </mesh>
+        {/* Condenser tube (angled) — approximated as cylinder */}
+        <mesh position={[0.1, 0.45, -0.75]} rotation={[0, 0, -Math.PI / 5]} castShadow>
+          <cylinderGeometry args={[0.018, 0.018, 0.5, 12]} />
+          <meshPhysicalMaterial
+            color="#c8e0ff"
+            transparent
+            opacity={0.3}
+            roughness={0.05}
+            transmission={0.75}
+          />
+        </mesh>
 
-      {/* Collection flask */}
-      <mesh position={[0.45, 0.18, -0.75]} castShadow>
-        <sphereGeometry args={[0.09, 16, 16]} />
-        <meshPhysicalMaterial
-          color="#c8e0ff"
-          transparent
-          opacity={0.3}
-          roughness={0.05}
-          transmission={0.75}
-        />
-      </mesh>
+        {/* Collection flask */}
+        <mesh position={[0.45, 0.18, -0.75]} castShadow>
+          <sphereGeometry args={[0.09, 16, 16]} />
+          <meshPhysicalMaterial
+            color="#c8e0ff"
+            transparent
+            opacity={0.3}
+            roughness={0.05}
+            transmission={0.75}
+          />
+        </mesh>
+      </group>
 
       {/* Stand rod for condenser */}
       <mesh position={[0.1, 0.6, -0.9]} castShadow>

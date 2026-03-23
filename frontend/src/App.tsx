@@ -11,6 +11,7 @@ import CustomSubstanceInput from "./components/ui/CustomSubstanceInput";
 import SimulationToggle from "./components/ui/SimulationToggle";
 import ReactionLog from "./components/ui/ReactionLog";
 import ContainerContextMenu from "./components/ui/ContainerContextMenu";
+import NotificationToast from "./components/ui/NotificationToast";
 import StructurePanel from "./components/ui/StructurePanel";
 import SpectraPanel from "./components/ui/SpectraPanel";
 import ResizeHandle from "./components/ui/ResizeHandle";
@@ -112,6 +113,7 @@ export default function App() {
 
       <EnvironmentBar />
       <ContainerContextMenu />
+      <NotificationToast />
     </div>
   );
 }
