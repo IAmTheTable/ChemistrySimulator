@@ -2599,5 +2599,1588 @@
       "sounds": [],
       "safety": []
     }
+  },
+  {
+    "reactants": ["C6H12O6"],
+    "products": ["C2H5OH", "CO2"],
+    "equation": "C6H12O6 -> 2C2H5OH + 2CO2",
+    "reaction_type": "decomposition",
+    "delta_h": -67.0,
+    "products_detail": [
+      {"formula": "C2H5OH", "phase": "l", "color": "#e8e8e8"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 30, "catalyst": "yeast", "notes": "Fermentation of glucose by yeast produces ethanol and carbon dioxide"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#e8e8e8", "speed": "slow"},
+      "gas": {"type": "CO2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling", "fermentation", "alcohol_smell"],
+      "sounds": ["bubble_gentle"],
+      "safety": ["flammable"]
+    }
+  },
+  {
+    "reactants": ["CuSO4", "Na2S"],
+    "products": ["CuS", "Na2SO4"],
+    "equation": "CuSO4 + Na2S -> CuS + Na2SO4",
+    "reaction_type": "double_displacement",
+    "delta_h": -52.0,
+    "products_detail": [
+      {"formula": "CuS", "phase": "s", "color": "#1a1a1a"},
+      {"formula": "Na2SO4", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#4169e1", "to": "#1a1a1a", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "CuS", "color": "#1a1a1a"},
+      "special": ["black_precipitate", "color_change"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Ca(OH)2", "CO2"],
+    "products": ["CaCO3", "H2O"],
+    "equation": "Ca(OH)2 + CO2 -> CaCO3 + H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -113.0,
+    "products_detail": [
+      {"formula": "CaCO3", "phase": "s", "color": "#ffffff"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Limewater test for CO2 — solution turns milky white"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#ffffff", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "CaCO3", "color": "#ffffff"},
+      "special": ["milky_white", "limewater_test"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["HCl", "NH3"],
+    "products": ["NH4Cl"],
+    "equation": "HCl + NH3 -> NH4Cl",
+    "reaction_type": "acid_base",
+    "delta_h": -176.0,
+    "products_detail": [
+      {"formula": "NH4Cl", "phase": "s", "color": "#ffffff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Gas-phase reaction produces white smoke of ammonium chloride"},
+    "effects": {
+      "color": {"from": null, "to": "#ffffff", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["white_smoke", "fumes"],
+      "sounds": [],
+      "safety": ["irritant"]
+    }
+  },
+  {
+    "reactants": ["Zn", "H2SO4"],
+    "products": ["ZnSO4", "H2"],
+    "equation": "Zn + H2SO4 -> ZnSO4 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -155.0,
+    "products_detail": [
+      {"formula": "ZnSO4", "phase": "aq", "color": "#e8e8e8"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Laboratory preparation of hydrogen gas"},
+    "effects": {
+      "color": {"from": "#d0d0d0", "to": "#e8e8e8", "speed": "medium"},
+      "gas": {"type": "H2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling", "hydrogen_prep"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["FeCl3", "KSCN"],
+    "products": ["Fe(SCN)3", "KCl"],
+    "equation": "FeCl3 + 3KSCN -> Fe(SCN)3 + 3KCl",
+    "reaction_type": "double_displacement",
+    "delta_h": -10.0,
+    "products_detail": [
+      {"formula": "Fe(SCN)3", "phase": "aq", "color": "#8b0000"},
+      {"formula": "KCl", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Blood-red color test for Fe3+ ions — thiocyanate complex"},
+    "effects": {
+      "color": {"from": "#b8860b", "to": "#8b0000", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["blood_red_color", "iron_test", "color_change"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Mg(OH)2", "HCl"],
+    "products": ["MgCl2", "H2O"],
+    "equation": "Mg(OH)2 + 2HCl -> MgCl2 + 2H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -105.0,
+    "products_detail": [
+      {"formula": "MgCl2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Antacid reaction — milk of magnesia neutralizing stomach acid"},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#f0f0f0", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["antacid_reaction"],
+      "sounds": ["bubble_gentle"],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["H2SO4", "Ba(OH)2"],
+    "products": ["BaSO4", "H2O"],
+    "equation": "H2SO4 + Ba(OH)2 -> BaSO4 + 2H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -236.0,
+    "products_detail": [
+      {"formula": "BaSO4", "phase": "s", "color": "#f8f8f8"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Double driving force: neutralization AND precipitation of BaSO4"},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#f8f8f8", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "BaSO4", "color": "#f8f8f8"},
+      "special": ["white_precipitate"],
+      "sounds": [],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["Cu(OH)2"],
+    "products": ["CuO", "H2O"],
+    "equation": "Cu(OH)2 -> CuO + H2O",
+    "reaction_type": "decomposition",
+    "delta_h": 6.7,
+    "products_detail": [
+      {"formula": "CuO", "phase": "s", "color": "#1a1a1a"},
+      {"formula": "H2O", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 200, "min_temperature": 150, "catalyst": null, "notes": "Blue copper hydroxide decomposes to black copper oxide on heating"},
+    "effects": {
+      "color": {"from": "#87ceeb", "to": "#1a1a1a", "speed": "medium"},
+      "gas": {"type": "H2O", "rate": "slow"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["color_change", "blue_to_black"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Fe(OH)3"],
+    "products": ["Fe2O3", "H2O"],
+    "equation": "2Fe(OH)3 -> Fe2O3 + 3H2O",
+    "reaction_type": "decomposition",
+    "delta_h": 15.0,
+    "products_detail": [
+      {"formula": "Fe2O3", "phase": "s", "color": "#8b4513"},
+      {"formula": "H2O", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 300, "min_temperature": 200, "catalyst": null, "notes": "Iron hydroxide decomposes to iron oxide (rust) on heating"},
+    "effects": {
+      "color": {"from": "#8b4513", "to": "#a0522d", "speed": "slow"},
+      "gas": {"type": "H2O", "rate": "slow"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["color_change"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["NiCl2", "Na2S"],
+    "products": ["NiS", "NaCl"],
+    "equation": "NiCl2 + Na2S -> NiS + 2NaCl",
+    "reaction_type": "double_displacement",
+    "delta_h": -40.0,
+    "products_detail": [
+      {"formula": "NiS", "phase": "s", "color": "#1a1a1a"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#00cc00", "to": "#1a1a1a", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "NiS", "color": "#1a1a1a"},
+      "special": ["black_precipitate", "color_change"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Pb(NO3)2", "Na2S"],
+    "products": ["PbS", "NaNO3"],
+    "equation": "Pb(NO3)2 + Na2S -> PbS + 2NaNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -60.0,
+    "products_detail": [
+      {"formula": "PbS", "phase": "s", "color": "#1a1a1a"},
+      {"formula": "NaNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Lead sulfide is extremely insoluble — black precipitate"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#1a1a1a", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "PbS", "color": "#1a1a1a"},
+      "special": ["black_precipitate"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["Pb(NO3)2", "K2CrO4"],
+    "products": ["PbCrO4", "KNO3"],
+    "equation": "Pb(NO3)2 + K2CrO4 -> PbCrO4 + 2KNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -55.0,
+    "products_detail": [
+      {"formula": "PbCrO4", "phase": "s", "color": "#ffd700"},
+      {"formula": "KNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Chrome yellow — historically used as a pigment"},
+    "effects": {
+      "color": {"from": "#ffff00", "to": "#ffd700", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "PbCrO4", "color": "#ffd700"},
+      "special": ["yellow_precipitate", "chrome_yellow"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["AgNO3", "K2CrO4"],
+    "products": ["Ag2CrO4", "KNO3"],
+    "equation": "2AgNO3 + K2CrO4 -> Ag2CrO4 + 2KNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -45.0,
+    "products_detail": [
+      {"formula": "Ag2CrO4", "phase": "s", "color": "#8b0000"},
+      {"formula": "KNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Brick-red precipitate — used as indicator in Mohr titration"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#8b0000", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Ag2CrO4", "color": "#8b0000"},
+      "special": ["red_precipitate", "mohr_indicator"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["MgCO3", "HCl"],
+    "products": ["MgCl2", "H2O", "CO2"],
+    "equation": "MgCO3 + 2HCl -> MgCl2 + H2O + CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -90.0,
+    "products_detail": [
+      {"formula": "MgCl2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "CO2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing", "effervescence"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["K2CO3", "HCl"],
+    "products": ["KCl", "H2O", "CO2"],
+    "equation": "K2CO3 + 2HCl -> 2KCl + H2O + CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -85.0,
+    "products_detail": [
+      {"formula": "KCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "CO2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing"],
+      "sounds": ["fizz_vigorous"],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["BaCO3", "HCl"],
+    "products": ["BaCl2", "H2O", "CO2"],
+    "equation": "BaCO3 + 2HCl -> BaCl2 + H2O + CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -75.0,
+    "products_detail": [
+      {"formula": "BaCl2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "CO2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["H2O"],
+    "products": ["H2", "O2"],
+    "equation": "2H2O -> 2H2 + O2",
+    "reaction_type": "decomposition",
+    "delta_h": 285.8,
+    "products_detail": [
+      {"formula": "H2", "phase": "g", "color": null},
+      {"formula": "O2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": "electrolysis", "notes": "Electrolysis of water — requires electrical energy input"},
+    "effects": {
+      "color": {"from": "#cce5ff", "to": "#cce5ff", "speed": "slow"},
+      "gas": {"type": "H2", "rate": "moderate"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["bubbling", "electrolysis", "two_gas_streams"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["CuSO4", "NaOH"],
+    "products": ["Cu(OH)2", "Na2SO4"],
+    "equation": "CuSO4 + 2NaOH -> Cu(OH)2 + Na2SO4",
+    "reaction_type": "double_displacement",
+    "delta_h": -30.0,
+    "products_detail": [
+      {"formula": "Cu(OH)2", "phase": "s", "color": "#87ceeb"},
+      {"formula": "Na2SO4", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#4169e1", "to": "#87ceeb", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Cu(OH)2", "color": "#87ceeb"},
+      "special": ["blue_precipitate", "gelatinous"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["ZnCl2", "NaOH"],
+    "products": ["Zn(OH)2", "NaCl"],
+    "equation": "ZnCl2 + 2NaOH -> Zn(OH)2 + 2NaCl",
+    "reaction_type": "double_displacement",
+    "delta_h": -25.0,
+    "products_detail": [
+      {"formula": "Zn(OH)2", "phase": "s", "color": "#ffffff"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "White gelatinous precipitate — amphoteric hydroxide, dissolves in excess NaOH"},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#ffffff", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Zn(OH)2", "color": "#ffffff"},
+      "special": ["white_precipitate", "gelatinous", "amphoteric"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Cl2", "KBr"],
+    "products": ["KCl", "Br2"],
+    "equation": "Cl2 + 2KBr -> 2KCl + Br2",
+    "reaction_type": "single_displacement",
+    "delta_h": -95.0,
+    "products_detail": [
+      {"formula": "KCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "Br2", "phase": "aq", "color": "#8b0000"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Chlorine displaces bromine — solution turns orange-brown"},
+    "effects": {
+      "color": {"from": "#90ee90", "to": "#8b0000", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "halogen_displacement"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["Br2", "KI"],
+    "products": ["KBr", "I2"],
+    "equation": "Br2 + 2KI -> 2KBr + I2",
+    "reaction_type": "single_displacement",
+    "delta_h": -50.0,
+    "products_detail": [
+      {"formula": "KBr", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "I2", "phase": "aq", "color": "#4b0082"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Bromine displaces iodine — solution turns dark brown/purple"},
+    "effects": {
+      "color": {"from": "#8b0000", "to": "#4b0082", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "halogen_displacement"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["Cl2", "NaI"],
+    "products": ["NaCl", "I2"],
+    "equation": "Cl2 + 2NaI -> 2NaCl + I2",
+    "reaction_type": "single_displacement",
+    "delta_h": -120.0,
+    "products_detail": [
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "I2", "phase": "s", "color": "#4b0082"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#90ee90", "to": "#4b0082", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "I2", "color": "#4b0082"},
+      "special": ["color_change", "iodine_crystals"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["Cu", "H2SO4"],
+    "products": ["CuSO4", "SO2", "H2O"],
+    "equation": "Cu + 2H2SO4(conc) -> CuSO4 + SO2 + 2H2O",
+    "reaction_type": "redox",
+    "delta_h": -75.0,
+    "products_detail": [
+      {"formula": "CuSO4", "phase": "aq", "color": "#4169e1"},
+      {"formula": "SO2", "phase": "g", "color": null},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 100, "min_temperature": 80, "catalyst": null, "notes": "Hot concentrated sulfuric acid is an oxidizing acid — reacts with Cu"},
+    "effects": {
+      "color": {"from": "#b87333", "to": "#4169e1", "speed": "slow"},
+      "gas": {"type": "SO2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "pungent_smell"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["corrosive", "toxic_gas"]
+    }
+  },
+  {
+    "reactants": ["Al", "Fe2O3"],
+    "products": ["Al2O3", "Fe"],
+    "equation": "2Al + Fe2O3 -> Al2O3 + 2Fe",
+    "reaction_type": "redox",
+    "delta_h": -851.5,
+    "products_detail": [
+      {"formula": "Al2O3", "phase": "s", "color": "#ffffff"},
+      {"formula": "Fe", "phase": "l", "color": "#808080"}
+    ],
+    "conditions": {"temperature": 25, "min_temperature": 900, "catalyst": "ignition", "notes": "Thermite reaction — extremely exothermic, produces molten iron"},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#ff4500", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["sparks", "extreme_heat", "molten_metal", "bright_light", "thermite"],
+      "sounds": ["sizzle", "crackle", "roar"],
+      "safety": ["extreme_heat", "blinding_light", "fire_hazard"]
+    }
+  },
+  {
+    "reactants": ["Na2CO3", "HNO3"],
+    "products": ["NaNO3", "H2O", "CO2"],
+    "equation": "Na2CO3 + 2HNO3 -> 2NaNO3 + H2O + CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -80.0,
+    "products_detail": [
+      {"formula": "NaNO3", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "CO2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing"],
+      "sounds": ["fizz_vigorous"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["CaCO3", "H2SO4"],
+    "products": ["CaSO4", "H2O", "CO2"],
+    "equation": "CaCO3 + H2SO4 -> CaSO4 + H2O + CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -100.0,
+    "products_detail": [
+      {"formula": "CaSO4", "phase": "s", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Reaction slows as insoluble CaSO4 coat forms on marble"},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "CO2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing", "self_inhibiting"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["Mg(OH)2"],
+    "products": ["MgO", "H2O"],
+    "equation": "Mg(OH)2 -> MgO + H2O",
+    "reaction_type": "decomposition",
+    "delta_h": 37.0,
+    "products_detail": [
+      {"formula": "MgO", "phase": "s", "color": "#ffffff"},
+      {"formula": "H2O", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 400, "min_temperature": 350, "catalyst": null, "notes": "Thermal decomposition of magnesium hydroxide"},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#ffffff", "speed": "slow"},
+      "gas": {"type": "H2O", "rate": "slow"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["NH4HCO3"],
+    "products": ["NH3", "H2O", "CO2"],
+    "equation": "NH4HCO3 -> NH3 + H2O + CO2",
+    "reaction_type": "decomposition",
+    "delta_h": 65.0,
+    "products_detail": [
+      {"formula": "NH3", "phase": "g", "color": null},
+      {"formula": "H2O", "phase": "g", "color": null},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 60, "min_temperature": 36, "catalyst": null, "notes": "Ammonium bicarbonate decomposes easily — used as leavening agent"},
+    "effects": {
+      "color": {"from": "#ffffff", "to": null, "speed": "medium"},
+      "gas": {"type": "NH3", "rate": "moderate"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["ammonia_smell", "disappears"],
+      "sounds": [],
+      "safety": ["irritant"]
+    }
+  },
+  {
+    "reactants": ["C2H5OH", "CH3COOH"],
+    "products": ["CH3COOC2H5", "H2O"],
+    "equation": "C2H5OH + CH3COOH -> CH3COOC2H5 + H2O",
+    "reaction_type": "condensation",
+    "delta_h": -12.0,
+    "products_detail": [
+      {"formula": "CH3COOC2H5", "phase": "l", "color": "#e8e8e8"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 80, "min_temperature": 60, "catalyst": "H2SO4", "notes": "Fischer esterification — ethyl acetate has fruity smell"},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#e8e8e8", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fruity_smell", "ester_formation"],
+      "sounds": [],
+      "safety": ["flammable"]
+    }
+  },
+  {
+    "reactants": ["CH3OH", "CH3COOH"],
+    "products": ["CH3COOCH3", "H2O"],
+    "equation": "CH3OH + CH3COOH -> CH3COOCH3 + H2O",
+    "reaction_type": "condensation",
+    "delta_h": -10.0,
+    "products_detail": [
+      {"formula": "CH3COOCH3", "phase": "l", "color": "#e8e8e8"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 80, "min_temperature": 60, "catalyst": "H2SO4", "notes": "Fischer esterification — methyl acetate"},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#e8e8e8", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fruity_smell", "ester_formation"],
+      "sounds": [],
+      "safety": ["flammable"]
+    }
+  },
+  {
+    "reactants": ["Al", "NaOH", "H2O"],
+    "products": ["NaAlO2", "H2"],
+    "equation": "2Al + 2NaOH + 2H2O -> 2NaAlO2 + 3H2",
+    "reaction_type": "redox",
+    "delta_h": -418.0,
+    "products_detail": [
+      {"formula": "NaAlO2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Aluminum dissolves in sodium hydroxide — amphoteric metal"},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#f0f0f0", "speed": "slow"},
+      "gas": {"type": "H2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling", "metal_dissolves"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["Fe", "H2O"],
+    "products": ["Fe3O4", "H2"],
+    "equation": "3Fe + 4H2O -> Fe3O4 + 4H2",
+    "reaction_type": "redox",
+    "delta_h": -33.0,
+    "products_detail": [
+      {"formula": "Fe3O4", "phase": "s", "color": "#1a1a1a"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 570, "min_temperature": 500, "catalyst": null, "notes": "Iron reacts with steam at high temperature to form magnetite"},
+    "effects": {
+      "color": {"from": "#808080", "to": "#1a1a1a", "speed": "slow"},
+      "gas": {"type": "H2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change"],
+      "sounds": [],
+      "safety": ["extreme_heat", "flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["Zn", "NaOH"],
+    "products": ["Na2ZnO2", "H2"],
+    "equation": "Zn + 2NaOH -> Na2ZnO2 + H2",
+    "reaction_type": "redox",
+    "delta_h": -126.0,
+    "products_detail": [
+      {"formula": "Na2ZnO2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Zinc dissolves in sodium hydroxide — amphoteric metal"},
+    "effects": {
+      "color": {"from": "#d0d0d0", "to": "#f0f0f0", "speed": "slow"},
+      "gas": {"type": "H2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling", "metal_dissolves"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["CuO", "H2"],
+    "products": ["Cu", "H2O"],
+    "equation": "CuO + H2 -> Cu + H2O",
+    "reaction_type": "redox",
+    "delta_h": -129.0,
+    "products_detail": [
+      {"formula": "Cu", "phase": "s", "color": "#b87333"},
+      {"formula": "H2O", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 300, "min_temperature": 250, "catalyst": null, "notes": "Reduction of copper oxide by hydrogen — black turns to copper colored"},
+    "effects": {
+      "color": {"from": "#1a1a1a", "to": "#b87333", "speed": "medium"},
+      "gas": {"type": "H2O", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "black_to_copper"],
+      "sounds": [],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["Fe2O3", "CO"],
+    "products": ["Fe", "CO2"],
+    "equation": "Fe2O3 + 3CO -> 2Fe + 3CO2",
+    "reaction_type": "redox",
+    "delta_h": -24.8,
+    "products_detail": [
+      {"formula": "Fe", "phase": "s", "color": "#808080"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 700, "min_temperature": 600, "catalyst": null, "notes": "Blast furnace reduction of iron ore by carbon monoxide"},
+    "effects": {
+      "color": {"from": "#8b4513", "to": "#808080", "speed": "slow"},
+      "gas": {"type": "CO2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "smelting"],
+      "sounds": [],
+      "safety": ["toxic_gas", "extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["Fe2O3", "C"],
+    "products": ["Fe", "CO2"],
+    "equation": "2Fe2O3 + 3C -> 4Fe + 3CO2",
+    "reaction_type": "redox",
+    "delta_h": 234.0,
+    "products_detail": [
+      {"formula": "Fe", "phase": "s", "color": "#808080"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 1500, "min_temperature": 1200, "catalyst": null, "notes": "Smelting of iron ore with carbon (coke)"},
+    "effects": {
+      "color": {"from": "#8b4513", "to": "#808080", "speed": "slow"},
+      "gas": {"type": "CO2", "rate": "moderate"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["smelting", "molten_metal"],
+      "sounds": ["roar"],
+      "safety": ["extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["CuO", "C"],
+    "products": ["Cu", "CO2"],
+    "equation": "2CuO + C -> 2Cu + CO2",
+    "reaction_type": "redox",
+    "delta_h": -78.0,
+    "products_detail": [
+      {"formula": "Cu", "phase": "s", "color": "#b87333"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 1000, "min_temperature": 800, "catalyst": null, "notes": "Reduction of copper oxide by carbon"},
+    "effects": {
+      "color": {"from": "#1a1a1a", "to": "#b87333", "speed": "slow"},
+      "gas": {"type": "CO2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "smelting"],
+      "sounds": [],
+      "safety": ["extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["ZnO", "HCl"],
+    "products": ["ZnCl2", "H2O"],
+    "equation": "ZnO + 2HCl -> ZnCl2 + H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -105.0,
+    "products_detail": [
+      {"formula": "ZnCl2", "phase": "aq", "color": "#e8e8e8"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#e8e8e8", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["solid_dissolves"],
+      "sounds": [],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["ZnO", "NaOH"],
+    "products": ["Na2ZnO2", "H2O"],
+    "equation": "ZnO + 2NaOH -> Na2ZnO2 + H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -45.0,
+    "products_detail": [
+      {"formula": "Na2ZnO2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "ZnO is amphoteric — dissolves in both acids and bases"},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#f0f0f0", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["solid_dissolves", "amphoteric"],
+      "sounds": [],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["Pb(NO3)2", "NaCl"],
+    "products": ["PbCl2", "NaNO3"],
+    "equation": "Pb(NO3)2 + 2NaCl -> PbCl2 + 2NaNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -25.0,
+    "products_detail": [
+      {"formula": "PbCl2", "phase": "s", "color": "#f8f8f8"},
+      {"formula": "NaNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Lead chloride precipitates — white needle-like crystals in cold water"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f8f8f8", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "PbCl2", "color": "#f8f8f8"},
+      "special": ["white_precipitate", "needle_crystals"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["AgNO3", "NaBr"],
+    "products": ["AgBr", "NaNO3"],
+    "equation": "AgNO3 + NaBr -> AgBr + NaNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -55.0,
+    "products_detail": [
+      {"formula": "AgBr", "phase": "s", "color": "#ffffcc"},
+      {"formula": "NaNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Pale yellow precipitate — light sensitive, used in photography"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#ffffcc", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "AgBr", "color": "#ffffcc"},
+      "special": ["pale_yellow_precipitate", "light_sensitive"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Fe", "Cl2"],
+    "products": ["FeCl3"],
+    "equation": "2Fe + 3Cl2 -> 2FeCl3",
+    "reaction_type": "synthesis",
+    "delta_h": -399.5,
+    "products_detail": [
+      {"formula": "FeCl3", "phase": "s", "color": "#8b4513"}
+    ],
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null, "notes": "Iron burns in chlorine gas with brown fumes"},
+    "effects": {
+      "color": {"from": "#808080", "to": "#8b4513", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["brown_fumes", "sparks"],
+      "sounds": ["sizzle", "crackle"],
+      "safety": ["toxic_gas", "extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["Mg", "N2"],
+    "products": ["Mg3N2"],
+    "equation": "3Mg + N2 -> Mg3N2",
+    "reaction_type": "synthesis",
+    "delta_h": -461.1,
+    "products_detail": [
+      {"formula": "Mg3N2", "phase": "s", "color": "#c8c800"}
+    ],
+    "conditions": {"temperature": 600, "min_temperature": 500, "catalyst": null, "notes": "Magnesium burns in nitrogen — yellow-green powder"},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#c8c800", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bright_light"],
+      "sounds": ["sizzle"],
+      "safety": ["extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["Na", "O2"],
+    "products": ["Na2O2"],
+    "equation": "2Na + O2 -> Na2O2",
+    "reaction_type": "synthesis",
+    "delta_h": -510.9,
+    "products_detail": [
+      {"formula": "Na2O2", "phase": "s", "color": "#ffffcc"}
+    ],
+    "conditions": {"temperature": 25, "min_temperature": 150, "catalyst": null, "notes": "Sodium burns in excess oxygen forming sodium peroxide"},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#ffffcc", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["yellow_flame", "sparks"],
+      "sounds": ["sizzle"],
+      "safety": ["extreme_heat", "reactive"]
+    }
+  },
+  {
+    "reactants": ["CaO", "CO2"],
+    "products": ["CaCO3"],
+    "equation": "CaO + CO2 -> CaCO3",
+    "reaction_type": "synthesis",
+    "delta_h": -178.0,
+    "products_detail": [
+      {"formula": "CaCO3", "phase": "s", "color": "#ffffff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Quicklime absorbs CO2 to form limestone"},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#ffffff", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": [],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["C6H6", "Br2"],
+    "products": ["C6H5Br", "HBr"],
+    "equation": "C6H6 + Br2 -> C6H5Br + HBr",
+    "reaction_type": "substitution",
+    "delta_h": -32.0,
+    "products_detail": [
+      {"formula": "C6H5Br", "phase": "l", "color": "#e8e8e8"},
+      {"formula": "HBr", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": "FeBr3", "notes": "Electrophilic aromatic substitution — benzene + bromine with Lewis acid catalyst"},
+    "effects": {
+      "color": {"from": "#8b0000", "to": "#e8e8e8", "speed": "medium"},
+      "gas": {"type": "HBr", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["decolorization", "fumes"],
+      "sounds": [],
+      "safety": ["toxic", "flammable"]
+    }
+  },
+  {
+    "reactants": ["C2H4", "H2O"],
+    "products": ["C2H5OH"],
+    "equation": "C2H4 + H2O -> C2H5OH",
+    "reaction_type": "addition",
+    "delta_h": -44.0,
+    "products_detail": [
+      {"formula": "C2H5OH", "phase": "l", "color": "#e8e8e8"}
+    ],
+    "conditions": {"temperature": 300, "min_temperature": 250, "catalyst": "H3PO4", "notes": "Industrial synthesis of ethanol by hydration of ethylene"},
+    "effects": {
+      "color": {"from": null, "to": "#e8e8e8", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": [],
+      "safety": ["flammable"]
+    }
+  },
+  {
+    "reactants": ["C2H4", "H2"],
+    "products": ["C2H6"],
+    "equation": "C2H4 + H2 -> C2H6",
+    "reaction_type": "addition",
+    "delta_h": -137.0,
+    "products_detail": [
+      {"formula": "C2H6", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 150, "min_temperature": 100, "catalyst": "Ni", "notes": "Catalytic hydrogenation of ethylene to ethane"},
+    "effects": {
+      "color": {"from": null, "to": null, "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": [],
+      "safety": ["flammable"]
+    }
+  },
+  {
+    "reactants": ["C2H2", "H2"],
+    "products": ["C2H4"],
+    "equation": "C2H2 + H2 -> C2H4",
+    "reaction_type": "addition",
+    "delta_h": -174.0,
+    "products_detail": [
+      {"formula": "C2H4", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 200, "min_temperature": 150, "catalyst": "Pd/BaSO4", "notes": "Lindlar's catalyst for partial hydrogenation of acetylene to ethylene"},
+    "effects": {
+      "color": {"from": null, "to": null, "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": [],
+      "safety": ["flammable"]
+    }
+  },
+  {
+    "reactants": ["CaC2", "H2O"],
+    "products": ["C2H2", "Ca(OH)2"],
+    "equation": "CaC2 + 2H2O -> C2H2 + Ca(OH)2",
+    "reaction_type": "single_displacement",
+    "delta_h": -126.0,
+    "products_detail": [
+      {"formula": "C2H2", "phase": "g", "color": null},
+      {"formula": "Ca(OH)2", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Calcium carbide + water produces acetylene gas — used in old mining lamps"},
+    "effects": {
+      "color": {"from": "#808080", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "C2H2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling", "garlic_smell"],
+      "sounds": ["fizz_vigorous"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["NaHCO3", "CH3COOH"],
+    "products": ["CH3COONa", "H2O", "CO2"],
+    "equation": "NaHCO3 + CH3COOH -> CH3COONa + H2O + CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -25.0,
+    "products_detail": [
+      {"formula": "CH3COONa", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Baking soda volcano reaction — vinegar + baking soda"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "CO2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing", "foaming", "volcano_experiment"],
+      "sounds": ["fizz_vigorous"],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["KMnO4", "H2SO4", "FeSO4"],
+    "products": ["Fe2(SO4)3", "MnSO4", "K2SO4", "H2O"],
+    "equation": "2KMnO4 + 8H2SO4 + 10FeSO4 -> 5Fe2(SO4)3 + 2MnSO4 + K2SO4 + 8H2O",
+    "reaction_type": "redox",
+    "delta_h": -350.0,
+    "products_detail": [
+      {"formula": "Fe2(SO4)3", "phase": "aq", "color": "#daa520"},
+      {"formula": "MnSO4", "phase": "aq", "color": "#ffb6c1"},
+      {"formula": "K2SO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Permanganate titration — purple KMnO4 decolorizes as it reacts with Fe2+"},
+    "effects": {
+      "color": {"from": "#800080", "to": "#daa520", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "decolorization", "titration"],
+      "sounds": [],
+      "safety": ["oxidizer", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["K", "H2O"],
+    "products": ["KOH", "H2"],
+    "equation": "2K + 2H2O -> 2KOH + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -392.0,
+    "products_detail": [
+      {"formula": "KOH", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Potassium reacts violently with water — lilac flame, may explode"},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "H2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["sparks", "lilac_flame", "explosion_risk", "violent_reaction"],
+      "sounds": ["fizz_vigorous", "crackle", "explosion"],
+      "safety": ["flammable_gas", "corrosive", "explosive"]
+    }
+  },
+  {
+    "reactants": ["Li", "H2O"],
+    "products": ["LiOH", "H2"],
+    "equation": "2Li + 2H2O -> 2LiOH + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -223.0,
+    "products_detail": [
+      {"formula": "LiOH", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Lithium reacts gently with water — red flame"},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "H2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["red_flame", "bubbling"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["Ca", "H2O"],
+    "products": ["Ca(OH)2", "H2"],
+    "equation": "Ca + 2H2O -> Ca(OH)2 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -254.0,
+    "products_detail": [
+      {"formula": "Ca(OH)2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Calcium reacts with water — solution turns milky as Ca(OH)2 is slightly soluble"},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "H2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling", "milky"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["CH3COOH", "Na2CO3"],
+    "products": ["CH3COONa", "H2O", "CO2"],
+    "equation": "2CH3COOH + Na2CO3 -> 2CH3COONa + H2O + CO2",
+    "reaction_type": "acid_base",
+    "delta_h": -35.0,
+    "products_detail": [
+      {"formula": "CH3COONa", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Weak acid dissolves washing soda with effervescence"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "medium"},
+      "gas": {"type": "CO2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["fizzing"],
+      "sounds": ["fizz_moderate"],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["FeSO4", "NaOH"],
+    "products": ["Fe(OH)2", "Na2SO4"],
+    "equation": "FeSO4 + 2NaOH -> Fe(OH)2 + Na2SO4",
+    "reaction_type": "double_displacement",
+    "delta_h": -30.0,
+    "products_detail": [
+      {"formula": "Fe(OH)2", "phase": "s", "color": "#90ee90"},
+      {"formula": "Na2SO4", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Green gelatinous precipitate of iron(II) hydroxide — darkens in air as it oxidizes to Fe(OH)3"},
+    "effects": {
+      "color": {"from": "#90ee90", "to": "#90ee90", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Fe(OH)2", "color": "#90ee90"},
+      "special": ["green_precipitate", "gelatinous", "darkens_in_air"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["MnO2", "HCl"],
+    "products": ["MnCl2", "Cl2", "H2O"],
+    "equation": "MnO2 + 4HCl -> MnCl2 + Cl2 + 2H2O",
+    "reaction_type": "redox",
+    "delta_h": -35.0,
+    "products_detail": [
+      {"formula": "MnCl2", "phase": "aq", "color": "#ffb6c1"},
+      {"formula": "Cl2", "phase": "g", "color": "#90ee90"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 60, "min_temperature": 50, "catalyst": null, "notes": "Laboratory preparation of chlorine gas"},
+    "effects": {
+      "color": {"from": "#1a1a1a", "to": "#90ee90", "speed": "medium"},
+      "gas": {"type": "Cl2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["chlorine_smell", "yellow_green_gas"],
+      "sounds": [],
+      "safety": ["toxic_gas", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["Na2SO3", "H2SO4"],
+    "products": ["Na2SO4", "H2O", "SO2"],
+    "equation": "Na2SO3 + H2SO4 -> Na2SO4 + H2O + SO2",
+    "reaction_type": "acid_base",
+    "delta_h": -50.0,
+    "products_detail": [
+      {"formula": "Na2SO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "SO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Sulfite + acid releases sulfur dioxide gas — pungent smell"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "SO2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["pungent_smell"],
+      "sounds": [],
+      "safety": ["toxic_gas", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["Na2S", "H2SO4"],
+    "products": ["Na2SO4", "H2S"],
+    "equation": "Na2S + H2SO4 -> Na2SO4 + H2S",
+    "reaction_type": "double_displacement",
+    "delta_h": -25.0,
+    "products_detail": [
+      {"formula": "Na2SO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2S", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Rotten egg smell — hydrogen sulfide gas released"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "H2S", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["rotten_egg_smell"],
+      "sounds": [],
+      "safety": ["toxic_gas", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["FeCl3", "NaOH"],
+    "products": ["Fe(OH)3", "NaCl"],
+    "equation": "FeCl3 + 3NaOH -> Fe(OH)3 + 3NaCl",
+    "reaction_type": "double_displacement",
+    "delta_h": -40.0,
+    "products_detail": [
+      {"formula": "Fe(OH)3", "phase": "s", "color": "#8b4513"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Rust-brown gelatinous precipitate of iron(III) hydroxide"},
+    "effects": {
+      "color": {"from": "#b8860b", "to": "#8b4513", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Fe(OH)3", "color": "#8b4513"},
+      "special": ["brown_precipitate", "gelatinous"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["HNO3", "Cu"],
+    "products": ["Cu(NO3)2", "NO", "H2O"],
+    "equation": "8HNO3(dilute) + 3Cu -> 3Cu(NO3)2 + 2NO + 4H2O",
+    "reaction_type": "redox",
+    "delta_h": -170.0,
+    "products_detail": [
+      {"formula": "Cu(NO3)2", "phase": "aq", "color": "#0000cd"},
+      {"formula": "NO", "phase": "g", "color": null},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Dilute nitric acid dissolves copper — blue solution, colorless NO gas turns brown in air"},
+    "effects": {
+      "color": {"from": "#b87333", "to": "#0000cd", "speed": "slow"},
+      "gas": {"type": "NO", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "metal_dissolves", "brown_fumes_in_air"],
+      "sounds": [],
+      "safety": ["corrosive", "toxic_gas"]
+    }
+  },
+  {
+    "reactants": ["KNO3"],
+    "products": ["KNO2", "O2"],
+    "equation": "2KNO3 -> 2KNO2 + O2",
+    "reaction_type": "decomposition",
+    "delta_h": 125.0,
+    "products_detail": [
+      {"formula": "KNO2", "phase": "s", "color": "#f0f0f0"},
+      {"formula": "O2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 400, "min_temperature": 350, "catalyst": null, "notes": "Potassium nitrate decomposes to nitrite and oxygen on strong heating"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "slow"},
+      "gas": {"type": "O2", "rate": "moderate"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["relights_glowing_splint"],
+      "sounds": [],
+      "safety": ["oxidizer"]
+    }
+  },
+  {
+    "reactants": ["Pb(NO3)2"],
+    "products": ["PbO", "NO2", "O2"],
+    "equation": "2Pb(NO3)2 -> 2PbO + 4NO2 + O2",
+    "reaction_type": "decomposition",
+    "delta_h": 155.0,
+    "products_detail": [
+      {"formula": "PbO", "phase": "s", "color": "#ffd700"},
+      {"formula": "NO2", "phase": "g", "color": "#8b4513"},
+      {"formula": "O2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 500, "min_temperature": 400, "catalyst": null, "notes": "Lead nitrate crackles and produces brown NO2 fumes on heating"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#ffd700", "speed": "medium"},
+      "gas": {"type": "NO2", "rate": "moderate"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["brown_fumes", "cracking", "decrepitation"],
+      "sounds": ["crackle"],
+      "safety": ["toxic_gas", "extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["Cu(NO3)2"],
+    "products": ["CuO", "NO2", "O2"],
+    "equation": "2Cu(NO3)2 -> 2CuO + 4NO2 + O2",
+    "reaction_type": "decomposition",
+    "delta_h": 145.0,
+    "products_detail": [
+      {"formula": "CuO", "phase": "s", "color": "#1a1a1a"},
+      {"formula": "NO2", "phase": "g", "color": "#8b4513"},
+      {"formula": "O2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 350, "min_temperature": 300, "catalyst": null, "notes": "Copper nitrate decomposes to black CuO and brown NO2 gas"},
+    "effects": {
+      "color": {"from": "#4169e1", "to": "#1a1a1a", "speed": "medium"},
+      "gas": {"type": "NO2", "rate": "moderate"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["brown_fumes", "color_change"],
+      "sounds": [],
+      "safety": ["toxic_gas"]
+    }
+  },
+  {
+    "reactants": ["Na2CO3", "CaCl2"],
+    "products": ["CaCO3", "NaCl"],
+    "equation": "Na2CO3 + CaCl2 -> CaCO3 + 2NaCl",
+    "reaction_type": "double_displacement",
+    "delta_h": -45.0,
+    "products_detail": [
+      {"formula": "CaCO3", "phase": "s", "color": "#ffffff"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "White precipitate of calcium carbonate — water softening reaction"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#ffffff", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "CaCO3", "color": "#ffffff"},
+      "special": ["white_precipitate", "water_softening"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["AgNO3", "Na2S"],
+    "products": ["Ag2S", "NaNO3"],
+    "equation": "2AgNO3 + Na2S -> Ag2S + 2NaNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -70.0,
+    "products_detail": [
+      {"formula": "Ag2S", "phase": "s", "color": "#1a1a1a"},
+      {"formula": "NaNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Black precipitate of silver sulfide — similar to tarnishing of silver"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#1a1a1a", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Ag2S", "color": "#1a1a1a"},
+      "special": ["black_precipitate", "tarnishing"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["CdCl2", "Na2S"],
+    "products": ["CdS", "NaCl"],
+    "equation": "CdCl2 + Na2S -> CdS + 2NaCl",
+    "reaction_type": "double_displacement",
+    "delta_h": -55.0,
+    "products_detail": [
+      {"formula": "CdS", "phase": "s", "color": "#ffd700"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Bright yellow precipitate of cadmium sulfide — used as pigment"},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#ffd700", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "CdS", "color": "#ffd700"},
+      "special": ["yellow_precipitate", "cadmium_yellow"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["Mn", "HCl"],
+    "products": ["MnCl2", "H2"],
+    "equation": "Mn + 2HCl -> MnCl2 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -220.0,
+    "products_detail": [
+      {"formula": "MnCl2", "phase": "aq", "color": "#ffb6c1"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#ffb6c1", "speed": "medium"},
+      "gas": {"type": "H2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling", "pink_solution"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["Co", "HCl"],
+    "products": ["CoCl2", "H2"],
+    "equation": "Co + 2HCl -> CoCl2 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -195.0,
+    "products_detail": [
+      {"formula": "CoCl2", "phase": "aq", "color": "#ff69b4"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Cobalt dissolves in HCl forming pink solution"},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#ff69b4", "speed": "slow"},
+      "gas": {"type": "H2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling", "pink_solution"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas"]
+    }
+  },
+  {
+    "reactants": ["HCl", "Ba(OH)2"],
+    "products": ["BaCl2", "H2O"],
+    "equation": "2HCl + Ba(OH)2 -> BaCl2 + 2H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -116.0,
+    "products_detail": [
+      {"formula": "BaCl2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": ["bubble_gentle"],
+      "safety": ["corrosive", "toxic"]
+    }
+  },
+  {
+    "reactants": ["HNO3", "Ca(OH)2"],
+    "products": ["Ca(NO3)2", "H2O"],
+    "equation": "2HNO3 + Ca(OH)2 -> Ca(NO3)2 + 2H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -115.0,
+    "products_detail": [
+      {"formula": "Ca(NO3)2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": ["bubble_gentle"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["H3PO4", "KOH"],
+    "products": ["K3PO4", "H2O"],
+    "equation": "H3PO4 + 3KOH -> K3PO4 + 3H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -165.0,
+    "products_detail": [
+      {"formula": "K3PO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#f0f0f0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": ["bubble_gentle"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["NaOH", "Al(OH)3"],
+    "products": ["NaAlO2", "H2O"],
+    "equation": "NaOH + Al(OH)3 -> NaAlO2 + 2H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -50.0,
+    "products_detail": [
+      {"formula": "NaAlO2", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Amphoteric Al(OH)3 dissolves in excess NaOH forming aluminate"},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#f0f0f0", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["precipitate_dissolves", "amphoteric"],
+      "sounds": [],
+      "safety": ["corrosive"]
+    }
   }
 ]

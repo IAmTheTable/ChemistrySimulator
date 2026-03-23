@@ -82,7 +82,15 @@ _KNOWN_ACIDS: dict[str, tuple[str, str]] = {
     "H2SO4": ("H", "SO4"),
     "HNO3": ("H", "NO3"),
     "H3PO4": ("H", "PO4"),
+    "H2CO3": ("H", "CO3"),
+    "H2SO3": ("H", "SO3"),
+    "H2S": ("H", "S"),
+    "H2CrO4": ("H", "CrO4"),
+    "HClO3": ("H", "ClO3"),
+    "HClO4": ("H", "ClO4"),
     "CH3COOH": ("H", "CH3COO"),
+    "HCOOH": ("H", "HCOO"),
+    "H2C2O4": ("H", "C2O4"),
 }
 
 # Known salt decompositions into (cation, anion)
@@ -110,15 +118,74 @@ _KNOWN_SALTS: dict[str, tuple[str, str]] = {
     "K2CO3": ("K", "CO3"),
     "CaCO3": ("Ca", "CO3"),
     "BaCO3": ("Ba", "CO3"),
+    "MgCO3": ("Mg", "CO3"),
     "ZnCl2": ("Zn", "Cl"),
     "FeCl2": ("Fe", "Cl"),
     "FeCl3": ("Fe", "Cl"),
     "CuCl2": ("Cu", "Cl"),
     "PbCl2": ("Pb", "Cl"),
+    "MgCl2": ("Mg", "Cl"),
+    "AlCl3": ("Al", "Cl"),
+    "NiCl2": ("Ni", "Cl"),
+    "CoCl2": ("Co", "Cl"),
+    "MnCl2": ("Mn", "Cl"),
     "NaOH": ("Na", "OH"),
     "KOH": ("K", "OH"),
     "Ca(OH)2": ("Ca", "OH"),
     "Ba(OH)2": ("Ba", "OH"),
+    "Mg(OH)2": ("Mg", "OH"),
+    "Al(OH)3": ("Al", "OH"),
+    "Fe(OH)3": ("Fe", "OH"),
+    "Cu(OH)2": ("Cu", "OH"),
+    "Ni(OH)2": ("Ni", "OH"),
+    "Co(OH)2": ("Co", "OH"),
+    "Zn(OH)2": ("Zn", "OH"),
+    "Pb(OH)2": ("Pb", "OH"),
+    "Mn(OH)2": ("Mn", "OH"),
+    "Cu(NO3)2": ("Cu", "NO3"),
+    "Zn(NO3)2": ("Zn", "NO3"),
+    "Pb(NO3)2": ("Pb", "NO3"),
+    "Fe(NO3)3": ("Fe", "NO3"),
+    "Mg(NO3)2": ("Mg", "NO3"),
+    "Ca(NO3)2": ("Ca", "NO3"),
+    "Ba(NO3)2": ("Ba", "NO3"),
+    "MgSO4": ("Mg", "SO4"),
+    "NiSO4": ("Ni", "SO4"),
+    "CoSO4": ("Co", "SO4"),
+    "MnSO4": ("Mn", "SO4"),
+    "Al2(SO4)3": ("Al", "SO4"),
+    "K2SO4": ("K", "SO4"),
+    "K2CO3": ("K", "CO3"),
+    "Na2S": ("Na", "S"),
+    "K2S": ("K", "S"),
+    "CuS": ("Cu", "S"),
+    "ZnS": ("Zn", "S"),
+    "PbS": ("Pb", "S"),
+    "FeS": ("Fe", "S"),
+    "Ag2S": ("Ag", "S"),
+    "MnS": ("Mn", "S"),
+    "NiS": ("Ni", "S"),
+    "CoS": ("Co", "S"),
+    "Na3PO4": ("Na", "PO4"),
+    "K3PO4": ("K", "PO4"),
+    "Ca3(PO4)2": ("Ca", "PO4"),
+    "NH4Cl": ("NH4", "Cl"),
+    "NH4NO3": ("NH4", "NO3"),
+    "(NH4)2SO4": ("NH4", "SO4"),
+    "(NH4)2CO3": ("NH4", "CO3"),
+    "SnCl2": ("Sn", "Cl"),
+    "SnCl4": ("Sn", "Cl"),
+    "CrCl3": ("Cr", "Cl"),
+    "Na2CrO4": ("Na", "CrO4"),
+    "K2CrO4": ("K", "CrO4"),
+    "Na2Cr2O7": ("Na", "Cr2O7"),
+    "K2Cr2O7": ("K", "Cr2O7"),
+    "KMnO4": ("K", "MnO4"),
+    "NaF": ("Na", "F"),
+    "KF": ("K", "F"),
+    "CaF2": ("Ca", "F"),
+    "BaCl2": ("Ba", "Cl"),
+    "SrCl2": ("Sr", "Cl"),
 }
 
 
@@ -182,6 +249,12 @@ class ReactionPredictor:
     def _is_carbonate(formula: str) -> bool:
         if formula in _KNOWN_SALTS:
             return _KNOWN_SALTS[formula][1] == "CO3"
+        return False
+
+    @staticmethod
+    def _is_sulfide(formula: str) -> bool:
+        if formula in _KNOWN_SALTS:
+            return _KNOWN_SALTS[formula][1] == "S"
         return False
 
     def _ions(self, formula: str) -> tuple[str, str] | None:
@@ -580,7 +653,12 @@ class ReactionPredictor:
 
         Known decompositions:
         - Carbonates -> metal oxide + CO2
+        - Hydroxides -> metal oxide + H2O
+        - Bicarbonates -> carbonate + H2O + CO2
+        - Chlorates -> chloride + O2
+        - Nitrates -> varies by metal
         - H2O2 -> H2O + O2
+        - Ammonium salts -> ammonia + acid
         """
         if conditions is None:
             return None
@@ -596,8 +674,66 @@ class ReactionPredictor:
         # Carbonate decomposition: MCO3 -> MO + CO2
         if self._is_carbonate(compound):
             cation, _ = _KNOWN_SALTS[compound]
-            oxide = f"{cation}O" if cation != "Ca" else "CaO"
+            charge = _METAL_CHARGES.get(cation, 2)
+            if charge == 1:
+                oxide = f"{cation}2O"
+            else:
+                oxide = f"{cation}O"
             products = [oxide, "CO2"]
+            return self._result(DECOMPOSITION, reactants, products)
+
+        # Hydroxide decomposition: M(OH)n -> MxOy + H2O
+        if compound in _KNOWN_SALTS and _KNOWN_SALTS[compound][1] == "OH":
+            cation = _KNOWN_SALTS[compound][0]
+            # Alkali metal hydroxides are too stable for simple thermal decomp
+            if cation in _ALKALI_METALS:
+                return None
+            charge = _METAL_CHARGES.get(cation, 2)
+            if charge == 1:
+                oxide = f"{cation}2O"
+            else:
+                oxide = f"{cation}O"
+            products = [oxide, "H2O"]
+            return self._result(DECOMPOSITION, reactants, products)
+
+        # Bicarbonate decomposition: 2NaHCO3 -> Na2CO3 + H2O + CO2
+        _BICARBONATES = {
+            "NaHCO3": "Na2CO3", "KHCO3": "K2CO3",
+            "Ca(HCO3)2": "CaCO3", "Mg(HCO3)2": "MgCO3",
+            "NH4HCO3": None,  # special: -> NH3 + H2O + CO2
+        }
+        if compound in _BICARBONATES:
+            carbonate = _BICARBONATES[compound]
+            if carbonate is None:
+                products = ["NH3", "H2O", "CO2"]
+            else:
+                products = [carbonate, "H2O", "CO2"]
+            return self._result(DECOMPOSITION, reactants, products)
+
+        # Chlorate decomposition: 2KClO3 -> 2KCl + 3O2
+        _CHLORATES = {"KClO3": "KCl", "NaClO3": "NaCl"}
+        if compound in _CHLORATES:
+            products = [_CHLORATES[compound], "O2"]
+            return self._result(DECOMPOSITION, reactants, products)
+
+        # Nitrate decomposition (depends on metal activity)
+        if compound in _KNOWN_SALTS and _KNOWN_SALTS[compound][1] == "NO3":
+            cation = _KNOWN_SALTS[compound][0]
+            if cation in ("NH4",):
+                products = ["N2O", "H2O"]
+                return self._result(DECOMPOSITION, reactants, products)
+            # Active metals (Na, K): nitrate -> nitrite + O2
+            if cation in _ALKALI_METALS:
+                nitrite = f"{cation}NO2"
+                products = [nitrite, "O2"]
+                return self._result(DECOMPOSITION, reactants, products)
+            # Less active metals: nitrate -> oxide + NO2 + O2
+            charge = _METAL_CHARGES.get(cation, 2)
+            if charge == 1:
+                oxide = f"{cation}2O"
+            else:
+                oxide = f"{cation}O"
+            products = [oxide, "NO2", "O2"]
             return self._result(DECOMPOSITION, reactants, products)
 
         # H2O2 decomposition
@@ -605,7 +741,123 @@ class ReactionPredictor:
             products = ["H2O", "O2"]
             return self._result(DECOMPOSITION, reactants, products)
 
+        # Ammonium salts: NH4Cl -> NH3 + HCl
+        if compound in _KNOWN_SALTS and _KNOWN_SALTS[compound][0] == "NH4":
+            _, anion = _KNOWN_SALTS[compound]
+            acid = _make_salt_formula("H", anion)
+            products = ["NH3", acid]
+            return self._result(DECOMPOSITION, reactants, products)
+
         return None
+
+    # ------------------------------------------------------------------
+    # NEW: Metal combustion (metal + O2 -> metal oxide)
+    # ------------------------------------------------------------------
+
+    def _try_metal_combustion(self, reactants: list[str]) -> dict | None:
+        """Metal + O2 -> metal oxide."""
+        metal = None
+        has_o2 = False
+        for r in reactants:
+            if r == "O2":
+                has_o2 = True
+            elif self._is_metal(r):
+                metal = r
+
+        if metal is None or not has_o2:
+            return None
+
+        # Build oxide formula based on charge
+        charge = _METAL_CHARGES.get(metal)
+        if charge is None:
+            return None
+
+        # Cross with O^2-
+        from math import gcd as _gcd
+        g = _gcd(charge, 2)
+        m_sub = 2 // g
+        o_sub = charge // g
+
+        m_part = metal if m_sub == 1 else f"{metal}{m_sub}"
+        o_part = "O" if o_sub == 1 else f"O{o_sub}"
+        product = m_part + o_part
+
+        result = self._result(COMBUSTION, reactants, [product])
+        result["conditions"] = {"min_temperature": 200}
+        return result
+
+    # ------------------------------------------------------------------
+    # NEW: Acid + hydroxide (broader than existing acid_base)
+    # ------------------------------------------------------------------
+
+    def _try_acid_hydroxide(self, reactants: list[str]) -> dict | None:
+        """Acid + any metal hydroxide -> salt + water.
+        Broader than _try_acid_base: handles hydroxides not in _KNOWN_SALTS
+        by checking the formula for OH pattern.
+        """
+        acid = hydroxide = None
+        for r in reactants:
+            if self._is_acid(r):
+                acid = r
+            elif "OH" in r and r not in _KNOWN_ACIDS:
+                hydroxide = r
+
+        if acid is None or hydroxide is None:
+            return None
+
+        # Already handled by _try_acid_base
+        if self._is_base(hydroxide):
+            return None
+
+        # Try to extract metal from hydroxide
+        ions = self._ions(hydroxide)
+        if ions is None:
+            return None
+        cation, _ = ions
+        _, acid_anion = _KNOWN_ACIDS[acid]
+        salt = _make_salt_formula(cation, acid_anion)
+        products = [salt, "H2O"]
+        return self._result(ACID_BASE, reactants, products)
+
+    # ------------------------------------------------------------------
+    # NEW: Halogen displacement (Cl2 + KBr -> KCl + Br2)
+    # ------------------------------------------------------------------
+
+    def _try_halogen_displacement(self, reactants: list[str]) -> dict | None:
+        """A more reactive halogen displaces a less reactive one from a salt.
+        Activity order: F2 > Cl2 > Br2 > I2
+        """
+        _HALOGEN_ACTIVITY = {"F": 0, "Cl": 1, "Br": 2, "I": 3}
+        _HALOGEN_DIATOMIC = {"F": "F2", "Cl": "Cl2", "Br": "Br2", "I": "I2"}
+
+        _HALOGEN_FROM_FORMULA = {"F2": "F", "Cl2": "Cl", "Br2": "Br", "I2": "I"}
+        halogen_elem = None
+        halogen_formula = None
+        salt = None
+        for r in reactants:
+            if r in _HALOGEN_FROM_FORMULA:
+                halogen_formula = r
+                halogen_elem = _HALOGEN_FROM_FORMULA[r]
+            elif self._is_salt(r):
+                salt = r
+
+        if halogen_elem is None or salt is None:
+            return None
+
+        cation, anion = _KNOWN_SALTS[salt]
+        # Anion must be a halide
+        if anion not in _HALOGEN_ACTIVITY:
+            return None
+        if halogen_elem not in _HALOGEN_ACTIVITY:
+            return None
+
+        # Incoming halogen must be more reactive (lower index)
+        if _HALOGEN_ACTIVITY[halogen_elem] >= _HALOGEN_ACTIVITY[anion]:
+            return None
+
+        new_salt = _make_salt_formula(cation, halogen_elem)
+        displaced = _HALOGEN_DIATOMIC[anion]
+        return self._result(SINGLE_DISPLACEMENT, reactants, [new_salt, displaced])
 
     @staticmethod
     def _is_organic(formula: str) -> bool:
@@ -648,14 +900,17 @@ class ReactionPredictor:
         for rule in (
             self._try_metal_acid,
             self._try_acid_base,
+            self._try_acid_hydroxide,
             self._try_acid_carbonate,
             self._try_acid_metal_oxide,
             self._try_precipitation,
             self._try_double_displacement,
             self._try_metal_salt_displacement,
+            self._try_halogen_displacement,
             self._try_metal_water,
             self._try_oxide_water,
             self._try_combustion,
+            self._try_metal_combustion,
             self._try_synthesis,
         ):
             result = rule(reactants)
