@@ -28,7 +28,7 @@ def test_name_element_diatomic_nitrogen():
 # --- Binary Ionic Compounds ---
 
 def test_name_binary_ionic_nacl():
-    assert name_compound("NaCl") == "Sodium Chloride"
+    assert name_compound("NaCl") == "Sodium Chloride (Table Salt)"
 
 
 def test_name_binary_ionic_mgo():
@@ -40,7 +40,7 @@ def test_name_binary_ionic_caf2():
 
 
 def test_name_binary_ionic_al2o3():
-    assert name_compound("Al2O3") == "Aluminum Oxide"
+    assert name_compound("Al2O3") == "Aluminum Oxide (Alumina)"
 
 
 # --- Transition Metals (Roman Numerals) ---
@@ -64,11 +64,11 @@ def test_name_transition_cu2o():
 # --- Polyatomic Ions ---
 
 def test_name_polyatomic_naoh():
-    assert name_compound("NaOH") == "Sodium Hydroxide"
+    assert name_compound("NaOH") == "Sodium Hydroxide (Lye)"
 
 
 def test_name_polyatomic_caco3():
-    assert name_compound("CaCO3") == "Calcium Carbonate"
+    assert name_compound("CaCO3") == "Calcium Carbonate (Limestone)"
 
 
 def test_name_polyatomic_agno3():
@@ -106,7 +106,7 @@ def test_name_acid_hf():
 
 
 def test_name_acid_acetic():
-    assert name_compound("CH3COOH") == "Acetic Acid"
+    assert name_compound("CH3COOH") == "Acetic Acid (Vinegar)"
 
 
 # --- Binary Covalent Compounds ---
@@ -120,7 +120,7 @@ def test_name_covalent_co():
 
 
 def test_name_covalent_n2o():
-    assert name_compound("N2O") == "Dinitrogen Monoxide"
+    assert name_compound("N2O") == "Nitrous Oxide"
 
 
 def test_name_covalent_so3():
@@ -156,7 +156,7 @@ def test_name_common_h2o2():
 # --- Hydroxides/Bases ---
 
 def test_name_base_caoh2():
-    assert name_compound("Ca(OH)2") == "Calcium Hydroxide"
+    assert name_compound("Ca(OH)2") == "Calcium Hydroxide (Slaked Lime)"
 
 
 def test_name_base_koh():
@@ -170,7 +170,7 @@ def test_nomenclature_api(client):
     assert response.status_code == 200
     data = response.json()
     assert data["formula"] == "NaCl"
-    assert data["name"] == "Sodium Chloride"
+    assert data["name"] == "Sodium Chloride (Table Salt)"
 
 
 def test_nomenclature_api_common(client):
