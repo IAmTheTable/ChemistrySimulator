@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useLabStore } from "../../stores/labStore";
 import { useElement } from "../../api/elements";
 import { useChemicalName } from "../../api/nomenclature";
@@ -59,11 +60,14 @@ function ContainerInspector() {
   const mixedColor = item.contents.length > 0 ? item.contents[0].color : null;
 
   // Find the last reaction that involved this container's current contents
-  const lastReaction: ReactionLogEntry | undefined = reactionLog.find((entry) => {
-    const productFormulas = entry.products.map((p) => p.formula).sort().join(",");
+  const lastReaction = useMemo<ReactionLogEntry | undefined>(() => {
+    if (item.contents.length === 0) return undefined;
     const contentFormulas = item.contents.map((c) => c.formula).sort().join(",");
-    return productFormulas === contentFormulas && contentFormulas !== "";
-  });
+    return reactionLog.find((entry) => {
+      const productFormulas = entry.products.map((p) => p.formula).sort().join(",");
+      return productFormulas === contentFormulas;
+    });
+  }, [item.contents, reactionLog]);
 
   return (
     <div className="space-y-4">

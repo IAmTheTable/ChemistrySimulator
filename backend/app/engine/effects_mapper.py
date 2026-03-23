@@ -132,3 +132,64 @@ class EffectsMapper:
             sounds=sounds,
             safety=safety,
         )
+
+    # ------------------------------------------------------------------
+    # Observation generator
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def generate_observations(effects: ReactionEffects, delta_h: float | None) -> list[str]:
+        """Generate human-readable observation strings from effects."""
+        observations: list[str] = []
+
+        if effects.gas is not None:
+            rate = effects.gas.get("rate", "gentle")
+            gas_type = effects.gas.get("type", "gas")
+            if rate == "vigorous":
+                observations.append(
+                    f"Vigorous effervescence as {gas_type} gas is produced"
+                )
+            elif rate == "moderate":
+                observations.append(f"Gas bubbles observed ({gas_type})")
+            else:
+                observations.append(f"Gentle bubbling as {gas_type} gas evolves")
+
+        if effects.precipitate is not None:
+            color = effects.precipitate.get("color", "white")
+            observations.append(
+                f"A {color} precipitate forms and settles"
+            )
+
+        if effects.color is not None:
+            from_color = effects.color.get("from", "")
+            to_color = effects.color.get("to", "")
+            if from_color and to_color:
+                observations.append(
+                    f"Solution changes from {from_color} to {to_color}"
+                )
+            elif to_color:
+                observations.append(f"Solution turns {to_color}")
+
+        if delta_h is not None:
+            abs_dh = abs(delta_h)
+            if delta_h < 0:
+                if abs_dh > 200:
+                    observations.append(
+                        "Violent exothermic reaction, exercise extreme caution"
+                    )
+                elif abs_dh > 100:
+                    observations.append(
+                        "Significant heat released, temperature rises noticeably"
+                    )
+                elif abs_dh > 30:
+                    observations.append("Container feels warm to the touch")
+            else:
+                if abs_dh > 30:
+                    observations.append(
+                        "Solution cools as heat is absorbed"
+                    )
+
+        if "flame" in effects.special or "sparks" in effects.special:
+            observations.append("Sparks or flame observed")
+
+        return observations

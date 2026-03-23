@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import type { ThreeEvent } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import type { ContainerSubstance } from "../../../stores/labStore";
 import BubbleEffect from "../effects/BubbleEffect";
@@ -8,6 +7,7 @@ import SteamEffect from "../effects/SteamEffect";
 import FlameEffect from "../effects/FlameEffect";
 import PrecipitateEffect from "../effects/PrecipitateEffect";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
+import ContentsLabel from "./ContentsLabel";
 
 const CAPACITY_ML = 15;
 const COLD_GLASS_COLOR = "#ddeeff";
@@ -153,15 +153,7 @@ export default function TestTube({
       )}
 
       {/* Floating contents label */}
-      {contents && contents.length > 0 && (
-        <Html position={[0, 0.18, 0]} center distanceFactor={8}>
-          <div style={{ background: "rgba(0,0,0,0.7)", padding: "2px 6px", borderRadius: "4px", whiteSpace: "nowrap", pointerEvents: "none" }}>
-            <span style={{ color: "#e2e8f0", fontSize: "8px" }}>
-              {contents.map(s => s.formula).join(" + ")}
-            </span>
-          </div>
-        </Html>
-      )}
+      <ContentsLabel contents={contents ?? []} yOffset={height / 2 + 0.1} />
     </group>
   );
 }

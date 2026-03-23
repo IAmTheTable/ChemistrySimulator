@@ -108,7 +108,7 @@ class ReactionEngine:
         description = self._build_description(
             reactants, products_detail, reaction_type, delta_h,
         )
-        observations = self._build_observations(effects, delta_h)
+        observations = self._effects_mapper.generate_observations(effects, delta_h)
         safety_notes = self._build_safety_notes(
             reactants, products_detail, effects, delta_h,
         )
@@ -182,7 +182,7 @@ class ReactionEngine:
         description = self._build_description(
             reactants, products_detail, reaction_type, predicted_delta_h,
         )
-        observations = self._build_observations(effects, predicted_delta_h)
+        observations = self._effects_mapper.generate_observations(effects, predicted_delta_h)
         safety_notes = self._build_safety_notes(
             reactants, products_detail, effects, predicted_delta_h,
         )
@@ -325,71 +325,6 @@ class ReactionEngine:
             f"{reactant_str} react{vigor} in {type_label}, "
             f"producing {product_str}{energy_part}."
         )
-
-    @staticmethod
-    def _build_observations(
-        effects: ReactionEffects,
-        delta_h: float | None,
-    ) -> list[str]:
-        """Generate observation strings from effects data."""
-        observations: list[str] = []
-
-        # Gas observations
-        if effects.gas is not None:
-            rate = effects.gas.get("rate", "gentle")
-            gas_type = effects.gas.get("type", "gas")
-            if rate == "vigorous":
-                observations.append(
-                    f"Vigorous effervescence as {gas_type} gas is produced"
-                )
-            elif rate == "moderate":
-                observations.append(f"Gas bubbles observed ({gas_type})")
-            else:
-                observations.append(f"Gentle bubbling as {gas_type} gas evolves")
-
-        # Precipitate observations
-        if effects.precipitate is not None:
-            color = effects.precipitate.get("color", "white")
-            observations.append(
-                f"A {color} precipitate forms and settles"
-            )
-
-        # Color change observations
-        if effects.color is not None:
-            from_color = effects.color.get("from", "")
-            to_color = effects.color.get("to", "")
-            if from_color and to_color:
-                observations.append(
-                    f"Solution changes from {from_color} to {to_color}"
-                )
-            elif to_color:
-                observations.append(f"Solution turns {to_color}")
-
-        # Heat observations
-        if delta_h is not None:
-            abs_dh = abs(delta_h)
-            if delta_h < 0:
-                if abs_dh > 200:
-                    observations.append(
-                        "Violent exothermic reaction, exercise extreme caution"
-                    )
-                elif abs_dh > 100:
-                    observations.append(
-                        "Significant heat released, temperature rises noticeably"
-                    )
-                elif abs_dh > 30:
-                    observations.append("Container feels warm to the touch")
-            else:
-                if abs_dh > 30:
-                    observations.append(
-                        "Solution cools as heat is absorbed"
-                    )
-
-        # Special effects
-        if "flame" in effects.special or "sparks" in effects.special:
-            observations.append("Sparks or flame observed")
-
-        return observations
 
     @staticmethod
     def _build_safety_notes(
