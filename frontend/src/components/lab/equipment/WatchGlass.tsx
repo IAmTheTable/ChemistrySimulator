@@ -4,6 +4,7 @@ import * as THREE from "three";
 import type { ContainerSubstance } from "../../../stores/labStore";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
 import ContentsLabel from "./ContentsLabel";
+import GasReleaseEffect from "../effects/GasReleaseEffect";
 
 const CAPACITY_ML = 20;
 const COLD_GLASS_COLOR = "#d4eaff";
@@ -38,7 +39,7 @@ export default function WatchGlass({
   onPointerOver,
   onPointerOut,
   contents,
-  activeEffects: _activeEffects = [],
+  activeEffects = [],
   temperature = 25,
 }: WatchGlassProps) {
   const groupRef = useRef<THREE.Group>(null);
@@ -46,6 +47,7 @@ export default function WatchGlass({
   const radius = 0.1;
   const radialSegments = 32;
 
+  const gasContent = contents?.find(s => s.phase === "g");
   const computed = contents && contents.length > 0 ? computeFillState(contents, CAPACITY_ML) : null;
   const fillLevel = computed ? computed.fillLevel : 0;
   const fillColor = computed ? computed.fillColor : "#4fc3f7";
@@ -111,6 +113,10 @@ export default function WatchGlass({
           </mesh>
           <pointLight color="#facc15" intensity={0.3} distance={0.5} />
         </>
+      )}
+
+      {(activeEffects.includes("gas_release") || activeEffects.includes("bubbles")) && gasContent && (
+        <GasReleaseEffect position={[0, 0.03, 0]} gasFormula={gasContent.formula} />
       )}
 
       {/* Floating contents label */}

@@ -9,6 +9,7 @@ import PrecipitateEffect from "../effects/PrecipitateEffect";
 import ExplosionEffect from "../effects/ExplosionEffect";
 import SmokeEffect from "../effects/SmokeEffect";
 import SparkEffect from "../effects/SparkEffect";
+import GasReleaseEffect from "../effects/GasReleaseEffect";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
 import ContentsLabel from "./ContentsLabel";
 
@@ -71,6 +72,7 @@ export default function RoundBottomFlask({
   const effectAnchorY = -sphereRadius + fillHeight + 0.01;
   const effectPos: [number, number, number] = [0, effectAnchorY, 0];
   const precipColor = contents && contents.length > 0 ? contents[0].color : "#ffffff";
+  const gasContent = contents?.find(s => s.phase === "g");
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -167,6 +169,9 @@ export default function RoundBottomFlask({
       )}
       {activeEffects.includes("sparks") && (
         <SparkEffect position={[0, 0.1, 0]} />
+      )}
+      {(activeEffects.includes("gas_release") || activeEffects.includes("bubbles")) && gasContent && (
+        <GasReleaseEffect position={[0, sphereRadius + neckHeight, 0]} gasFormula={gasContent.formula} />
       )}
 
       {/* Floating contents label */}

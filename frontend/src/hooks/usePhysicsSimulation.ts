@@ -4,6 +4,8 @@ import { useLabStore } from "../stores/labStore";
 const TICK_INTERVAL = 1000;
 const AMBIENT_THRESHOLD = 0.5; // °C — close enough to ambient to snap
 
+const OPEN_CONTAINERS = new Set(["beaker", "watch-glass", "graduated-cylinder", "petri-dish", "crucible"]);
+
 const COOLING_RATES: Record<string, number> = {
   beaker: 0.05, erlenmeyer: 0.04, "test-tube": 0.06,
   "round-bottom": 0.03, "watch-glass": 0.08, "graduated-cylinder": 0.04,
@@ -51,6 +53,7 @@ export function usePhysicsSimulation() {
         // Phase change checks — single pass over contents
         let contentsChanged = false;
         let isBoiling = false;
+        let isReleasingGas = false;
         const newContents = item.contents.map(s => {
           const bp = BOILING_POINTS[s.formula];
           const fp = FREEZING_POINTS[s.formula];
@@ -82,6 +85,14 @@ export function usePhysicsSimulation() {
             return { ...s, phase: "l" };
           }
 
+          // Gas escape from open containers
+          if (s.phase === "g" && OPEN_CONTAINERS.has(item.type)) {
+            const escapeRate = 3; // mL per tick
+            contentsChanged = true;
+            isReleasingGas = true;
+            return { ...s, amount_ml: Math.max(0, s.amount_ml - escapeRate) };
+          }
+
           return s;
         }).filter(s => s.amount_ml > 0);
 
@@ -91,12 +102,23 @@ export function usePhysicsSimulation() {
         let newEffects = item.activeEffects;
         const hadSteam = item.activeEffects.includes("steam");
         if (isBoiling && !hadSteam) {
-          newEffects = [...item.activeEffects, "steam"];
+          newEffects = [...newEffects, "steam"];
           contentsChanged = true;
         } else if (!isBoiling && hadSteam) {
-          newEffects = item.activeEffects.filter(e => e !== "steam");
+          newEffects = newEffects.filter(e => e !== "steam");
           contentsChanged = true;
         }
+
+        // Update gas_release effect
+        const hadGasRelease = item.activeEffects.includes("gas_release");
+        if (isReleasingGas && !hadGasRelease) {
+          newEffects = [...newEffects, "gas_release"];
+          contentsChanged = true;
+        } else if (!isReleasingGas && hadGasRelease) {
+          newEffects = newEffects.filter(e => e !== "gas_release");
+          contentsChanged = true;
+        }
+
 
         const tempChanged = newTemp !== item.temperature;
         if (!tempChanged && !contentsChanged) return item;

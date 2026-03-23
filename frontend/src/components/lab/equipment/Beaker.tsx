@@ -9,6 +9,7 @@ import PrecipitateEffect from "../effects/PrecipitateEffect";
 import ExplosionEffect from "../effects/ExplosionEffect";
 import SmokeEffect from "../effects/SmokeEffect";
 import SparkEffect from "../effects/SparkEffect";
+import GasReleaseEffect from "../effects/GasReleaseEffect";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
 import ContentsLabel from "./ContentsLabel";
 
@@ -86,6 +87,9 @@ export default function Beaker({
 
   // Precipitate color: first substance color, or white
   const precipColor = contents && contents.length > 0 ? contents[0].color : "#ffffff";
+
+  // Gas content for release effect color
+  const gasContent = contents?.find(s => s.phase === "g");
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -188,6 +192,9 @@ export default function Beaker({
       )}
       {activeEffects.includes("sparks") && (
         <SparkEffect position={[0, 0.1, 0]} />
+      )}
+      {(activeEffects.includes("gas_release") || activeEffects.includes("bubbles")) && gasContent && (
+        <GasReleaseEffect position={[0, height / 2, 0]} gasFormula={gasContent.formula} />
       )}
 
       {/* Floating contents label */}
