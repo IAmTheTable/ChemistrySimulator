@@ -7,6 +7,11 @@ const EQUIPMENT = [
   { type: "round-bottom", label: "Round-Bottom Flask" },
   { type: "watch-glass", label: "Watch Glass" },
   { type: "graduated-cylinder", label: "Graduated Cylinder" },
+  { type: "petri-dish", label: "Petri Dish" },
+  { type: "crucible", label: "Crucible" },
+  { type: "funnel", label: "Funnel" },
+  { type: "pipette", label: "Pipette" },
+  { type: "clamp-stand", label: "Clamp Stand" },
 ];
 
 export default function EquipmentPalette() {

@@ -4,11 +4,13 @@ import { useLabStore } from "../stores/labStore";
 const TICK_INTERVAL = 1000;
 const AMBIENT_THRESHOLD = 0.5; // °C — close enough to ambient to snap
 
-const OPEN_CONTAINERS = new Set(["beaker", "watch-glass", "graduated-cylinder", "petri-dish", "crucible"]);
+const OPEN_CONTAINERS = new Set(["beaker", "watch-glass", "graduated-cylinder", "petri-dish", "crucible", "funnel"]);
 
 const COOLING_RATES: Record<string, number> = {
   beaker: 0.05, erlenmeyer: 0.04, "test-tube": 0.06,
   "round-bottom": 0.03, "watch-glass": 0.08, "graduated-cylinder": 0.04,
+  "petri-dish": 0.09, crucible: 0.03,
+  funnel: 0.09, pipette: 0.07, "clamp-stand": 0.01,
 };
 
 const BOILING_POINTS: Record<string, number> = {

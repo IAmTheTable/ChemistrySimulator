@@ -49,4 +49,9 @@ export const EQUIPMENT_Y_OFFSETS: Record<string, number> = {
   "round-bottom": 0.16,
   "watch-glass": 0.08,
   "graduated-cylinder": 0.25,
+  "petri-dish": 0.06,
+  crucible: 0.10,
+  funnel: 0.15,
+  pipette: 0.22,
+  "clamp-stand": 0.35,
 };

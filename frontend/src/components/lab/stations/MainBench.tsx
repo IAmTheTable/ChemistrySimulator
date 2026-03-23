@@ -9,6 +9,11 @@ import ErlenmeyerFlask from "../equipment/ErlenmeyerFlask";
 import RoundBottomFlask from "../equipment/RoundBottomFlask";
 import WatchGlass from "../equipment/WatchGlass";
 import GraduatedCylinder from "../equipment/GraduatedCylinder";
+import PetriDish from "../equipment/PetriDish";
+import Crucible from "../equipment/Crucible";
+import Funnel from "../equipment/Funnel";
+import Pipette from "../equipment/Pipette";
+import ClampStand from "../equipment/ClampStand";
 import StationShell, { LABEL_STYLE } from "./StationShell";
 import { useStationTool } from "./useStationTool";
 
@@ -19,6 +24,11 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "round-bottom": RoundBottomFlask,
   "watch-glass": WatchGlass,
   "graduated-cylinder": GraduatedCylinder,
+  "petri-dish": PetriDish,
+  crucible: Crucible,
+  funnel: Funnel,
+  pipette: Pipette,
+  "clamp-stand": ClampStand,
 };
 
 export default function MainBench() {
