@@ -162,7 +162,9 @@ function DynamicItems() {
             combineContainers(selectedBenchItem, item.id);
             selectBenchItem(null);
           } else {
-            selectBenchItem(selectedBenchItem === item.id ? null : item.id);
+            const newSelection = selectedBenchItem === item.id ? null : item.id;
+            selectBenchItem(newSelection);
+            if (newSelection) setActiveBottomTab("inspector");
           }
         };
         const onCtxMenu = (e: ThreeEvent<MouseEvent>) => {
