@@ -14,9 +14,19 @@ const COOLING_RATES: Record<string, number> = {
 };
 
 const BOILING_POINTS: Record<string, number> = {
-  H2O: 100, C2H5OH: 78.4, CH3OH: 64.7, C3H6O: 56.1,
-  CH2Cl2: 39.6, CHCl3: 61.2, CCl4: 76.7, C6H6: 80.1,
-  HCl: -85, NH3: -33, C2H4: -104,
+  // Gases at room temp (boil below 25°C — evaporate in open containers)
+  HCl: -85, NH3: -33, C2H4: -104, H2S: -60, SO2: -10, NO2: 21, HF: 19.5,
+  Cl2: -34, HBr: -67, HI: -35, CO2: -78.5, N2O: -88,
+  // Low boiling liquids
+  CH2Cl2: 39.6, C3H6O: 56.1, CHCl3: 61.2, CS2: 46.2,
+  // Medium boiling liquids
+  CH3OH: 64.7, C2H5OH: 78.4, C6H6: 80.1, CCl4: 76.7,
+  C3H7OH: 97, H2O: 100, HCOOH: 101, C4H9OH: 117,
+  // High boiling liquids (won't evaporate easily)
+  CH3COOH: 118, C3H8O3: 290, H2SO4: 337, H3PO4: 407,
+  HNO3: 83, C6H5OH: 182,
+  // Very high — essentially non-volatile
+  NaOH: 1388, KOH: 1327, NaCl: 1413,
 };
 
 const FREEZING_POINTS: Record<string, number> = {
@@ -57,9 +67,10 @@ export function usePhysicsSimulation() {
         let isBoiling = false;
         let isReleasingGas = false;
         const newContents = item.contents.map(s => {
-          const bp = BOILING_POINTS[s.formula];
-          const fp = FREEZING_POINTS[s.formula];
           const isLiquid = s.phase === "l" || s.phase === "aq";
+          // Aqueous solutions use water's boiling point, not the solute's
+          const bp = s.phase === "aq" ? (BOILING_POINTS["H2O"] ?? 100) : BOILING_POINTS[s.formula];
+          const fp = FREEZING_POINTS[s.formula];
 
           // Boiling
           if (bp !== undefined && isLiquid) {

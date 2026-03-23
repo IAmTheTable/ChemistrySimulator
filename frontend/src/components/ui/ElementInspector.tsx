@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useLabStore } from "../../stores/labStore";
 import { useElement } from "../../api/elements";
 import { useChemicalName } from "../../api/nomenclature";
@@ -148,15 +149,21 @@ function SubstanceRow({
   onViewStructure: () => void;
 }) {
   const { data: chemName } = useChemicalName(substance.formula);
+  const [expanded, setExpanded] = useState(false);
+  const { data: substanceInfo } = useSubstanceLookup(expanded ? substance.formula : null);
 
   return (
     <div className="bg-gray-800 rounded p-2">
       <div className="flex items-center justify-between">
-        <div>
+        <div
+          className="cursor-pointer"
+          onClick={() => setExpanded(!expanded)}
+        >
           <span className="font-mono text-xs text-gray-200">{substance.formula}</span>
           {chemName && (
             <span className="ml-1.5 text-[10px] text-gray-400">{chemName}</span>
           )}
+          <span className="ml-1 text-[9px] text-gray-600">{expanded ? "▲" : "▼"}</span>
         </div>
         <button
           onClick={onViewStructure}
@@ -168,9 +175,35 @@ function SubstanceRow({
       <div className="flex gap-3 mt-1 text-[10px] text-gray-500">
         <span>{substance.amount_ml} mL</span>
         <span>{PHASE_LABEL[substance.phase] ?? substance.phase}</span>
+        <span
+          className="inline-block w-2.5 h-2.5 rounded border border-gray-600"
+          style={{ backgroundColor: substance.color }}
+        />
       </div>
+      {expanded && substanceInfo && (
+        <div className="mt-2 pt-2 border-t border-gray-700 space-y-0.5 text-[10px]">
+          <div className="flex justify-between"><span className="text-gray-500">Molar Mass</span><span className="text-gray-300">{substanceInfo.molar_mass} g/mol</span></div>
+          <div className="flex justify-between"><span className="text-gray-500">Phase (STP)</span><span className="text-gray-300">{substanceInfo.phase}</span></div>
+          {substanceInfo.hazard_class && (
+            <div className="flex justify-between"><span className="text-gray-500">Hazard</span><span className="text-yellow-400">{substanceInfo.hazard_class}</span></div>
+          )}
+        </div>
+      )}
     </div>
   );
+}
+
+function useSubstanceLookup(formula: string | null) {
+  return useQuery({
+    queryKey: ["substance-lookup", formula],
+    queryFn: async () => {
+      const res = await fetch(`/api/substances/lookup?formula=${encodeURIComponent(formula!)}`, { method: "POST" });
+      if (!res.ok) return null;
+      return res.json();
+    },
+    enabled: formula !== null,
+    staleTime: Infinity,
+  });
 }
 
 /* ------------------------------------------------------------------ */
