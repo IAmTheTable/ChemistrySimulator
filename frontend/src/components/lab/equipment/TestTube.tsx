@@ -75,7 +75,6 @@ export default function TestTube({
   // Hot glow; darken if damaged
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
-  const glassOpacity = damaged ? 0.4 : 0.2;
 
   const effectAnchorY = -height / 2 + fillHeight + 0.01;
   const effectPos: [number, number, number] = [0, effectAnchorY, 0];
@@ -94,31 +93,29 @@ export default function TestTube({
         <cylinderGeometry
           args={[radius, radius, height, radialSegments, 1, true]}
         />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.92}
-          thickness={0.3}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Rounded bottom — small hemisphere */}
       <mesh position={[0, -height / 2, 0]} castShadow>
         <sphereGeometry args={[radius, radialSegments, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={0.22}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.92}
-          thickness={0.3}
+          opacity={0.2}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
+          depthWrite={false}
         />
       </mesh>
 

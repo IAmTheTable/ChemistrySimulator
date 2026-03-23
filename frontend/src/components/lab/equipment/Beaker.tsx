@@ -79,7 +79,6 @@ export default function Beaker({
   // Emissive glow when hot; darken if damaged
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
-  const glassOpacity = damaged ? 0.4 : 0.25;
 
   // Effect anchor: top of the liquid, centered
   const effectAnchorY = -height / 2 + fillHeight + 0.02;
@@ -103,31 +102,29 @@ export default function Beaker({
         <cylinderGeometry
           args={[radiusTop, radiusBottom, height, radialSegments, 1, true]}
         />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.5}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Bottom disk */}
       <mesh position={[0, -height / 2, 0]} castShadow>
         <cylinderGeometry args={[radiusBottom, radiusBottom, 0.008, radialSegments]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={0.3}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.85}
-          thickness={0.3}
+          opacity={0.2}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
+          depthWrite={false}
         />
       </mesh>
 

@@ -56,7 +56,6 @@ export default function Funnel({
 
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
-  const glassOpacity = damaged ? 0.4 : 0.22;
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -83,34 +82,32 @@ export default function Funnel({
       {/* Inverted cone (wide top, narrow bottom) */}
       <mesh castShadow position={[0, stemHeight / 2, 0]}>
         <coneGeometry args={[coneTopRadius, coneHeight, radialSegments, 1, true]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.3}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Stem tube below cone */}
       <mesh castShadow position={[0, -(coneHeight / 2), 0]}>
         <cylinderGeometry args={[stemRadius, stemRadius, stemHeight, radialSegments, 1, true]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.3}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 

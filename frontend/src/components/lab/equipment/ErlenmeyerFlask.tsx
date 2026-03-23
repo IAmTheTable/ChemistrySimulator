@@ -80,7 +80,6 @@ export default function ErlenmeyerFlask({
   // Hot glow; darken if damaged
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
-  const glassOpacity = damaged ? 0.4 : 0.22;
 
   const effectAnchorY = -bodyHeight / 2 + fillHeight + 0.01;
   const effectPos: [number, number, number] = [0, effectAnchorY, 0];
@@ -99,31 +98,29 @@ export default function ErlenmeyerFlask({
         <cylinderGeometry
           args={[shoulderRadius, baseRadius, bodyHeight, radialSegments, 1, true]}
         />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.5}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Bottom disk */}
       <mesh position={[0, -bodyHeight / 2, 0]} castShadow>
         <cylinderGeometry args={[baseRadius, baseRadius, 0.008, radialSegments]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={0.28}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.88}
-          thickness={0.3}
+          opacity={0.2}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
+          depthWrite={false}
         />
       </mesh>
 
@@ -132,17 +129,16 @@ export default function ErlenmeyerFlask({
         <cylinderGeometry
           args={[neckRadius, shoulderRadius, neckHeight, radialSegments, 1, true]}
         />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.5}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 

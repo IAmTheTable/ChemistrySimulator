@@ -63,7 +63,6 @@ export default function Pipette({
 
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
-  const glassOpacity = damaged ? 0.4 : 0.22;
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -90,50 +89,48 @@ export default function Pipette({
       {/* Lower thin shaft */}
       <mesh castShadow position={[0, -totalHeight / 2 + lowerShaftHeight / 2, 0]}>
         <cylinderGeometry args={[thinRadius, thinRadius * 0.5, lowerShaftHeight, radialSegments, 1, true]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.2}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Bulge in the middle */}
       <mesh castShadow position={[0, -totalHeight / 2 + bulgeY, 0]}>
         <sphereGeometry args={[bulgeRadius, radialSegments, 8]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.3}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Upper thin shaft */}
       <mesh castShadow position={[0, -totalHeight / 2 + upperShaftY, 0]}>
         <cylinderGeometry args={[thinRadius, thinRadius, upperShaftHeight, radialSegments, 1, true]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.2}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 

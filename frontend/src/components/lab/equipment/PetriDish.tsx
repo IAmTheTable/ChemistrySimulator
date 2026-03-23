@@ -56,7 +56,6 @@ export default function PetriDish({
 
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
-  const glassOpacity = damaged ? 0.4 : 0.2;
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -79,34 +78,32 @@ export default function PetriDish({
       {/* Bottom disk */}
       <mesh castShadow position={[0, 0, 0]}>
         <cylinderGeometry args={[radius, radius, 0.005, radialSegments]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity + 0.05}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.88}
-          thickness={0.2}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.2}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Cylindrical wall */}
       <mesh castShadow position={[0, wallHeight / 2, 0]}>
         <cylinderGeometry args={[radius, radius, wallHeight, radialSegments, 1, true]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.15}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 

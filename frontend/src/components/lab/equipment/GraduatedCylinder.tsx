@@ -64,7 +64,6 @@ export default function GraduatedCylinder({
 
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
-  const glassOpacity = damaged ? 0.4 : 0.22;
 
   // Fill dimensions
   const fillHeight = Math.max(0, fillLevel) * (height - 0.02);
@@ -96,45 +95,42 @@ export default function GraduatedCylinder({
         <cylinderGeometry
           args={[radius, radius, height, radialSegments, 1, true]}
         />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.4}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Wide base for stability */}
       <mesh position={[0, -height / 2 - baseHeight / 2, 0]} castShadow>
         <cylinderGeometry args={[baseRadius, baseRadius, baseHeight, radialSegments]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={0.3}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.85}
-          thickness={0.3}
+          opacity={0.2}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Bottom disk */}
       <mesh position={[0, -height / 2, 0]} castShadow>
         <cylinderGeometry args={[radius, radius, 0.006, radialSegments]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={0.3}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.85}
-          thickness={0.3}
+          opacity={0.2}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
+          depthWrite={false}
         />
       </mesh>
 

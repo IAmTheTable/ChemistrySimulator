@@ -62,7 +62,6 @@ export default function RoundBottomFlask({
 
   const { glassColor: baseGlassColor, glassEmissive, glassEmissiveIntensity } = getGlassAppearance(temperature, COLD_GLASS_COLOR);
   const glassColor = damaged ? "#5c4033" : baseGlassColor;
-  const glassOpacity = damaged ? 0.4 : 0.22;
 
   // Fill: liquid sits in the bottom of the sphere
   const fillHeight = fillLevel * sphereRadius * 1.6;
@@ -84,17 +83,16 @@ export default function RoundBottomFlask({
       {/* Spherical body */}
       <mesh castShadow>
         <sphereGeometry args={[sphereRadius, radialSegments, radialSegments]} />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.5}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
@@ -103,17 +101,16 @@ export default function RoundBottomFlask({
         <cylinderGeometry
           args={[neckRadius, neckRadius * 1.5, neckHeight, radialSegments, 1, true]}
         />
-        <meshPhysicalMaterial
+        <meshStandardMaterial
           transparent
-          opacity={glassOpacity}
-          roughness={0.0}
-          metalness={0.0}
-          transmission={0.9}
-          thickness={0.5}
-          side={THREE.DoubleSide}
+          opacity={damaged ? 0.35 : 0.15}
+          roughness={0.1}
+          metalness={0.1}
           color={glassColor}
           emissive={glassEmissive}
           emissiveIntensity={glassEmissiveIntensity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
