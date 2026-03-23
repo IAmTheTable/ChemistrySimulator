@@ -12,7 +12,7 @@ from app.engine.equation_balancer import balance_equation
 from app.engine.thermodynamics import ThermodynamicsCalculator
 from app.engine.effects_mapper import EffectsMapper
 from app.engine.nomenclature import name_compound
-from app.engine.constants import MIXTURE, NO_REACTION, AQUEOUS, GAS, SOLID
+from app.engine.constants import MIXTURE, NO_REACTION, AQUEOUS, GAS, SOLID, COMBUSTION
 from app.models.reaction import ReactionResult, ReactionEffects
 
 # Phase symbol labels for state notation
@@ -25,6 +25,9 @@ _PHASE_SYMBOLS: dict[str, str] = {
 
 # Alkali metals for safety notes
 _ALKALI_METALS = {"Li", "Na", "K", "Rb", "Cs", "Fr"}
+
+# Atmospheres that contain no oxygen
+_OXYGEN_FREE_ATMOSPHERES = {"nitrogen", "argon", "vacuum", "hydrogen", "co2"}
 
 
 class ReactionEngine:
@@ -60,15 +63,29 @@ class ReactionEngine:
         if total_volume_ml <= 0:
             total_volume_ml = 100.0
 
+        atmosphere = conditions.get("atmosphere", "air")
+        pressure = conditions.get("pressure", 1)
+        temperature = conditions.get("temperature", 25)
+
         # 2. Try curated match
         curated = self._matcher.match(formulas)
         if curated is not None:
-            return self._build_curated_result(curated, reactants, total_volume_ml)
+            result = self._build_curated_result(curated, reactants, total_volume_ml)
+            blocked = self._check_atmosphere_block(result, atmosphere)
+            if blocked is not None:
+                return blocked
+            result = self._apply_environment_notes(result, atmosphere, pressure, temperature)
+            return result
 
         # 3. Try predicted reaction
         predicted = self._predictor.predict(formulas, conditions)
         if predicted is not None:
-            return self._build_predicted_result(predicted, reactants, total_volume_ml)
+            result = self._build_predicted_result(predicted, reactants, total_volume_ml)
+            blocked = self._check_atmosphere_block(result, atmosphere)
+            if blocked is not None:
+                return blocked
+            result = self._apply_environment_notes(result, atmosphere, pressure, temperature)
+            return result
 
         # 4. General mixture fallback — substances mixed but no chemical change
         if len(formulas) >= 2:
@@ -261,6 +278,105 @@ class ReactionEngine:
             reactants=reactants,
             products=[],
             effects=ReactionEffects(),
+        )
+
+    # ------------------------------------------------------------------
+    # Environment / atmosphere helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _check_atmosphere_block(
+        result: ReactionResult,
+        atmosphere: str,
+    ) -> ReactionResult | None:
+        """Block combustion reactions when the atmosphere contains no oxygen.
+
+        Returns a replacement ReactionResult if the reaction is blocked,
+        or None if the reaction can proceed normally.
+        """
+        if result.reaction_type != COMBUSTION:
+            return None
+
+        if atmosphere not in _OXYGEN_FREE_ATMOSPHERES:
+            return None
+
+        atmo_label = atmosphere.replace("_", " ").title()
+        return ReactionResult(
+            equation="No reaction",
+            reaction_type=NO_REACTION,
+            source=result.source,
+            reactants=result.reactants,
+            products=[],
+            effects=ReactionEffects(),
+            description=(
+                f"Combustion cannot occur in a {atmo_label} atmosphere. "
+                f"Oxygen is required for combustion reactions."
+            ),
+            observations=[
+                f"No reaction observed -- atmosphere is {atmo_label} (no O\u2082 available)"
+            ],
+            safety_notes=[],
+            balanced_with_states="",
+        )
+
+    @staticmethod
+    def _apply_environment_notes(
+        result: ReactionResult,
+        atmosphere: str,
+        pressure: float,
+        temperature: float,
+    ) -> ReactionResult:
+        """Append environment-aware notes to the reaction description and
+        safety notes without altering the core reaction result."""
+        extra_desc_parts: list[str] = []
+        extra_safety: list[str] = []
+
+        # Atmosphere notes
+        if atmosphere in _OXYGEN_FREE_ATMOSPHERES:
+            atmo_label = atmosphere.replace("_", " ").title()
+            extra_desc_parts.append(
+                f"Reaction occurs under {atmo_label} atmosphere."
+            )
+
+        # Pressure notes
+        if pressure > 10:
+            extra_desc_parts.append(
+                f"High pressure ({pressure} atm) may favor product formation."
+            )
+            extra_safety.append(
+                "High-pressure conditions -- ensure vessel is rated for this pressure"
+            )
+        elif pressure < 0.1 and pressure > 0:
+            extra_desc_parts.append(
+                f"Low pressure ({pressure} atm) may shift equilibrium toward gaseous products."
+            )
+
+        # Temperature notes
+        if temperature > 200:
+            extra_safety.append(
+                f"Operating at {temperature}\u00b0C -- extreme heat hazard, use proper shielding"
+            )
+        elif temperature > 100:
+            extra_safety.append(
+                f"Operating at {temperature}\u00b0C -- burn hazard, use heat-resistant equipment"
+            )
+        elif temperature < -50:
+            extra_safety.append(
+                f"Operating at {temperature}\u00b0C -- cryogenic conditions, use insulated gloves"
+            )
+
+        if not extra_desc_parts and not extra_safety:
+            return result
+
+        new_description = result.description
+        if extra_desc_parts:
+            new_description = new_description.rstrip()
+            new_description += " " + " ".join(extra_desc_parts)
+
+        new_safety = list(result.safety_notes) + extra_safety
+
+        return result.model_copy(
+            update={"description": new_description, "safety_notes": new_safety}
         )
 
     # ------------------------------------------------------------------

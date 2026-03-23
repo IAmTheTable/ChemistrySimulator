@@ -2,7 +2,7 @@ import type { ReactionResult, ReactionEvent } from "../types/reaction";
 
 export async function runReaction(
   reactants: { formula: string; amount_g?: number; amount_ml?: number; phase: string }[],
-  conditions: { temperature: number; pressure: number; catalyst: string | null } = { temperature: 25, pressure: 1, catalyst: null },
+  conditions: { temperature: number; pressure: number; catalyst: string | null; atmosphere?: string } = { temperature: 25, pressure: 1, catalyst: null },
 ): Promise<ReactionResult> {
   const response = await fetch("/api/reactions/run", {
     method: "POST",

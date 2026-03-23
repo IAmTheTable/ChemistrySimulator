@@ -59,6 +59,8 @@ interface LabState {
     temperature: number;
     pressure: number;
     atmosphere: string;
+    humidity: number;
+    customMix: string;
   };
   structureViewer: {
     formula: string | null;
@@ -93,6 +95,7 @@ interface LabState {
   toggleStructureLabels: () => void;
   toggleStructureCharges: () => void;
   closeStructureViewer: () => void;
+  setEnvironment: (env: Partial<LabState["environment"]>) => void;
   setActiveRightTab: (tab: string) => void;
 }
 
@@ -111,6 +114,8 @@ export const useLabStore = create<LabState>()((set) => ({
     temperature: 25,
     pressure: 1,
     atmosphere: "air",
+    humidity: 50,
+    customMix: "",
   },
   structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS },
   activeRightTab: "lab",
@@ -180,6 +185,7 @@ export const useLabStore = create<LabState>()((set) => ({
   toggleStructureLabels: () => set((state) => ({ structureViewer: { ...state.structureViewer, showLabels: !state.structureViewer.showLabels } })),
   toggleStructureCharges: () => set((state) => ({ structureViewer: { ...state.structureViewer, showCharges: !state.structureViewer.showCharges } })),
   closeStructureViewer: () => set({ structureViewer: { ...STRUCTURE_VIEWER_DEFAULTS } }),
+  setEnvironment: (env) => set((state) => ({ environment: { ...state.environment, ...env } })),
   setActiveRightTab: (tab) => set({ activeRightTab: tab }),
   combineContainers: async (sourceId: string, targetId: string) => {
     const state = useLabStore.getState();
@@ -202,10 +208,12 @@ export const useLabStore = create<LabState>()((set) => ({
         }));
 
     try {
+      const env = useLabStore.getState().environment;
       const result = await runReaction(reactants, {
-        temperature: target.temperature,
-        pressure: 1,
+        temperature: target.temperature || env.temperature,
+        pressure: env.pressure,
         catalyst: null,
+        atmosphere: env.atmosphere,
       });
 
       // Update target with products
