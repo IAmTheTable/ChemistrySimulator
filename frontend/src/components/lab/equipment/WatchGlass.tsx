@@ -99,7 +99,7 @@ export default function WatchGlass({
       )}
 
       {/* Floating contents label */}
-      <ContentsLabel contents={contents ?? []} yOffset={0.12} />
+      <ContentsLabel contents={contents ?? []} yOffset={0.12} temperature={temperature} />
     </group>
   );
 }

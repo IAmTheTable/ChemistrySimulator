@@ -169,7 +169,7 @@ export default function TestTube({
       )}
 
       {/* Floating contents label */}
-      <ContentsLabel contents={contents ?? []} yOffset={height / 2 + 0.1} />
+      <ContentsLabel contents={contents ?? []} yOffset={height / 2 + 0.1} temperature={temperature} />
     </group>
   );
 }

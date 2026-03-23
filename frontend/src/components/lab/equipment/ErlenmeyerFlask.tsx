@@ -193,7 +193,7 @@ export default function ErlenmeyerFlask({
       )}
 
       {/* Floating contents label */}
-      <ContentsLabel contents={contents ?? []} yOffset={bodyHeight / 2 + neckHeight + 0.1} />
+      <ContentsLabel contents={contents ?? []} yOffset={bodyHeight / 2 + neckHeight + 0.1} temperature={temperature} />
     </group>
   );
 }

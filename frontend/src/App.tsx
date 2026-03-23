@@ -15,6 +15,7 @@ import StructurePanel from "./components/ui/StructurePanel";
 import SpectraPanel from "./components/ui/SpectraPanel";
 import ResizeHandle from "./components/ui/ResizeHandle";
 import { useLabStore } from "./stores/labStore";
+import { usePhysicsSimulation } from "./hooks/usePhysicsSimulation";
 
 const LAYOUT = {
   SIDEBAR_DEFAULT: 280,
@@ -29,6 +30,8 @@ const TAB_CLASS =
   "flex-1 px-2 py-1.5 text-[10px] font-medium text-gray-400 hover:text-gray-200 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 transition-colors";
 
 export default function App() {
+  usePhysicsSimulation();
+
   const activeTab = useLabStore((s) => s.activeRightTab);
   const setActiveTab = useLabStore((s) => s.setActiveRightTab);
   const activeBottomTab = useLabStore((s) => s.activeBottomTab);

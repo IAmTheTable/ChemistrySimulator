@@ -155,7 +155,7 @@ export default function RoundBottomFlask({
       )}
 
       {/* Floating contents label */}
-      <ContentsLabel contents={contents ?? []} yOffset={sphereRadius + neckHeight + 0.1} />
+      <ContentsLabel contents={contents ?? []} yOffset={sphereRadius + neckHeight + 0.1} temperature={temperature} />
     </group>
   );
 }
