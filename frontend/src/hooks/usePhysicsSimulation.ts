@@ -31,6 +31,56 @@ const BOILING_POINTS: Record<string, number> = {
 
 const FREEZING_POINTS: Record<string, number> = {
   H2O: 0, C2H5OH: -114, CH3OH: -97.6, C6H6: 5.5, Hg: -38.8,
+  CH3COOH: 16.6, C6H12: 6.5, CCl4: -23, CHCl3: -63.5,
+  HNO3: -42, H2SO4: 10.4, C3H6O: -95, CS2: -111.6,
+  NaCl: 801, KCl: 770, NaOH: 318, KOH: 360,
+  CaCO3: 825, Na2CO3: 851, NaHCO3: 50,
+  C6H5OH: 41, C3H8O3: 18, HCOOH: 8.3,
+  Br2: -7.2, I2: 113.7, S: 115.2, P: 44.2,
+  Fe: 1538, Cu: 1085, Al: 660, Zn: 419.5, Ag: 961.8, Au: 1064,
+  Na: 97.8, K: 63.4, Mg: 650, Ca: 842, Li: 180.5,
+  Sn: 231.9, Pb: 327.5, Ni: 1455, Co: 1495,
+};
+
+const DENSITIES: Record<string, number> = { // g/mL
+  H2O: 1.0, C2H5OH: 0.789, CH3OH: 0.792, C3H6O: 0.784,
+  H2SO4: 1.84, HNO3: 1.51, HCl: 1.19, H3PO4: 1.88,
+  NaOH: 2.13, KOH: 2.12, CH3COOH: 1.049,
+  C6H6: 0.879, CCl4: 1.594, CHCl3: 1.489, CS2: 1.266,
+  Hg: 13.534, Br2: 3.1, C3H8O3: 1.261,
+  NaCl: 2.165, CaCO3: 2.711, Na2CO3: 2.54,
+  Fe: 7.874, Cu: 8.96, Al: 2.70, Zn: 7.13, Ag: 10.49, Au: 19.3,
+  Na: 0.968, K: 0.862, Mg: 1.738, Ca: 1.55, Li: 0.534,
+  KCl: 1.984, NaHCO3: 2.20, CuSO4: 3.60, AgNO3: 4.35,
+  FeCl3: 2.90, BaCl2: 3.856, NH4Cl: 1.527, KMnO4: 2.703,
+};
+
+// Solubility data: g per 100 mL of solvent
+const SOLUBILITY: Record<string, Record<string, number>> = {
+  NaCl: { H2O: 36 },
+  KCl: { H2O: 34 },
+  NaOH: { H2O: 111 },
+  KOH: { H2O: 121 },
+  AgNO3: { H2O: 256 },
+  CuSO4: { H2O: 32 },
+  Na2CO3: { H2O: 30 },
+  NaHCO3: { H2O: 9.6 },
+  CaCO3: { H2O: 0.0013 },
+  BaSO4: { H2O: 0.00024 },
+  AgCl: { H2O: 0.00019 },
+  Fe: { H2O: 0 },
+  Cu: { H2O: 0 },
+  KI: { H2O: 150 },
+  NH4Cl: { H2O: 37.2 },
+  NH4NO3: { H2O: 190 },
+  CaCl2: { H2O: 74.5 },
+  FeCl3: { H2O: 91.8 },
+  BaCl2: { H2O: 37.5 },
+  KMnO4: { H2O: 6.4 },
+  C6H12O6: { H2O: 91 },
+  C12H22O11: { H2O: 200 },
+  CH4N2O: { H2O: 108 },
+  Na2S2O3: { H2O: 79.4 },
 };
 
 const LIQUID_COOLING_FACTOR = 0.6;
@@ -108,6 +158,49 @@ export function usePhysicsSimulation() {
 
           return s;
         }).filter(s => s.amount_ml > 0);
+
+        // Solubility simulation — dissolve solids into liquids
+        const liquids = newContents.filter(s => s.phase === "l" || s.phase === "aq");
+        const solids = newContents.filter(s => s.phase === "s");
+        if (liquids.length > 0 && solids.length > 0) {
+          for (const solid of solids) {
+            for (const liquid of liquids) {
+              const solData = SOLUBILITY[solid.formula];
+              if (!solData) continue;
+              const maxG = solData[liquid.formula];
+              if (maxG === undefined || maxG <= 0) continue;
+              // Compute how much is already dissolved (aq phase of same formula)
+              const alreadyDissolved = newContents
+                .filter(s => s.formula === solid.formula && s.phase === "aq")
+                .reduce((sum, s) => sum + s.amount_ml, 0);
+              const solventVol = liquid.amount_ml;
+              const density = DENSITIES[solid.formula] ?? 2.0;
+              const maxDissolveML = (maxG / 100) * solventVol / density;
+              const canDissolve = Math.max(0, maxDissolveML - alreadyDissolved);
+              if (canDissolve > 0 && solid.amount_ml > 0) {
+                const dissolveAmount = Math.min(solid.amount_ml, canDissolve * 0.1); // 10% per tick
+                if (dissolveAmount > 0.001) {
+                  solid.amount_ml -= dissolveAmount;
+                  // Add to existing aq entry or create one
+                  const aqEntry = newContents.find(s => s.formula === solid.formula && s.phase === "aq");
+                  if (aqEntry) {
+                    aqEntry.amount_ml += dissolveAmount;
+                  } else {
+                    newContents.push({ formula: solid.formula, amount_ml: dissolveAmount, phase: "aq", color: solid.color });
+                  }
+                  contentsChanged = true;
+                }
+              }
+            }
+          }
+          // Remove zero-volume entries
+          for (let i = newContents.length - 1; i >= 0; i--) {
+            if (newContents[i].amount_ml <= 0.001) {
+              newContents.splice(i, 1);
+              contentsChanged = true;
+            }
+          }
+        }
 
         if (newContents.length !== item.contents.length) contentsChanged = true;
 
