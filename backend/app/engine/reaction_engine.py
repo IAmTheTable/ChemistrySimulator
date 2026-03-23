@@ -327,9 +327,65 @@ class ReactionEngine:
         temperature: float,
     ) -> ReactionResult:
         """Append environment-aware notes to the reaction description and
-        safety notes without altering the core reaction result."""
+        safety notes without altering the core reaction result.  Also applies
+        environment-driven *effects* (e.g. explosion when flammable gas is
+        produced in an O2-rich atmosphere)."""
         extra_desc_parts: list[str] = []
         extra_safety: list[str] = []
+        extra_observations: list[str] = []
+        extra_special: list[str] = list(result.effects.special)
+        extra_sounds: list[str] = list(result.effects.sounds)
+        new_temp_change: float = result.temp_change
+
+        # ── O2-rich atmosphere: flammable-gas explosion ────────────────
+        _FLAMMABLE_GASES = {"H2", "CH4", "C2H6", "C3H8", "C2H2", "C2H4"}
+        if atmosphere == "oxygen":
+            gas_products = [
+                p for p in result.products
+                if isinstance(p, dict) and p.get("phase") == "g"
+            ]
+            flammable = any(
+                p.get("formula") in _FLAMMABLE_GASES for p in gas_products
+            )
+            if flammable:
+                if "explosion" not in extra_special:
+                    extra_special.append("explosion")
+                if "bang" not in extra_sounds:
+                    extra_sounds.append("bang")
+                extra_safety.append(
+                    "CRITICAL: Flammable gas produced in pure oxygen "
+                    "-- immediate explosion/fire risk!"
+                )
+                extra_observations.append(
+                    "EXPLOSION: Gas ignites violently on contact "
+                    "with oxygen atmosphere"
+                )
+                new_temp_change = abs(new_temp_change) * 3
+            else:
+                # Warn about any gaseous products in O2 environment
+                if gas_products:
+                    extra_safety.append(
+                        "Caution: gaseous products released in oxygen-rich "
+                        "atmosphere -- monitor for ignition risk"
+                    )
+
+        # ── High pressure compresses gases ─────────────────────────────
+        if pressure > 5:
+            extra_observations.append(
+                f"Gas volume significantly reduced at {pressure} atm"
+            )
+
+        # ── Low temperature: kinetics note ─────────────────────────────
+        if temperature < 0:
+            extra_desc_parts.append(
+                f"Reaction kinetics slowed at {temperature}\u00b0C."
+            )
+
+        # ── High temperature + decomposition: accelerated ──────────────
+        if temperature > 100 and result.reaction_type == "decomposition":
+            extra_desc_parts.append(
+                "Elevated temperature accelerates decomposition."
+            )
 
         # Atmosphere notes
         if atmosphere in _OXYGEN_FREE_ATMOSPHERES:
@@ -365,7 +421,16 @@ class ReactionEngine:
                 f"Operating at {temperature}\u00b0C -- cryogenic conditions, use insulated gloves"
             )
 
-        if not extra_desc_parts and not extra_safety:
+        # Build updated fields
+        has_changes = (
+            extra_desc_parts
+            or extra_safety
+            or extra_observations
+            or extra_special != list(result.effects.special)
+            or extra_sounds != list(result.effects.sounds)
+            or new_temp_change != result.temp_change
+        )
+        if not has_changes:
             return result
 
         new_description = result.description
@@ -373,10 +438,20 @@ class ReactionEngine:
             new_description = new_description.rstrip()
             new_description += " " + " ".join(extra_desc_parts)
 
-        new_safety = list(result.safety_notes) + extra_safety
+        new_safety_notes = list(result.safety_notes) + extra_safety
+        new_observations = list(result.observations) + extra_observations
+        new_effects = result.effects.model_copy(
+            update={"special": extra_special, "sounds": extra_sounds}
+        )
 
         return result.model_copy(
-            update={"description": new_description, "safety_notes": new_safety}
+            update={
+                "description": new_description,
+                "safety_notes": new_safety_notes,
+                "observations": new_observations,
+                "effects": new_effects,
+                "temp_change": new_temp_change,
+            }
         )
 
     # ------------------------------------------------------------------
@@ -390,17 +465,21 @@ class ReactionEngine:
         reaction_type: str,
         delta_h: float | None,
     ) -> str:
-        """Generate a human-readable description of the reaction."""
+        """Generate a human-readable, educational description of the reaction."""
+        reactant_formulas_list = [
+            r.get("formula", "") for r in reactants if r.get("formula")
+        ]
         reactant_names = [
-            name_compound(r.get("formula", r.get("formula", "")))
-            for r in reactants
-            if r.get("formula")
+            name_compound(f) for f in reactant_formulas_list
         ]
         product_names = [
             p.get("name") or name_compound(p.get("formula", ""))
             for p in products
             if p.get("formula")
         ]
+        product_formulas_set = {
+            p.get("formula", "") for p in products if p.get("formula")
+        }
 
         # Reaction type label
         type_labels = {
@@ -419,15 +498,33 @@ class ReactionEngine:
         energy_part = ""
         if delta_h is not None:
             if delta_h < -200:
-                energy_part = ", releasing a large amount of energy"
+                energy_part = (
+                    f" The reaction is highly exothermic "
+                    f"(\u0394H = {delta_h:.0f} kJ/mol) because the bonds "
+                    f"formed in the products are much stronger than those "
+                    f"broken in the reactants."
+                )
             elif delta_h < -50:
-                energy_part = ", releasing energy as heat"
+                energy_part = (
+                    f" The reaction is exothermic (\u0394H = {delta_h:.0f} "
+                    f"kJ/mol), releasing energy as heat."
+                )
             elif delta_h < 0:
-                energy_part = ", with a slight release of heat"
+                energy_part = (
+                    f" The reaction is mildly exothermic "
+                    f"(\u0394H = {delta_h:.0f} kJ/mol)."
+                )
             elif delta_h > 50:
-                energy_part = ", absorbing energy from the surroundings"
+                energy_part = (
+                    f" The reaction is endothermic "
+                    f"(\u0394H = +{delta_h:.0f} kJ/mol), absorbing energy "
+                    f"from the surroundings."
+                )
             elif delta_h > 0:
-                energy_part = ", with slight energy absorption"
+                energy_part = (
+                    f" The reaction is slightly endothermic "
+                    f"(\u0394H = +{delta_h:.0f} kJ/mol)."
+                )
 
         # Vigor description
         vigor = ""
@@ -437,10 +534,67 @@ class ReactionEngine:
         reactant_str = " and ".join(reactant_names[:3]) if reactant_names else "The reactants"
         product_str = " and ".join(product_names[:3]) if product_names else "products"
 
-        return (
+        base = (
             f"{reactant_str} react{vigor} in {type_label}, "
-            f"producing {product_str}{energy_part}."
+            f"producing {product_str}."
         )
+
+        # ── Driving force explanation ──────────────────────────────────
+        driving_force = ""
+        if reaction_type == "single_displacement":
+            # Identify which metal displaces which
+            metals_in = [f for f in reactant_formulas_list if len(f) <= 2 and f[0].isupper()]
+            if metals_in:
+                metal = metals_in[0]
+                driving_force = (
+                    f" {name_compound(metal)} is higher in the activity "
+                    f"series than the metal it displaces, providing the "
+                    f"thermodynamic driving force."
+                )
+        elif reaction_type == "acid_base":
+            driving_force = (
+                " The driving force is the formation of water, a very "
+                "stable covalent compound."
+            )
+        elif reaction_type == "precipitation":
+            solid_products = [
+                p.get("formula", "")
+                for p in products
+                if p.get("phase") == "s"
+            ]
+            if solid_products:
+                driving_force = (
+                    f" The insoluble precipitate "
+                    f"({', '.join(solid_products)}) forms because its "
+                    f"lattice energy exceeds its hydration energy."
+                )
+        elif reaction_type == "combustion":
+            driving_force = (
+                " The strong C=O and O-H bonds in the products (CO\u2082 and "
+                "H\u2082O) are thermodynamically very stable, driving the "
+                "reaction forward."
+            )
+        elif reaction_type == "decomposition":
+            driving_force = (
+                " Sufficient energy overcomes the bond energies in "
+                "the reactant, breaking it into simpler substances."
+            )
+
+        # ── Gas evolution note ─────────────────────────────────────────
+        gas_note = ""
+        gas_products = [
+            p.get("formula", "")
+            for p in products
+            if p.get("phase") == "g"
+        ]
+        if gas_products and reaction_type not in ("combustion",):
+            gas_note = (
+                f" Gas evolution ({', '.join(gas_products)}) helps "
+                f"drive the reaction to completion by removing a product "
+                f"from the solution."
+            )
+
+        return base + driving_force + gas_note + energy_part
 
     @staticmethod
     def _build_safety_notes(
