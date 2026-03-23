@@ -241,6 +241,9 @@ export const useLabStore = create<LabState>()((set) => ({
       if (result.effects.gas) effectNames.push("bubbles");
       if (result.effects.heat === "exothermic") effectNames.push("steam");
       if (result.effects.precipitate) effectNames.push("precipitate");
+      if (result.effects.special?.includes("explosion")) effectNames.push("explosion", "smoke");
+      if (result.effects.special?.includes("sparks")) effectNames.push("sparks");
+      if (result.effects.special?.includes("flame")) effectNames.push("flame");
       const isExplosion = result.effects.special?.includes("explosion") ?? false;
 
       // Merge contents, temperature, and effects into a single set() call

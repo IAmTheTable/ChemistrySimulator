@@ -1,8 +1,6 @@
 import * as THREE from "three";
 import type { ContainerSubstance } from "../../../stores/labStore";
 
-const HOT_EMISSIVE = new THREE.Color("#ff6600");
-const COLD_EMISSIVE = new THREE.Color("#000000");
 
 export function blendColors(colors: string[]): string {
   if (colors.length === 0) return "#cccccc";
@@ -25,12 +23,32 @@ export function computeFillState(contents: ContainerSubstance[], capacityMl: num
 }
 
 export function getGlassAppearance(temperature: number, coldColor: string) {
-  const isHot = temperature > 60;
-  return {
-    glassColor: isHot ? "#ffe0b2" : coldColor,
-    glassEmissive: isHot ? HOT_EMISSIVE : COLD_EMISSIVE,
-    glassEmissiveIntensity: isHot ? 0.15 : 0,
-  };
+  if (temperature > 500) {
+    // Extremely hot — glowing red/orange
+    return { glassColor: "#ff4400", glassEmissive: new THREE.Color("#ff2200"), glassEmissiveIntensity: 0.6 };
+  }
+  if (temperature > 200) {
+    // Very hot — orange glow
+    return { glassColor: "#ff8c00", glassEmissive: new THREE.Color("#ff6600"), glassEmissiveIntensity: 0.4 };
+  }
+  if (temperature > 100) {
+    // Hot — warm glow
+    return { glassColor: "#ffe0b2", glassEmissive: new THREE.Color("#ff6600"), glassEmissiveIntensity: 0.2 };
+  }
+  if (temperature > 60) {
+    // Warm
+    return { glassColor: "#ffe0b2", glassEmissive: new THREE.Color("#ff6600"), glassEmissiveIntensity: 0.1 };
+  }
+  if (temperature < -50) {
+    // Very cold — blue/frost
+    return { glassColor: "#b3e5fc", glassEmissive: new THREE.Color("#2196f3"), glassEmissiveIntensity: 0.15 };
+  }
+  if (temperature < 0) {
+    // Cold — slight blue tint
+    return { glassColor: "#e1f5fe", glassEmissive: new THREE.Color("#0288d1"), glassEmissiveIntensity: 0.05 };
+  }
+  // Normal
+  return { glassColor: coldColor, glassEmissive: new THREE.Color("#000000"), glassEmissiveIntensity: 0 };
 }
 
 export const EQUIPMENT_Y_OFFSETS: Record<string, number> = {

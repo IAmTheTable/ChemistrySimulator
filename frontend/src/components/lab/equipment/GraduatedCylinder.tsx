@@ -6,6 +6,9 @@ import BubbleEffect from "../effects/BubbleEffect";
 import SteamEffect from "../effects/SteamEffect";
 import FlameEffect from "../effects/FlameEffect";
 import PrecipitateEffect from "../effects/PrecipitateEffect";
+import ExplosionEffect from "../effects/ExplosionEffect";
+import SmokeEffect from "../effects/SmokeEffect";
+import SparkEffect from "../effects/SparkEffect";
 import { computeFillState, getGlassAppearance } from "./equipmentUtils";
 import ContentsLabel from "./ContentsLabel";
 
@@ -178,6 +181,15 @@ export default function GraduatedCylinder({
       )}
       {activeEffects.includes("precipitate") && (
         <PrecipitateEffect position={effectPos} color={precipColor} />
+      )}
+      {activeEffects.includes("explosion") && (
+        <ExplosionEffect position={[0, 0.1, 0]} />
+      )}
+      {activeEffects.includes("smoke") && (
+        <SmokeEffect position={[0, height / 2, 0]} />
+      )}
+      {activeEffects.includes("sparks") && (
+        <SparkEffect position={[0, 0.1, 0]} />
       )}
 
       {/* Floating contents label */}
