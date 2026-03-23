@@ -12,7 +12,7 @@
     "name": "Sodium Hydroxide",
     "phase": "aq",
     "color": "#f0f0f0",
-    "molar_mass": 40.00,
+    "molar_mass": 40.0,
     "hazard_class": "corrosive"
   },
   {
@@ -148,7 +148,7 @@
     "name": "Potassium Iodide",
     "phase": "aq",
     "color": "#f0f0e0",
-    "molar_mass": 166.00,
+    "molar_mass": 166.0,
     "hazard_class": "none"
   },
   {
@@ -188,7 +188,7 @@
     "name": "Iron(III) Chloride",
     "phase": "s",
     "color": "#b8860b",
-    "molar_mass": 162.20,
+    "molar_mass": 162.2,
     "hazard_class": "corrosive"
   },
   {
@@ -220,7 +220,7 @@
     "name": "Potassium",
     "phase": "s",
     "color": "#c0c0c0",
-    "molar_mass": 39.10,
+    "molar_mass": 39.1,
     "hazard_class": "flammable"
   },
   {
@@ -276,7 +276,7 @@
     "name": "Propane",
     "phase": "g",
     "color": null,
-    "molar_mass": 44.10,
+    "molar_mass": 44.1,
     "hazard_class": "flammable"
   },
   {
@@ -316,7 +316,7 @@
     "name": "Phosphoric Acid",
     "phase": "aq",
     "color": "#e0e0e0",
-    "molar_mass": 98.00,
+    "molar_mass": 98.0,
     "hazard_class": "corrosive"
   },
   {
@@ -388,7 +388,7 @@
     "name": "Magnesium Oxide",
     "phase": "s",
     "color": "#ffffff",
-    "molar_mass": 40.30,
+    "molar_mass": 40.3,
     "hazard_class": "none"
   },
   {
@@ -654,5 +654,557 @@
     "color": "#c0c0c0",
     "molar_mass": 52.0,
     "hazard_class": "none"
+  },
+  {
+    "formula": "CH3Cl",
+    "name": "Chloromethane",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 50.49,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C2H5Br",
+    "name": "Bromoethane",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 108.97,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C2H4Br2",
+    "name": "1,2-Dibromoethane",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 187.86,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "C6H5Cl",
+    "name": "Chlorobenzene",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 112.56,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C7H8",
+    "name": "Toluene",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 92.14,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "CH3CHO",
+    "name": "Acetaldehyde",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 44.05,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "CH3COCl",
+    "name": "Acetyl Chloride",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 78.5,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "C6H5COCH3",
+    "name": "Acetophenone",
+    "phase": "l",
+    "color": "#e8e8d0",
+    "molar_mass": 120.15,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "C3H6",
+    "name": "Propene",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 42.08,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C5H10",
+    "name": "1-Pentene",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 70.13,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C5H12",
+    "name": "Pentane",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 72.15,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C10H22",
+    "name": "Decane",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 142.28,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "PCl5",
+    "name": "Phosphorus Pentachloride",
+    "phase": "s",
+    "color": "#fffdd0",
+    "molar_mass": 208.24,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "POCl3",
+    "name": "Phosphoryl Chloride",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 153.33,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "SOCl2",
+    "name": "Thionyl Chloride",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 118.97,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "CO",
+    "name": "Carbon Monoxide",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 28.01,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "NO",
+    "name": "Nitric Oxide",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 30.01,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "NO2",
+    "name": "Nitrogen Dioxide",
+    "phase": "g",
+    "color": "#8b4513",
+    "molar_mass": 46.01,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "SO3",
+    "name": "Sulfur Trioxide",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 80.06,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "H2S",
+    "name": "Hydrogen Sulfide",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 34.08,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "Cl2",
+    "name": "Chlorine",
+    "phase": "g",
+    "color": "#90ee90",
+    "molar_mass": 70.91,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "H2",
+    "name": "Hydrogen",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 2.02,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "O2",
+    "name": "Oxygen",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 32.0,
+    "hazard_class": "oxidizer"
+  },
+  {
+    "formula": "N2",
+    "name": "Nitrogen",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 28.01,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "CO2",
+    "name": "Carbon Dioxide",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 44.01,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "C2H4",
+    "name": "Ethylene",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 28.05,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C2H6",
+    "name": "Ethane",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 30.07,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "CH4",
+    "name": "Methane",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 16.04,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "FeS2",
+    "name": "Iron Pyrite",
+    "phase": "s",
+    "color": "#c0a000",
+    "molar_mass": 119.98,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "H2S2O7",
+    "name": "Oleum (Disulfuric Acid)",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 178.13,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "CaSiO3",
+    "name": "Calcium Silicate (Slag)",
+    "phase": "s",
+    "color": "#d3d3d3",
+    "molar_mass": 116.16,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Na2SiO3",
+    "name": "Sodium Silicate (Water Glass)",
+    "phase": "s",
+    "color": "#f0f0f0",
+    "molar_mass": 122.06,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "SiF4",
+    "name": "Silicon Tetrafluoride",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 104.08,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "H3BO3",
+    "name": "Boric Acid",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 61.83,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "B2O3",
+    "name": "Boron Trioxide",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 69.62,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "HClO",
+    "name": "Hypochlorous Acid",
+    "phase": "aq",
+    "color": "#e0e0e0",
+    "molar_mass": 52.46,
+    "hazard_class": "oxidizer"
+  },
+  {
+    "formula": "NaClO",
+    "name": "Sodium Hypochlorite (Bleach)",
+    "phase": "aq",
+    "color": "#f0f0f0",
+    "molar_mass": 74.44,
+    "hazard_class": "oxidizer"
+  },
+  {
+    "formula": "HCHO",
+    "name": "Formaldehyde",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 30.03,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "HCOONa",
+    "name": "Sodium Formate",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 68.01,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "C6H5ONa",
+    "name": "Sodium Phenoxide",
+    "phase": "s",
+    "color": "#f0f0f0",
+    "molar_mass": 116.09,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "C6H5COONa",
+    "name": "Sodium Benzoate",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 144.11,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Na2C2O4",
+    "name": "Sodium Oxalate",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 134.0,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "C2H5ONa",
+    "name": "Sodium Ethoxide",
+    "phase": "s",
+    "color": "#f0f0f0",
+    "molar_mass": 68.05,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "C3H7OH",
+    "name": "Propanol",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 60.1,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C3H7Cl",
+    "name": "1-Chloropropane",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 78.54,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C3H7Br",
+    "name": "1-Bromopropane",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 122.99,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "TiCl4",
+    "name": "Titanium Tetrachloride",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 189.68,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "ZnO",
+    "name": "Zinc Oxide",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 81.38,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Cu2O",
+    "name": "Copper(I) Oxide",
+    "phase": "s",
+    "color": "#cc0000",
+    "molar_mass": 143.09,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "FeS",
+    "name": "Iron(II) Sulfide",
+    "phase": "s",
+    "color": "#2d2d2d",
+    "molar_mass": 87.91,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "C3H6O3",
+    "name": "Lactic Acid",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 90.08,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "ATP",
+    "name": "Adenosine Triphosphate",
+    "phase": "aq",
+    "color": "#e0e0e0",
+    "molar_mass": 507.18,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "ADP",
+    "name": "Adenosine Diphosphate",
+    "phase": "aq",
+    "color": "#e0e0e0",
+    "molar_mass": 427.2,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "HF",
+    "name": "Hydrofluoric Acid",
+    "phase": "aq",
+    "color": "#e0e0e0",
+    "molar_mass": 20.01,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "HBr",
+    "name": "Hydrobromic Acid",
+    "phase": "aq",
+    "color": "#e0e0e0",
+    "molar_mass": 80.91,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "HI",
+    "name": "Hydroiodic Acid",
+    "phase": "aq",
+    "color": "#e0e0e0",
+    "molar_mass": 127.91,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "F2",
+    "name": "Fluorine",
+    "phase": "g",
+    "color": "#ffffcc",
+    "molar_mass": 38.0,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "C2H3Cl",
+    "name": "Vinyl Chloride",
+    "phase": "g",
+    "color": null,
+    "molar_mass": 62.5,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "K2CO3",
+    "name": "Potassium Carbonate",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 138.21,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "Na2CrO4",
+    "name": "Sodium Chromate",
+    "phase": "s",
+    "color": "#ffd700",
+    "molar_mass": 161.97,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "C6H5OH",
+    "name": "Phenol",
+    "phase": "s",
+    "color": "#f0f0f0",
+    "molar_mass": 94.11,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "C6H5NH2",
+    "name": "Aniline",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 93.13,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "CH3OH",
+    "name": "Methanol",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 32.04,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "HCOOH",
+    "name": "Formic Acid",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 46.03,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "H2C2O4",
+    "name": "Oxalic Acid",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 90.03,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "Sr",
+    "name": "Strontium",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 87.62,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "Ba",
+    "name": "Barium",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 137.33,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "C6H5COOH",
+    "name": "Benzoic Acid",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 122.12,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "Ba(OH)2",
+    "name": "Barium Hydroxide",
+    "phase": "s",
+    "color": "#f0f0f0",
+    "molar_mass": 171.34,
+    "hazard_class": "toxic"
   }
 ]

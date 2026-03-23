@@ -1,214 +1,1086 @@
 {
-  "H2O": {"delta_hf": -285.8, "delta_sf": 69.9},
-  "NaOH": {"delta_hf": -425.6, "delta_sf": 64.5},
-  "HCl": {"delta_hf": -167.2, "delta_sf": 186.9},
-  "NaCl": {"delta_hf": -411.2, "delta_sf": 72.1},
-  "H2": {"delta_hf": 0.0, "delta_sf": 130.7},
-  "O2": {"delta_hf": 0.0, "delta_sf": 205.2},
-  "N2": {"delta_hf": 0.0, "delta_sf": 191.6},
-  "CO2": {"delta_hf": -393.5, "delta_sf": 213.8},
-  "H2SO4": {"delta_hf": -814.0, "delta_sf": 156.9},
-  "AgCl": {"delta_hf": -127.0, "delta_sf": 96.3},
-  "Na": {"delta_hf": 0.0, "delta_sf": 51.3},
-  "Fe": {"delta_hf": 0.0, "delta_sf": 27.3},
-  "Cu": {"delta_hf": 0.0, "delta_sf": 33.2},
-  "Zn": {"delta_hf": 0.0, "delta_sf": 41.6},
-  "CaCO3": {"delta_hf": -1206.9, "delta_sf": 92.9},
-  "CaO": {"delta_hf": -634.9, "delta_sf": 38.1},
-  "NH3": {"delta_hf": -45.9, "delta_sf": 192.8},
-  "Fe2O3": {"delta_hf": -824.2, "delta_sf": 87.4},
-  "MgO": {"delta_hf": -601.6, "delta_sf": 27.0},
-  "ZnCl2": {"delta_hf": -415.1, "delta_sf": 111.5},
-  "CuSO4": {"delta_hf": -771.4, "delta_sf": 109.2},
-  "FeSO4": {"delta_hf": -928.4, "delta_sf": 107.5},
-  "KOH": {"delta_hf": -424.6, "delta_sf": 78.9},
-  "AgNO3": {"delta_hf": -124.4, "delta_sf": 140.9},
-  "NaNO3": {"delta_hf": -467.9, "delta_sf": 116.5},
-  "PbI2": {"delta_hf": -175.5, "delta_sf": 174.9},
-  "KI": {"delta_hf": -327.9, "delta_sf": 106.3},
-  "Pb(NO3)2": {"delta_hf": -451.9, "delta_sf": 217.9},
-  "BaSO4": {"delta_hf": -1473.2, "delta_sf": 132.2},
-  "BaCl2": {"delta_hf": -855.0, "delta_sf": 123.7},
-  "Na2SO4": {"delta_hf": -1387.1, "delta_sf": 149.6},
-  "Mg": {"delta_hf": 0.0, "delta_sf": 32.7},
-  "S": {"delta_hf": 0.0, "delta_sf": 32.1},
-  "C": {"delta_hf": 0.0, "delta_sf": 5.7},
-  "Cl2": {"delta_hf": 0.0, "delta_sf": 223.1},
-  "FeS": {"delta_hf": -100.0, "delta_sf": 60.3},
-  "H2O2": {"delta_hf": -187.8, "delta_sf": 109.6},
-  "NaHCO3": {"delta_hf": -950.8, "delta_sf": 101.7},
-  "CH3COOH": {"delta_hf": -484.3, "delta_sf": 159.8},
-  "CH3COONa": {"delta_hf": -708.8, "delta_sf": 123.0},
-  "KNO3": {"delta_hf": -494.6, "delta_sf": 133.1},
-  "CH4": {"delta_hf": -74.6, "delta_sf": 186.3},
-  "C2H5OH": {"delta_hf": -277.6, "delta_sf": 160.7},
-  "MnO2": {"delta_hf": -520.0, "delta_sf": 53.1},
-  "KCl": {"delta_hf": -436.5, "delta_sf": 82.6},
-  "FeCl2": {"delta_hf": -341.8, "delta_sf": 118.0},
-  "MgCl2": {"delta_hf": -641.3, "delta_sf": 89.6},
-  "Al": {"delta_hf": 0.0, "delta_sf": 28.3},
-  "Li": {"delta_hf": 0.0, "delta_sf": 29.1},
-  "K": {"delta_hf": 0.0, "delta_sf": 64.7},
-  "Ca": {"delta_hf": 0.0, "delta_sf": 41.6},
-  "P": {"delta_hf": 0.0, "delta_sf": 41.1},
-  "Sn": {"delta_hf": 0.0, "delta_sf": 51.2},
-  "Ni": {"delta_hf": 0.0, "delta_sf": 29.9},
-  "H3PO4": {"delta_hf": -1288.3, "delta_sf": 158.2},
-  "HNO3": {"delta_hf": -207.4, "delta_sf": 146.4},
-  "H2CO3": {"delta_hf": -699.6, "delta_sf": 187.4},
-  "Na2CO3": {"delta_hf": -1130.7, "delta_sf": 135.0},
-  "CaCl2": {"delta_hf": -795.4, "delta_sf": 104.6},
-  "Na2S": {"delta_hf": -364.8, "delta_sf": 83.7},
-  "NH4Cl": {"delta_hf": -314.4, "delta_sf": 94.6},
-  "NH4NO3": {"delta_hf": -365.6, "delta_sf": 151.1},
-  "KClO3": {"delta_hf": -397.7, "delta_sf": 143.1},
-  "FeCl3": {"delta_hf": -399.5, "delta_sf": 142.3},
-  "Al2O3": {"delta_hf": -1675.7, "delta_sf": 50.9},
-  "SO2": {"delta_hf": -296.8, "delta_sf": 248.2},
-  "SO3": {"delta_hf": -395.7, "delta_sf": 256.8},
-  "C3H8": {"delta_hf": -104.7, "delta_sf": 270.3},
-  "C6H12O6": {"delta_hf": -1274.4, "delta_sf": 212.1},
-  "C2H2": {"delta_hf": 226.7, "delta_sf": 200.9},
-  "C2H4": {"delta_hf": 52.4, "delta_sf": 219.3},
-  "C4H10": {"delta_hf": -125.7, "delta_sf": 310.1},
-  "Cu(OH)2": {"delta_hf": -449.8, "delta_sf": 108.0},
-  "Fe(OH)3": {"delta_hf": -823.0, "delta_sf": 106.7},
-  "CuO": {"delta_hf": -157.3, "delta_sf": 42.6},
-  "Ca(OH)2": {"delta_hf": -985.2, "delta_sf": 83.4},
-  "LiOH": {"delta_hf": -484.9, "delta_sf": 42.8},
-  "PbSO4": {"delta_hf": -920.0, "delta_sf": 148.5},
-  "AlCl3": {"delta_hf": -704.2, "delta_sf": 110.7},
-  "H2S": {"delta_hf": -20.6, "delta_sf": 205.8},
-  "NO2": {"delta_hf": 33.2, "delta_sf": 240.1},
-  "N2O": {"delta_hf": 82.1, "delta_sf": 219.9},
-  "Na2O": {"delta_hf": -414.2, "delta_sf": 75.1},
-  "Na2O2": {"delta_hf": -510.9, "delta_sf": 95.0},
-  "ZnSO4": {"delta_hf": -982.8, "delta_sf": 110.5},
-  "Cu(NO3)2": {"delta_hf": -302.9, "delta_sf": 193.3},
-  "Zn(NO3)2": {"delta_hf": -483.7, "delta_sf": 180.7},
-  "MgSO4": {"delta_hf": -1284.9, "delta_sf": 91.6},
-  "NiSO4": {"delta_hf": -872.9, "delta_sf": 92.0},
-  "SnCl2": {"delta_hf": -325.1, "delta_sf": 134.0},
-  "Ag": {"delta_hf": 0.0, "delta_sf": 42.6},
-  "Mg(OH)2": {"delta_hf": -924.5, "delta_sf": 63.2},
-  "MgCO3": {"delta_hf": -1095.8, "delta_sf": 65.7},
-  "Na3PO4": {"delta_hf": -1917.4, "delta_sf": 173.8},
-  "K2SO4": {"delta_hf": -1437.8, "delta_sf": 175.6},
-  "H2SO3": {"delta_hf": -608.8, "delta_sf": 232.2},
-  "I2": {"delta_hf": 0.0, "delta_sf": 116.1},
-  "P4O10": {"delta_hf": -2984.0, "delta_sf": 228.9},
-  "Mg3N2": {"delta_hf": -461.1, "delta_sf": 87.9},
-  "CaSO4": {"delta_hf": -1434.1, "delta_sf": 106.7},
-  "Fe3O4": {"delta_hf": -1118.4, "delta_sf": 146.4},
-  "NH4HCO3": {"delta_hf": -849.4, "delta_sf": 120.9},
-  "KNO2": {"delta_hf": -369.8, "delta_sf": 152.1},
-  "MnCl2": {"delta_hf": -481.3, "delta_sf": 118.2},
-  "Na2ZnO2": {"delta_hf": -1025.0, "delta_sf": 90.0},
-  "NaAlO2": {"delta_hf": -1133.0, "delta_sf": 70.4},
-  "Al2(SO4)3": {"delta_hf": -3440.8, "delta_sf": 239.3},
-  "Ca3(PO4)2": {"delta_hf": -4120.8, "delta_sf": 236.0},
-  "Na2S2O3": {"delta_hf": -1123.0, "delta_sf": 155.0},
-  "K2Cr2O7": {"delta_hf": -2033.0, "delta_sf": 291.2},
-  "CoCl2": {"delta_hf": -312.5, "delta_sf": 109.2},
-  "NiCl2": {"delta_hf": -305.3, "delta_sf": 97.7},
-  "Cr2O3": {"delta_hf": -1139.7, "delta_sf": 81.2},
-  "TiO2": {"delta_hf": -944.7, "delta_sf": 50.3},
-  "SiO2": {"delta_hf": -910.7, "delta_sf": 41.5},
-  "C12H22O11": {"delta_hf": -2222.1, "delta_sf": 360.2},
-  "C2H6O2": {"delta_hf": -460.0, "delta_sf": 163.2},
-  "C3H8O3": {"delta_hf": -669.6, "delta_sf": 206.3},
-  "CS2": {"delta_hf": 89.0, "delta_sf": 151.3},
-  "Br2": {"delta_hf": 0.0, "delta_sf": 152.2},
-  "Si": {"delta_hf": 0.0, "delta_sf": 18.8},
-  "B": {"delta_hf": 0.0, "delta_sf": 5.9},
-  "Ti": {"delta_hf": 0.0, "delta_sf": 30.7},
-  "W": {"delta_hf": 0.0, "delta_sf": 32.6},
-  "Pt": {"delta_hf": 0.0, "delta_sf": 41.6},
-  "Au": {"delta_hf": 0.0, "delta_sf": 47.4},
-  "Pb": {"delta_hf": 0.0, "delta_sf": 64.8},
-  "Co": {"delta_hf": 0.0, "delta_sf": 30.0},
-  "Hg": {"delta_hf": 0.0, "delta_sf": 75.9},
-  "Mn": {"delta_hf": 0.0, "delta_sf": 32.0},
-  "Cr": {"delta_hf": 0.0, "delta_sf": 23.8},
-  "C8H10N4O2": {"delta_hf": -345.1, "delta_sf": 260.0},
-  "C9H8O4": {"delta_hf": -765.0, "delta_sf": 222.0},
-  "C6H8O6": {"delta_hf": -1164.0, "delta_sf": 190.0},
-  "CH4N2O": {"delta_hf": -333.5, "delta_sf": 104.6},
-  "C2H6OS": {"delta_hf": -204.0, "delta_sf": 188.0},
-  "NaI": {"delta_hf": -287.8, "delta_sf": 98.5},
-  "Na2S4O6": {"delta_hf": -1920.0, "delta_sf": 280.0},
-  "PbCl2": {"delta_hf": -359.4, "delta_sf": 136.0},
-  "Pb(OH)2": {"delta_hf": -515.9, "delta_sf": 88.0},
-  "AgI": {"delta_hf": -61.8, "delta_sf": 115.5},
-  "Co(OH)2": {"delta_hf": -539.7, "delta_sf": 79.0},
-  "Cr2(SO4)3": {"delta_hf": -3308.0, "delta_sf": 280.0},
-  "CrCl3": {"delta_hf": -556.5, "delta_sf": 123.0},
-  "CuCl2": {"delta_hf": -220.1, "delta_sf": 108.1},
-  "CuI": {"delta_hf": -67.8, "delta_sf": 96.7},
-  "KBr": {"delta_hf": -393.8, "delta_sf": 95.9},
-  "KI3": {"delta_hf": -340.0, "delta_sf": 220.0},
-  "KMnO4": {"delta_hf": -837.2, "delta_sf": 171.7},
-  "Ni(OH)2": {"delta_hf": -529.7, "delta_sf": 88.0},
-  "SnCl4": {"delta_hf": -511.3, "delta_sf": 258.6},
-  "CuS": {"delta_hf": -53.1, "delta_sf": 66.5},
-  "NiS": {"delta_hf": -82.0, "delta_sf": 53.0},
-  "PbS": {"delta_hf": -100.4, "delta_sf": 91.2},
-  "PbO": {"delta_hf": -219.0, "delta_sf": 66.5},
-  "PbCrO4": {"delta_hf": -930.9, "delta_sf": 146.0},
-  "K2CrO4": {"delta_hf": -1403.7, "delta_sf": 200.1},
-  "Ag2CrO4": {"delta_hf": -731.7, "delta_sf": 217.6},
-  "Ag2S": {"delta_hf": -32.6, "delta_sf": 144.0},
-  "CdS": {"delta_hf": -161.9, "delta_sf": 64.9},
-  "CdCl2": {"delta_hf": -391.5, "delta_sf": 115.3},
-  "Fe(OH)2": {"delta_hf": -569.0, "delta_sf": 88.0},
-  "Zn(OH)2": {"delta_hf": -641.9, "delta_sf": 81.2},
-  "Fe(NO3)3": {"delta_hf": -670.7, "delta_sf": 234.0},
-  "Fe2(SO4)3": {"delta_hf": -2583.0, "delta_sf": 307.5},
-  "Fe(SCN)3": {"delta_hf": -250.0, "delta_sf": 280.0},
-  "KSCN": {"delta_hf": -200.2, "delta_sf": 124.3},
-  "NO": {"delta_hf": 91.3, "delta_sf": 210.8},
-  "CO": {"delta_hf": -110.5, "delta_sf": 197.7},
-  "Ca(NO3)2": {"delta_hf": -938.2, "delta_sf": 193.2},
-  "Ba(NO3)2": {"delta_hf": -992.1, "delta_sf": 213.8},
-  "BaCO3": {"delta_hf": -1216.3, "delta_sf": 112.1},
-  "K3PO4": {"delta_hf": -1979.9, "delta_sf": 192.3},
-  "Al(OH)3": {"delta_hf": -1276.0, "delta_sf": 71.1},
-  "Mg(NO3)2": {"delta_hf": -790.6, "delta_sf": 164.0},
-  "Mn(OH)2": {"delta_hf": -695.4, "delta_sf": 99.2},
-  "Co(OH)2": {"delta_hf": -539.7, "delta_sf": 79.0},
-  "CH3COOC2H5": {"delta_hf": -480.2, "delta_sf": 259.4},
-  "CH3COOCH3": {"delta_hf": -442.8, "delta_sf": 235.2},
-  "CH3OH": {"delta_hf": -239.2, "delta_sf": 126.8},
-  "CaC2": {"delta_hf": -59.8, "delta_sf": 70.0},
-  "C2H6": {"delta_hf": -83.8, "delta_sf": 229.2},
-  "Na2SO3": {"delta_hf": -1100.8, "delta_sf": 145.9},
-  "C6H6": {"delta_hf": 49.1, "delta_sf": 173.4},
-  "C6H5Br": {"delta_hf": -17.4, "delta_sf": 219.2},
-  "HBr": {"delta_hf": -36.3, "delta_sf": 198.7},
-  "CoSO4": {"delta_hf": -888.3, "delta_sf": 118.0},
-  "MnSO4": {"delta_hf": -1065.3, "delta_sf": 112.1},
-  "AgBr": {"delta_hf": -100.4, "delta_sf": 107.1},
-  "NaBr": {"delta_hf": -361.1, "delta_sf": 86.8},
-  "K2S": {"delta_hf": -380.7, "delta_sf": 105.0},
-  "MnS": {"delta_hf": -214.2, "delta_sf": 78.2},
-  "CoS": {"delta_hf": -82.8, "delta_sf": 67.0},
-  "ZnS": {"delta_hf": -206.0, "delta_sf": 57.7},
-  "NaF": {"delta_hf": -576.6, "delta_sf": 51.1},
-  "KF": {"delta_hf": -567.3, "delta_sf": 66.6},
-  "CaF2": {"delta_hf": -1228.0, "delta_sf": 68.9},
-  "SrCl2": {"delta_hf": -828.9, "delta_sf": 114.8},
-  "Ba(OH)2": {"delta_hf": -944.7, "delta_sf": 107.0},
-  "HCOOH": {"delta_hf": -424.7, "delta_sf": 129.0},
-  "H2C2O4": {"delta_hf": -831.3, "delta_sf": 120.0},
-  "HF": {"delta_hf": -273.3, "delta_sf": 173.8},
-  "HI": {"delta_hf": 26.5, "delta_sf": 206.6},
-  "F2": {"delta_hf": 0.0, "delta_sf": 202.8},
-  "Rb": {"delta_hf": 0.0, "delta_sf": 76.8},
-  "Cs": {"delta_hf": 0.0, "delta_sf": 85.2},
-  "Sr": {"delta_hf": 0.0, "delta_sf": 55.0},
-  "Ba": {"delta_hf": 0.0, "delta_sf": 62.5},
-  "Cd": {"delta_hf": 0.0, "delta_sf": 51.8},
-  "NH4Cl_decomp": {"delta_hf": -314.4, "delta_sf": 94.6},
-  "KHCO3": {"delta_hf": -963.2, "delta_sf": 115.5},
-  "NaClO3": {"delta_hf": -365.8, "delta_sf": 123.4}
+  "H2O": {
+    "delta_hf": -285.8,
+    "delta_sf": 69.9
+  },
+  "NaOH": {
+    "delta_hf": -425.6,
+    "delta_sf": 64.5
+  },
+  "HCl": {
+    "delta_hf": -167.2,
+    "delta_sf": 186.9
+  },
+  "NaCl": {
+    "delta_hf": -411.2,
+    "delta_sf": 72.1
+  },
+  "H2": {
+    "delta_hf": 0.0,
+    "delta_sf": 130.7
+  },
+  "O2": {
+    "delta_hf": 0.0,
+    "delta_sf": 205.2
+  },
+  "N2": {
+    "delta_hf": 0.0,
+    "delta_sf": 191.6
+  },
+  "CO2": {
+    "delta_hf": -393.5,
+    "delta_sf": 213.8
+  },
+  "H2SO4": {
+    "delta_hf": -814.0,
+    "delta_sf": 156.9
+  },
+  "AgCl": {
+    "delta_hf": -127.0,
+    "delta_sf": 96.3
+  },
+  "Na": {
+    "delta_hf": 0.0,
+    "delta_sf": 51.3
+  },
+  "Fe": {
+    "delta_hf": 0.0,
+    "delta_sf": 27.3
+  },
+  "Cu": {
+    "delta_hf": 0.0,
+    "delta_sf": 33.2
+  },
+  "Zn": {
+    "delta_hf": 0.0,
+    "delta_sf": 41.6
+  },
+  "CaCO3": {
+    "delta_hf": -1206.9,
+    "delta_sf": 92.9
+  },
+  "CaO": {
+    "delta_hf": -634.9,
+    "delta_sf": 38.1
+  },
+  "NH3": {
+    "delta_hf": -45.9,
+    "delta_sf": 192.8
+  },
+  "Fe2O3": {
+    "delta_hf": -824.2,
+    "delta_sf": 87.4
+  },
+  "MgO": {
+    "delta_hf": -601.6,
+    "delta_sf": 27.0
+  },
+  "ZnCl2": {
+    "delta_hf": -415.1,
+    "delta_sf": 111.5
+  },
+  "CuSO4": {
+    "delta_hf": -771.4,
+    "delta_sf": 109.2
+  },
+  "FeSO4": {
+    "delta_hf": -928.4,
+    "delta_sf": 107.5
+  },
+  "KOH": {
+    "delta_hf": -424.6,
+    "delta_sf": 78.9
+  },
+  "AgNO3": {
+    "delta_hf": -124.4,
+    "delta_sf": 140.9
+  },
+  "NaNO3": {
+    "delta_hf": -467.9,
+    "delta_sf": 116.5
+  },
+  "PbI2": {
+    "delta_hf": -175.5,
+    "delta_sf": 174.9
+  },
+  "KI": {
+    "delta_hf": -327.9,
+    "delta_sf": 106.3
+  },
+  "Pb(NO3)2": {
+    "delta_hf": -451.9,
+    "delta_sf": 217.9
+  },
+  "BaSO4": {
+    "delta_hf": -1473.2,
+    "delta_sf": 132.2
+  },
+  "BaCl2": {
+    "delta_hf": -855.0,
+    "delta_sf": 123.7
+  },
+  "Na2SO4": {
+    "delta_hf": -1387.1,
+    "delta_sf": 149.6
+  },
+  "Mg": {
+    "delta_hf": 0.0,
+    "delta_sf": 32.7
+  },
+  "S": {
+    "delta_hf": 0.0,
+    "delta_sf": 32.1
+  },
+  "C": {
+    "delta_hf": 0.0,
+    "delta_sf": 5.7
+  },
+  "Cl2": {
+    "delta_hf": 0.0,
+    "delta_sf": 223.1
+  },
+  "FeS": {
+    "delta_hf": -100.0,
+    "delta_sf": 60.3
+  },
+  "H2O2": {
+    "delta_hf": -187.8,
+    "delta_sf": 109.6
+  },
+  "NaHCO3": {
+    "delta_hf": -950.8,
+    "delta_sf": 101.7
+  },
+  "CH3COOH": {
+    "delta_hf": -484.3,
+    "delta_sf": 159.8
+  },
+  "CH3COONa": {
+    "delta_hf": -708.8,
+    "delta_sf": 123.0
+  },
+  "KNO3": {
+    "delta_hf": -494.6,
+    "delta_sf": 133.1
+  },
+  "CH4": {
+    "delta_hf": -74.6,
+    "delta_sf": 186.3
+  },
+  "C2H5OH": {
+    "delta_hf": -277.6,
+    "delta_sf": 160.7
+  },
+  "MnO2": {
+    "delta_hf": -520.0,
+    "delta_sf": 53.1
+  },
+  "KCl": {
+    "delta_hf": -436.5,
+    "delta_sf": 82.6
+  },
+  "FeCl2": {
+    "delta_hf": -341.8,
+    "delta_sf": 118.0
+  },
+  "MgCl2": {
+    "delta_hf": -641.3,
+    "delta_sf": 89.6
+  },
+  "Al": {
+    "delta_hf": 0.0,
+    "delta_sf": 28.3
+  },
+  "Li": {
+    "delta_hf": 0.0,
+    "delta_sf": 29.1
+  },
+  "K": {
+    "delta_hf": 0.0,
+    "delta_sf": 64.7
+  },
+  "Ca": {
+    "delta_hf": 0.0,
+    "delta_sf": 41.6
+  },
+  "P": {
+    "delta_hf": 0.0,
+    "delta_sf": 41.1
+  },
+  "Sn": {
+    "delta_hf": 0.0,
+    "delta_sf": 51.2
+  },
+  "Ni": {
+    "delta_hf": 0.0,
+    "delta_sf": 29.9
+  },
+  "H3PO4": {
+    "delta_hf": -1288.3,
+    "delta_sf": 158.2
+  },
+  "HNO3": {
+    "delta_hf": -207.4,
+    "delta_sf": 146.4
+  },
+  "H2CO3": {
+    "delta_hf": -699.6,
+    "delta_sf": 187.4
+  },
+  "Na2CO3": {
+    "delta_hf": -1130.7,
+    "delta_sf": 135.0
+  },
+  "CaCl2": {
+    "delta_hf": -795.4,
+    "delta_sf": 104.6
+  },
+  "Na2S": {
+    "delta_hf": -364.8,
+    "delta_sf": 83.7
+  },
+  "NH4Cl": {
+    "delta_hf": -314.4,
+    "delta_sf": 94.6
+  },
+  "NH4NO3": {
+    "delta_hf": -365.6,
+    "delta_sf": 151.1
+  },
+  "KClO3": {
+    "delta_hf": -397.7,
+    "delta_sf": 143.1
+  },
+  "FeCl3": {
+    "delta_hf": -399.5,
+    "delta_sf": 142.3
+  },
+  "Al2O3": {
+    "delta_hf": -1675.7,
+    "delta_sf": 50.9
+  },
+  "SO2": {
+    "delta_hf": -296.8,
+    "delta_sf": 248.2
+  },
+  "SO3": {
+    "delta_hf": -395.7,
+    "delta_sf": 256.8
+  },
+  "C3H8": {
+    "delta_hf": -104.7,
+    "delta_sf": 270.3
+  },
+  "C6H12O6": {
+    "delta_hf": -1274.4,
+    "delta_sf": 212.1
+  },
+  "C2H2": {
+    "delta_hf": 226.7,
+    "delta_sf": 200.9
+  },
+  "C2H4": {
+    "delta_hf": 52.4,
+    "delta_sf": 219.3
+  },
+  "C4H10": {
+    "delta_hf": -125.7,
+    "delta_sf": 310.1
+  },
+  "Cu(OH)2": {
+    "delta_hf": -449.8,
+    "delta_sf": 108.0
+  },
+  "Fe(OH)3": {
+    "delta_hf": -823.0,
+    "delta_sf": 106.7
+  },
+  "CuO": {
+    "delta_hf": -157.3,
+    "delta_sf": 42.6
+  },
+  "Ca(OH)2": {
+    "delta_hf": -985.2,
+    "delta_sf": 83.4
+  },
+  "LiOH": {
+    "delta_hf": -484.9,
+    "delta_sf": 42.8
+  },
+  "PbSO4": {
+    "delta_hf": -920.0,
+    "delta_sf": 148.5
+  },
+  "AlCl3": {
+    "delta_hf": -704.2,
+    "delta_sf": 110.7
+  },
+  "H2S": {
+    "delta_hf": -20.6,
+    "delta_sf": 205.8
+  },
+  "NO2": {
+    "delta_hf": 33.2,
+    "delta_sf": 240.1
+  },
+  "N2O": {
+    "delta_hf": 82.1,
+    "delta_sf": 219.9
+  },
+  "Na2O": {
+    "delta_hf": -414.2,
+    "delta_sf": 75.1
+  },
+  "Na2O2": {
+    "delta_hf": -510.9,
+    "delta_sf": 95.0
+  },
+  "ZnSO4": {
+    "delta_hf": -982.8,
+    "delta_sf": 110.5
+  },
+  "Cu(NO3)2": {
+    "delta_hf": -302.9,
+    "delta_sf": 193.3
+  },
+  "Zn(NO3)2": {
+    "delta_hf": -483.7,
+    "delta_sf": 180.7
+  },
+  "MgSO4": {
+    "delta_hf": -1284.9,
+    "delta_sf": 91.6
+  },
+  "NiSO4": {
+    "delta_hf": -872.9,
+    "delta_sf": 92.0
+  },
+  "SnCl2": {
+    "delta_hf": -325.1,
+    "delta_sf": 134.0
+  },
+  "Ag": {
+    "delta_hf": 0.0,
+    "delta_sf": 42.6
+  },
+  "Mg(OH)2": {
+    "delta_hf": -924.5,
+    "delta_sf": 63.2
+  },
+  "MgCO3": {
+    "delta_hf": -1095.8,
+    "delta_sf": 65.7
+  },
+  "Na3PO4": {
+    "delta_hf": -1917.4,
+    "delta_sf": 173.8
+  },
+  "K2SO4": {
+    "delta_hf": -1437.8,
+    "delta_sf": 175.6
+  },
+  "H2SO3": {
+    "delta_hf": -608.8,
+    "delta_sf": 232.2
+  },
+  "I2": {
+    "delta_hf": 0.0,
+    "delta_sf": 116.1
+  },
+  "P4O10": {
+    "delta_hf": -2984.0,
+    "delta_sf": 228.9
+  },
+  "Mg3N2": {
+    "delta_hf": -461.1,
+    "delta_sf": 87.9
+  },
+  "CaSO4": {
+    "delta_hf": -1434.1,
+    "delta_sf": 106.7
+  },
+  "Fe3O4": {
+    "delta_hf": -1118.4,
+    "delta_sf": 146.4
+  },
+  "NH4HCO3": {
+    "delta_hf": -849.4,
+    "delta_sf": 120.9
+  },
+  "KNO2": {
+    "delta_hf": -369.8,
+    "delta_sf": 152.1
+  },
+  "MnCl2": {
+    "delta_hf": -481.3,
+    "delta_sf": 118.2
+  },
+  "Na2ZnO2": {
+    "delta_hf": -1025.0,
+    "delta_sf": 90.0
+  },
+  "NaAlO2": {
+    "delta_hf": -1133.0,
+    "delta_sf": 70.4
+  },
+  "Al2(SO4)3": {
+    "delta_hf": -3440.8,
+    "delta_sf": 239.3
+  },
+  "Ca3(PO4)2": {
+    "delta_hf": -4120.8,
+    "delta_sf": 236.0
+  },
+  "Na2S2O3": {
+    "delta_hf": -1123.0,
+    "delta_sf": 155.0
+  },
+  "K2Cr2O7": {
+    "delta_hf": -2033.0,
+    "delta_sf": 291.2
+  },
+  "CoCl2": {
+    "delta_hf": -312.5,
+    "delta_sf": 109.2
+  },
+  "NiCl2": {
+    "delta_hf": -305.3,
+    "delta_sf": 97.7
+  },
+  "Cr2O3": {
+    "delta_hf": -1139.7,
+    "delta_sf": 81.2
+  },
+  "TiO2": {
+    "delta_hf": -944.7,
+    "delta_sf": 50.3
+  },
+  "SiO2": {
+    "delta_hf": -910.7,
+    "delta_sf": 41.5
+  },
+  "C12H22O11": {
+    "delta_hf": -2222.1,
+    "delta_sf": 360.2
+  },
+  "C2H6O2": {
+    "delta_hf": -460.0,
+    "delta_sf": 163.2
+  },
+  "C3H8O3": {
+    "delta_hf": -669.6,
+    "delta_sf": 206.3
+  },
+  "CS2": {
+    "delta_hf": 89.0,
+    "delta_sf": 151.3
+  },
+  "Br2": {
+    "delta_hf": 0.0,
+    "delta_sf": 152.2
+  },
+  "Si": {
+    "delta_hf": 0.0,
+    "delta_sf": 18.8
+  },
+  "B": {
+    "delta_hf": 0.0,
+    "delta_sf": 5.9
+  },
+  "Ti": {
+    "delta_hf": 0.0,
+    "delta_sf": 30.7
+  },
+  "W": {
+    "delta_hf": 0.0,
+    "delta_sf": 32.6
+  },
+  "Pt": {
+    "delta_hf": 0.0,
+    "delta_sf": 41.6
+  },
+  "Au": {
+    "delta_hf": 0.0,
+    "delta_sf": 47.4
+  },
+  "Pb": {
+    "delta_hf": 0.0,
+    "delta_sf": 64.8
+  },
+  "Co": {
+    "delta_hf": 0.0,
+    "delta_sf": 30.0
+  },
+  "Hg": {
+    "delta_hf": 0.0,
+    "delta_sf": 75.9
+  },
+  "Mn": {
+    "delta_hf": 0.0,
+    "delta_sf": 32.0
+  },
+  "Cr": {
+    "delta_hf": 0.0,
+    "delta_sf": 23.8
+  },
+  "C8H10N4O2": {
+    "delta_hf": -345.1,
+    "delta_sf": 260.0
+  },
+  "C9H8O4": {
+    "delta_hf": -765.0,
+    "delta_sf": 222.0
+  },
+  "C6H8O6": {
+    "delta_hf": -1164.0,
+    "delta_sf": 190.0
+  },
+  "CH4N2O": {
+    "delta_hf": -333.5,
+    "delta_sf": 104.6
+  },
+  "C2H6OS": {
+    "delta_hf": -204.0,
+    "delta_sf": 188.0
+  },
+  "NaI": {
+    "delta_hf": -287.8,
+    "delta_sf": 98.5
+  },
+  "Na2S4O6": {
+    "delta_hf": -1920.0,
+    "delta_sf": 280.0
+  },
+  "PbCl2": {
+    "delta_hf": -359.4,
+    "delta_sf": 136.0
+  },
+  "Pb(OH)2": {
+    "delta_hf": -515.9,
+    "delta_sf": 88.0
+  },
+  "AgI": {
+    "delta_hf": -61.8,
+    "delta_sf": 115.5
+  },
+  "Co(OH)2": {
+    "delta_hf": -539.7,
+    "delta_sf": 79.0
+  },
+  "Cr2(SO4)3": {
+    "delta_hf": -3308.0,
+    "delta_sf": 280.0
+  },
+  "CrCl3": {
+    "delta_hf": -556.5,
+    "delta_sf": 123.0
+  },
+  "CuCl2": {
+    "delta_hf": -220.1,
+    "delta_sf": 108.1
+  },
+  "CuI": {
+    "delta_hf": -67.8,
+    "delta_sf": 96.7
+  },
+  "KBr": {
+    "delta_hf": -393.8,
+    "delta_sf": 95.9
+  },
+  "KI3": {
+    "delta_hf": -340.0,
+    "delta_sf": 220.0
+  },
+  "KMnO4": {
+    "delta_hf": -837.2,
+    "delta_sf": 171.7
+  },
+  "Ni(OH)2": {
+    "delta_hf": -529.7,
+    "delta_sf": 88.0
+  },
+  "SnCl4": {
+    "delta_hf": -511.3,
+    "delta_sf": 258.6
+  },
+  "CuS": {
+    "delta_hf": -53.1,
+    "delta_sf": 66.5
+  },
+  "NiS": {
+    "delta_hf": -82.0,
+    "delta_sf": 53.0
+  },
+  "PbS": {
+    "delta_hf": -100.4,
+    "delta_sf": 91.2
+  },
+  "PbO": {
+    "delta_hf": -219.0,
+    "delta_sf": 66.5
+  },
+  "PbCrO4": {
+    "delta_hf": -930.9,
+    "delta_sf": 146.0
+  },
+  "K2CrO4": {
+    "delta_hf": -1403.7,
+    "delta_sf": 200.1
+  },
+  "Ag2CrO4": {
+    "delta_hf": -731.7,
+    "delta_sf": 217.6
+  },
+  "Ag2S": {
+    "delta_hf": -32.6,
+    "delta_sf": 144.0
+  },
+  "CdS": {
+    "delta_hf": -161.9,
+    "delta_sf": 64.9
+  },
+  "CdCl2": {
+    "delta_hf": -391.5,
+    "delta_sf": 115.3
+  },
+  "Fe(OH)2": {
+    "delta_hf": -569.0,
+    "delta_sf": 88.0
+  },
+  "Zn(OH)2": {
+    "delta_hf": -641.9,
+    "delta_sf": 81.2
+  },
+  "Fe(NO3)3": {
+    "delta_hf": -670.7,
+    "delta_sf": 234.0
+  },
+  "Fe2(SO4)3": {
+    "delta_hf": -2583.0,
+    "delta_sf": 307.5
+  },
+  "Fe(SCN)3": {
+    "delta_hf": -250.0,
+    "delta_sf": 280.0
+  },
+  "KSCN": {
+    "delta_hf": -200.2,
+    "delta_sf": 124.3
+  },
+  "NO": {
+    "delta_hf": 91.3,
+    "delta_sf": 210.8
+  },
+  "CO": {
+    "delta_hf": -110.5,
+    "delta_sf": 197.7
+  },
+  "Ca(NO3)2": {
+    "delta_hf": -938.2,
+    "delta_sf": 193.2
+  },
+  "Ba(NO3)2": {
+    "delta_hf": -992.1,
+    "delta_sf": 213.8
+  },
+  "BaCO3": {
+    "delta_hf": -1216.3,
+    "delta_sf": 112.1
+  },
+  "K3PO4": {
+    "delta_hf": -1979.9,
+    "delta_sf": 192.3
+  },
+  "Al(OH)3": {
+    "delta_hf": -1276.0,
+    "delta_sf": 71.1
+  },
+  "Mg(NO3)2": {
+    "delta_hf": -790.6,
+    "delta_sf": 164.0
+  },
+  "Mn(OH)2": {
+    "delta_hf": -695.4,
+    "delta_sf": 99.2
+  },
+  "CH3COOC2H5": {
+    "delta_hf": -480.2,
+    "delta_sf": 259.4
+  },
+  "CH3COOCH3": {
+    "delta_hf": -442.8,
+    "delta_sf": 235.2
+  },
+  "CH3OH": {
+    "delta_hf": -239.2,
+    "delta_sf": 126.8
+  },
+  "CaC2": {
+    "delta_hf": -59.8,
+    "delta_sf": 70.0
+  },
+  "C2H6": {
+    "delta_hf": -83.8,
+    "delta_sf": 229.2
+  },
+  "Na2SO3": {
+    "delta_hf": -1100.8,
+    "delta_sf": 145.9
+  },
+  "C6H6": {
+    "delta_hf": 49.1,
+    "delta_sf": 173.4
+  },
+  "C6H5Br": {
+    "delta_hf": -17.4,
+    "delta_sf": 219.2
+  },
+  "HBr": {
+    "delta_hf": -36.3,
+    "delta_sf": 198.7
+  },
+  "CoSO4": {
+    "delta_hf": -888.3,
+    "delta_sf": 118.0
+  },
+  "MnSO4": {
+    "delta_hf": -1065.3,
+    "delta_sf": 112.1
+  },
+  "AgBr": {
+    "delta_hf": -100.4,
+    "delta_sf": 107.1
+  },
+  "NaBr": {
+    "delta_hf": -361.1,
+    "delta_sf": 86.8
+  },
+  "K2S": {
+    "delta_hf": -380.7,
+    "delta_sf": 105.0
+  },
+  "MnS": {
+    "delta_hf": -214.2,
+    "delta_sf": 78.2
+  },
+  "CoS": {
+    "delta_hf": -82.8,
+    "delta_sf": 67.0
+  },
+  "ZnS": {
+    "delta_hf": -206.0,
+    "delta_sf": 57.7
+  },
+  "NaF": {
+    "delta_hf": -576.6,
+    "delta_sf": 51.1
+  },
+  "KF": {
+    "delta_hf": -567.3,
+    "delta_sf": 66.6
+  },
+  "CaF2": {
+    "delta_hf": -1228.0,
+    "delta_sf": 68.9
+  },
+  "SrCl2": {
+    "delta_hf": -828.9,
+    "delta_sf": 114.8
+  },
+  "Ba(OH)2": {
+    "delta_hf": -944.7,
+    "delta_sf": 107.0
+  },
+  "HCOOH": {
+    "delta_hf": -424.7,
+    "delta_sf": 129.0
+  },
+  "H2C2O4": {
+    "delta_hf": -831.3,
+    "delta_sf": 120.0
+  },
+  "HF": {
+    "delta_hf": -273.3,
+    "delta_sf": 173.8
+  },
+  "HI": {
+    "delta_hf": 26.5,
+    "delta_sf": 206.6
+  },
+  "F2": {
+    "delta_hf": 0.0,
+    "delta_sf": 202.8
+  },
+  "Rb": {
+    "delta_hf": 0.0,
+    "delta_sf": 76.8
+  },
+  "Cs": {
+    "delta_hf": 0.0,
+    "delta_sf": 85.2
+  },
+  "Sr": {
+    "delta_hf": 0.0,
+    "delta_sf": 55.0
+  },
+  "Ba": {
+    "delta_hf": 0.0,
+    "delta_sf": 62.5
+  },
+  "Cd": {
+    "delta_hf": 0.0,
+    "delta_sf": 51.8
+  },
+  "NH4Cl_decomp": {
+    "delta_hf": -314.4,
+    "delta_sf": 94.6
+  },
+  "KHCO3": {
+    "delta_hf": -963.2,
+    "delta_sf": 115.5
+  },
+  "NaClO3": {
+    "delta_hf": -365.8,
+    "delta_sf": 123.4
+  },
+  "CH3Cl": {
+    "delta_hf": -81.9,
+    "delta_sf": 234.6
+  },
+  "C2H5Br": {
+    "delta_hf": -90.5,
+    "delta_sf": 286.7
+  },
+  "C2H4Br2": {
+    "delta_hf": -145.3,
+    "delta_sf": 223.3
+  },
+  "C6H5Cl": {
+    "delta_hf": 11.0,
+    "delta_sf": 217.5
+  },
+  "C7H8": {
+    "delta_hf": 12.0,
+    "delta_sf": 221.0
+  },
+  "CH3CHO": {
+    "delta_hf": -166.2,
+    "delta_sf": 263.7
+  },
+  "CH3COCl": {
+    "delta_hf": -272.9,
+    "delta_sf": 200.8
+  },
+  "C6H5COCH3": {
+    "delta_hf": -142.5,
+    "delta_sf": 246.0
+  },
+  "C2H5ONa": {
+    "delta_hf": -370.0,
+    "delta_sf": 120.0
+  },
+  "C6H5ONa": {
+    "delta_hf": -348.0,
+    "delta_sf": 135.0
+  },
+  "C6H2Br3OH": {
+    "delta_hf": -220.0,
+    "delta_sf": 330.0
+  },
+  "C6H5NH3Cl": {
+    "delta_hf": -297.0,
+    "delta_sf": 230.0
+  },
+  "C3H7Cl": {
+    "delta_hf": -130.0,
+    "delta_sf": 306.0
+  },
+  "C3H7Br": {
+    "delta_hf": -121.0,
+    "delta_sf": 310.0
+  },
+  "C5H10": {
+    "delta_hf": -36.4,
+    "delta_sf": 262.6
+  },
+  "(C2H4)n": {
+    "delta_hf": -54.0,
+    "delta_sf": 80.0
+  },
+  "CH3CH(OH)CH2CHO": {
+    "delta_hf": -416.0,
+    "delta_sf": 250.0
+  },
+  "HCOONa": {
+    "delta_hf": -666.5,
+    "delta_sf": 102.0
+  },
+  "C6H5COONa": {
+    "delta_hf": -550.0,
+    "delta_sf": 160.0
+  },
+  "Na2C2O4": {
+    "delta_hf": -1318.0,
+    "delta_sf": 140.0
+  },
+  "PCl5": {
+    "delta_hf": -443.5,
+    "delta_sf": 364.6
+  },
+  "POCl3": {
+    "delta_hf": -597.1,
+    "delta_sf": 222.5
+  },
+  "SOCl2": {
+    "delta_hf": -245.6,
+    "delta_sf": 309.8
+  },
+  "C3H6": {
+    "delta_hf": 20.0,
+    "delta_sf": 226.8
+  },
+  "[Cu(NH3)4]SO4": {
+    "delta_hf": -955.0,
+    "delta_sf": 300.0
+  },
+  "Na2CrO4": {
+    "delta_hf": -1342.2,
+    "delta_sf": 176.6
+  },
+  "TiCl4": {
+    "delta_hf": -804.2,
+    "delta_sf": 252.3
+  },
+  "ZnO": {
+    "delta_hf": -350.5,
+    "delta_sf": 43.7
+  },
+  "Cu2O": {
+    "delta_hf": -168.6,
+    "delta_sf": 93.1
+  },
+  "C6H6O6": {
+    "delta_hf": -1189.0,
+    "delta_sf": 185.0
+  },
+  "C3H6O3": {
+    "delta_hf": -686.6,
+    "delta_sf": 127.6
+  },
+  "CH3COCOOH": {
+    "delta_hf": -584.5,
+    "delta_sf": 179.5
+  },
+  "C57H110O6": {
+    "delta_hf": -2800.0,
+    "delta_sf": 1600.0
+  },
+  "C17H35COONa": {
+    "delta_hf": -820.0,
+    "delta_sf": 470.0
+  },
+  "ATP": {
+    "delta_hf": -3012.0,
+    "delta_sf": 320.0
+  },
+  "ADP": {
+    "delta_hf": -2620.0,
+    "delta_sf": 280.0
+  },
+  "Pi": {
+    "delta_hf": -1277.0,
+    "delta_sf": 158.0
+  },
+  "NAD+": {
+    "delta_hf": -320.0,
+    "delta_sf": 250.0
+  },
+  "NADH": {
+    "delta_hf": -342.0,
+    "delta_sf": 260.0
+  },
+  "C6H12O7": {
+    "delta_hf": -1370.0,
+    "delta_sf": 230.0
+  },
+  "(C6H10O5)n": {
+    "delta_hf": -960.0,
+    "delta_sf": 180.0
+  },
+  "FeS2": {
+    "delta_hf": -178.2,
+    "delta_sf": 52.9
+  },
+  "H2S2O7": {
+    "delta_hf": -1273.6,
+    "delta_sf": 200.0
+  },
+  "CaSiO3": {
+    "delta_hf": -1634.9,
+    "delta_sf": 81.9
+  },
+  "Na2SiO3": {
+    "delta_hf": -1561.4,
+    "delta_sf": 113.9
+  },
+  "SiF4": {
+    "delta_hf": -1615.0,
+    "delta_sf": 282.8
+  },
+  "H3BO3": {
+    "delta_hf": -1094.3,
+    "delta_sf": 90.0
+  },
+  "B2O3": {
+    "delta_hf": -1273.5,
+    "delta_sf": 54.0
+  },
+  "HClO": {
+    "delta_hf": -120.9,
+    "delta_sf": 142.0
+  },
+  "NaClO": {
+    "delta_hf": -347.1,
+    "delta_sf": 102.0
+  },
+  "HCHO": {
+    "delta_hf": -108.6,
+    "delta_sf": 218.8
+  },
+  "K2O": {
+    "delta_hf": -361.5,
+    "delta_sf": 94.1
+  },
+  "K2CO3": {
+    "delta_hf": -1151.0,
+    "delta_sf": 155.5
+  },
+  "C10H22": {
+    "delta_hf": -249.5,
+    "delta_sf": 425.9
+  },
+  "C5H12": {
+    "delta_hf": -146.4,
+    "delta_sf": 348.4
+  },
+  "amino_acids": {
+    "delta_hf": -520.0,
+    "delta_sf": 160.0
+  },
+  "RCOONa": {
+    "delta_hf": -750.0,
+    "delta_sf": 200.0
+  },
+  "protein": {
+    "delta_hf": -800.0,
+    "delta_sf": 300.0
+  },
+  "C6H5COOH": {
+    "delta_hf": -385.1,
+    "delta_sf": 167.6
+  },
+  "C6H5NH2": {
+    "delta_hf": 31.6,
+    "delta_sf": 191.4
+  }
 }

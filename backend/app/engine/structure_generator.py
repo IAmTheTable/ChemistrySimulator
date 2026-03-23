@@ -172,6 +172,51 @@ FORMULA_TO_SMILES: dict[str, str] = {
     "C2H3N": "CC#N",               # Acetonitrile
     "C3H5N": "CCC#N",              # Propionitrile
     "C4H9OH": "CCCCO",             # Butanol (1-)
+    # New organic compounds
+    "CH3Cl": "CCl",                    # Chloromethane
+    "C2H5Br": "CCBr",                 # Bromoethane
+    "C2H4Br2": "BrCCBr",             # 1,2-Dibromoethane
+    "C6H5Cl": "Clc1ccccc1",          # Chlorobenzene
+    "CH3CHO": "CC=O",                 # Acetaldehyde
+    "CH3COCl": "CC(=O)Cl",           # Acetyl chloride
+    "C6H5COCH3": "CC(=O)c1ccccc1",   # Acetophenone
+    "C6H5ONa": "[Na+].[O-]c1ccccc1", # Sodium phenoxide
+    "C6H2Br3OH": "Oc1c(Br)cc(Br)cc1Br",  # 2,4,6-Tribromophenol
+    "C6H5NH3Cl": "[NH3+]c1ccccc1.[Cl-]",  # Anilinium chloride
+    "C3H7Cl": "CCCCl",               # 1-Chloropropane
+    "C3H7Br": "CCCBr",               # 1-Bromopropane
+    "C3H6": "CC=C",                   # Propene
+    "C5H10": "CCCC=C",               # 1-Pentene
+    "C2H3Cl": "C=CCl",               # Vinyl chloride
+    "C3H7OH": "CCCO",                # Propanol
+    "C2H5ONa": "[Na+].[O-]CC",       # Sodium ethoxide
+    "C6H5COONa": "[Na+].[O-]C(=O)c1ccccc1",  # Sodium benzoate
+    "HCOONa": "[Na+].[O-]C=O",       # Sodium formate
+    "Na2C2O4": "[Na+].[Na+].[O-]C(=O)C(=O)[O-]",  # Sodium oxalate
+    "HCHO": "C=O",                    # Formaldehyde
+    "CH3CH(OH)CH2CHO": "CC(O)CC=O",  # Aldol product
+    # New inorganic compounds
+    "ZnO": "[Zn+2].[O-2]",
+    "Cu2O": "[Cu+].[Cu+].[O-2]",
+    "TiCl4": "[Ti](Cl)(Cl)(Cl)Cl",
+    "Na2SiO3": "[Na+].[Na+].[O-][Si](=O)[O-]",
+    "H3BO3": "OB(O)O",               # Boric acid
+    "HClO": "OCl",                    # Hypochlorous acid
+    "NaClO": "[Na+].[O-]Cl",         # Sodium hypochlorite
+    "CaSiO3": "[Ca+2].[O-][Si](=O)[O-]",
+    "H2S2O7": "OS(=O)(=O)OS(=O)(=O)O",  # Oleum
+    "SiF4": "[Si](F)(F)(F)F",
+    "FeS2": "[Fe+2].[S-].[S-]",      # Pyrite approx
+    # Biochem compounds
+    "C3H6O3": "CC(O)C(=O)O",         # Lactic acid
+    "CH3COCOOH": "CC(=O)C(=O)O",     # Pyruvic acid
+    "C6H6O6": "OC1OC(=O)C(=O)C(O)=C1O",  # Dehydroascorbic acid approx
+    "C6H12O7": "OCC(O)C(O)C(O)C(O)C(=O)O",  # Gluconic acid
+    # Industrial solvents / reagents
+    "PCl5": "ClP(Cl)(Cl)(Cl)Cl",
+    "POCl3": "O=P(Cl)(Cl)Cl",
+    "SOCl2": "O=S(Cl)Cl",
+    "B2O3": "B1OB(O1)=O",
 }
 
 # RDKit bond type to integer order mapping

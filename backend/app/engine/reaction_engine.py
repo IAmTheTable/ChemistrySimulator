@@ -69,18 +69,31 @@ class ReactionEngine:
         pressure = conditions.get("pressure", 1)
         temperature = conditions.get("temperature", 25)
 
-        # 2. Try curated match
-        curated = self._matcher.match(formulas)
-        if curated is not None:
-            conditions_met, reason = self._check_conditions_met(curated, conditions)
-            if not conditions_met:
-                return self._build_conditions_not_met_result(curated, reactants, reason)
-            result = self._build_curated_result(curated, reactants, total_volume_ml)
-            blocked = self._check_atmosphere_block(result, atmosphere)
-            if blocked is not None:
-                return blocked
-            result = self._apply_environment_notes(result, atmosphere, pressure, temperature)
-            return result
+        # 2. Try curated match — consider all candidates and pick best
+        all_curated = self._matcher.match_all(formulas)
+        if all_curated:
+            # First pass: find a reaction whose conditions ARE met
+            best_met = None
+            best_unmet = None
+            best_unmet_reason = ""
+            for curated in all_curated:
+                conditions_met, reason = self._check_conditions_met(curated, conditions)
+                if conditions_met:
+                    best_met = curated
+                    break
+                elif best_unmet is None:
+                    best_unmet = curated
+                    best_unmet_reason = reason
+
+            if best_met is not None:
+                result = self._build_curated_result(best_met, reactants, total_volume_ml)
+                blocked = self._check_atmosphere_block(result, atmosphere)
+                if blocked is not None:
+                    return blocked
+                result = self._apply_environment_notes(result, atmosphere, pressure, temperature)
+                return result
+            elif best_unmet is not None:
+                return self._build_conditions_not_met_result(best_unmet, reactants, best_unmet_reason)
 
         # 3. Try predicted reaction
         predicted = self._predictor.predict(formulas, conditions)
