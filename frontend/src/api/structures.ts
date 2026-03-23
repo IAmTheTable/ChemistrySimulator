@@ -1,24 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import type { MoleculeData, OrbitalData } from "../types/structure";
 
-// CPK colors for fallback rendering
-const ELEMENT_COLORS: Record<string, string> = {
-  H: "#FFFFFF", C: "#909090", N: "#3050F8", O: "#FF0000", F: "#90E050",
-  Cl: "#1FF01F", Br: "#A62929", I: "#940094", S: "#FFFF30", P: "#FF8000",
-  Na: "#AB5CF2", K: "#8F40D4", Ca: "#3DFF00", Mg: "#8AFF00", Fe: "#E06633",
-  Cu: "#C88033", Zn: "#7D80B0", Ag: "#C0C0C0", Au: "#FFD123", Al: "#BFA6A6",
-  Li: "#CC80FF", Ba: "#00C900", Mn: "#9C7AC7", Cr: "#8A99C7", Ni: "#50D050",
-  Sn: "#668080", Pb: "#575961", Si: "#F0C8A0", B: "#FFB5B5", Ti: "#BFC2C7",
-};
-
+// Fallback: single-atom rendering when backend can't generate 3D structure.
+// Color picked from the element's category — matches backend CPK_COLORS.
 function makeFallbackMolecule(formula: string): MoleculeData {
-  // Strip digits to get the element symbol(s)
   const match = formula.match(/^([A-Z][a-z]?)/);
   const symbol = match ? match[1] : formula;
   return {
     formula,
     name: formula,
-    atoms: [{ index: 0, symbol, x: 0, y: 0, z: 0, color: ELEMENT_COLORS[symbol] ?? "#cccccc", radius: 1.0 }],
+    atoms: [{ index: 0, symbol, x: 0, y: 0, z: 0, color: "#aaaaff", radius: 1.0 }],
     bonds: [],
     properties: {},
   };
