@@ -20,9 +20,9 @@ import { useLabStore } from "./stores/labStore";
 import { usePhysicsSimulation } from "./hooks/usePhysicsSimulation";
 
 const LAYOUT = {
-  SIDEBAR_DEFAULT: 280,
-  SIDEBAR_MIN: 200,
-  BOTTOM_DEFAULT: 160,
+  SIDEBAR_DEFAULT: 240,
+  SIDEBAR_MIN: 180,
+  BOTTOM_DEFAULT: 180,
   BOTTOM_MIN: 80,
   MIN_LAB_WIDTH: 300,
   MIN_TOP_HEIGHT: 150,
@@ -55,48 +55,32 @@ export default function App() {
       <StationTabs />
 
       <div className="flex-1 flex min-h-0">
-
+        {/* Left sidebar: Lab tools */}
         <div style={{ width: sidebarWidth }} className="bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0 overflow-hidden">
-          <div className="flex-1 flex flex-col min-h-0 border-b border-gray-800">
-            <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
-              <Tabs.List className="flex border-b border-gray-800 shrink-0">
-                <Tabs.Trigger value="lab" className={TAB_CLASS}>Lab</Tabs.Trigger>
-                <Tabs.Trigger value="reactions" className={TAB_CLASS}>Reactions</Tabs.Trigger>
-                <Tabs.Trigger value="spectra" className={TAB_CLASS}>Spectra</Tabs.Trigger>
-              </Tabs.List>
-              <Tabs.Content value="lab" className="flex-1 p-3 overflow-y-auto space-y-4">
-                <EquipmentPalette />
-                <div className="border-t border-gray-800 pt-3"><SubstanceInventory /></div>
-                <div className="border-t border-gray-800 pt-3"><CustomSubstanceInput /></div>
-                <div className="border-t border-gray-800 pt-3"><SimulationToggle /></div>
-              </Tabs.Content>
-              <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
-                <ReactionLog />
-              </Tabs.Content>
-              <Tabs.Content value="spectra" className="flex-1 p-3 overflow-y-auto">
-                <SpectraPanel />
-              </Tabs.Content>
-            </Tabs.Root>
-          </div>
-
-          <div className="flex-1 flex flex-col min-h-0">
-            <Tabs.Root value={activeBottomTab} onValueChange={setActiveBottomTab} className="flex flex-col h-full">
-              <Tabs.List className="flex border-b border-gray-800 shrink-0">
-                <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
-                <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
-              </Tabs.List>
-              <Tabs.Content value="inspector" className="flex-1 px-3 py-2 overflow-y-auto">
-                <ElementInspector />
-              </Tabs.Content>
-              <Tabs.Content value="structure" className="flex-1 px-3 py-2 flex flex-col min-h-0">
-                <StructurePanel />
-              </Tabs.Content>
-            </Tabs.Root>
-          </div>
+          <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
+            <Tabs.List className="flex border-b border-gray-800 shrink-0">
+              <Tabs.Trigger value="lab" className={TAB_CLASS}>Lab</Tabs.Trigger>
+              <Tabs.Trigger value="reactions" className={TAB_CLASS}>Reactions</Tabs.Trigger>
+              <Tabs.Trigger value="spectra" className={TAB_CLASS}>Spectra</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="lab" className="flex-1 p-3 overflow-y-auto space-y-3">
+              <EquipmentPalette />
+              <div className="border-t border-gray-800 pt-3"><SubstanceInventory /></div>
+              <div className="border-t border-gray-800 pt-3"><CustomSubstanceInput /></div>
+              <div className="border-t border-gray-800 pt-3"><SimulationToggle /></div>
+            </Tabs.Content>
+            <Tabs.Content value="reactions" className="flex-1 p-3 overflow-y-auto">
+              <ReactionLog />
+            </Tabs.Content>
+            <Tabs.Content value="spectra" className="flex-1 p-3 overflow-y-auto">
+              <SpectraPanel />
+            </Tabs.Content>
+          </Tabs.Root>
         </div>
 
         <ResizeHandle direction="vertical" onResize={handleSidebarResize} />
 
+        {/* Center + bottom: lab scene above, periodic table + inspector below */}
         <div className="flex-1 flex flex-col min-h-0">
           <div className="flex-1 bg-gray-950 min-h-0 overflow-hidden">
             <LabScene />
@@ -104,9 +88,27 @@ export default function App() {
 
           <ResizeHandle direction="horizontal" onResize={handleBottomResize} />
 
-          <div style={{ height: bottomHeight }} className="bg-gray-900 border-t border-gray-800 px-4 py-2 overflow-y-auto flex-shrink-0">
-            <div className="w-full">
+          {/* Bottom panel: periodic table (left) + inspector/structure (right) */}
+          <div style={{ height: bottomHeight }} className="bg-gray-900 border-t border-gray-800 flex flex-shrink-0 overflow-hidden">
+            {/* Periodic table — left, scrollable */}
+            <div className="px-3 py-2 overflow-auto border-r border-gray-800">
               <PeriodicTable />
+            </div>
+
+            {/* Inspector/Structure — fills remaining space right of table */}
+            <div className="flex-1 min-w-0 overflow-hidden">
+              <Tabs.Root value={activeBottomTab} onValueChange={setActiveBottomTab} className="flex flex-col h-full">
+                <Tabs.List className="flex border-b border-gray-800 shrink-0">
+                  <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
+                  <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.Content value="inspector" className="flex-1 px-3 py-2 overflow-y-auto">
+                  <ElementInspector />
+                </Tabs.Content>
+                <Tabs.Content value="structure" className="flex-1 px-3 py-2 flex flex-col min-h-0">
+                  <StructurePanel />
+                </Tabs.Content>
+              </Tabs.Root>
             </div>
           </div>
         </div>
