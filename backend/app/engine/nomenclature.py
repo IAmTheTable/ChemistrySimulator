@@ -672,12 +672,132 @@ def _name_ionic(
     return _fallback_name(counts, ordered_symbols)
 
 
+def _name_organic(counts: dict[str, int]) -> str:
+    """Name an organic compound based on its molecular formula.
+
+    Classifies compounds by functional group using element ratios
+    and degree of unsaturation to produce a systematic name.
+    """
+    c = counts.get("C", 0)
+    h = counts.get("H", 0)
+    o = counts.get("O", 0)
+    n = counts.get("N", 0)
+    s = counts.get("S", 0)
+    cl = counts.get("Cl", 0)
+    br = counts.get("Br", 0)
+    f_count = counts.get("F", 0)
+
+    # Carbon chain prefix
+    _CARBON_PREFIX = {
+        1: "meth", 2: "eth", 3: "prop", 4: "but",
+        5: "pent", 6: "hex", 7: "hept", 8: "oct",
+        9: "non", 10: "dec", 11: "undec", 12: "dodec",
+        13: "tridec", 14: "tetradec", 15: "pentadec",
+        16: "hexadec", 17: "heptadec", 18: "octadec",
+        19: "nonadec", 20: "icos",
+    }
+
+    prefix = _CARBON_PREFIX.get(c, f"C{c}")
+
+    # Degree of unsaturation = (2C + 2 + N - H - halogen) / 2
+    halogens = cl + br + f_count
+    dou = (2 * c + 2 + n - h - halogens) / 2
+
+    # Only C and H
+    if set(counts.keys()) <= {"C", "H"}:
+        if h == 2 * c + 2:
+            return f"{prefix.capitalize()}ane"        # Alkane: CnH(2n+2)
+        elif h == 2 * c:
+            return f"{prefix.capitalize()}ene"        # Alkene: CnH(2n)
+        elif h == 2 * c - 2:
+            if dou >= 4 and c >= 6:
+                return f"{prefix.capitalize()}yl Aromatic"
+            return f"{prefix.capitalize()}yne"        # Alkyne: CnH(2n-2)
+        elif dou >= 4:
+            return f"Aromatic Hydrocarbon (C{c}H{h})"
+        else:
+            return f"Hydrocarbon (C{c}H{h})"
+
+    # C, H, O compounds
+    if set(counts.keys()) <= {"C", "H", "O"}:
+        if o == 1 and h == 2 * c + 2:
+            return f"{prefix.capitalize()}anol"       # Alcohol: CnH(2n+1)OH
+        if o == 1 and h == 2 * c:
+            if c == 1:
+                return "Formaldehyde"
+            return f"{prefix.capitalize()}anal"       # Aldehyde
+        if o == 1 and h == 2 * c and c >= 3:
+            return f"{prefix.capitalize()}anone"      # Ketone
+        if o == 2 and h == 2 * c:
+            return f"{prefix.capitalize()}anoic Acid" # Carboxylic acid
+        if o == 2 and h == 2 * c + 2 and c >= 2:
+            return f"{prefix.capitalize()}yl Ester"
+        if o >= 3 and h >= 2 * c:
+            return f"Polyhydroxy Compound (C{c}H{h}O{o})"
+        return f"Oxygenated Organic Compound (C{c}H{h}O{o})"
+
+    # C, H, N compounds
+    if set(counts.keys()) <= {"C", "H", "N"}:
+        if n == 1 and h == 2 * c + 3:
+            return f"{prefix.capitalize()}amine"      # Primary amine
+        if n == 1:
+            return f"Nitrogen Heterocycle (C{c}H{h}N)"
+        if n == 2:
+            return f"Diamine/Diazine (C{c}H{h}N{n})"
+        if n >= 3:
+            return f"Polynitrogen Compound (C{c}H{h}N{n})"
+
+    # C, H, O, N compounds
+    if set(counts.keys()) <= {"C", "H", "O", "N"}:
+        if n >= 1 and o >= 1:
+            if n == 1 and o == 2:
+                return f"Amino Acid or Nitro Compound (C{c}H{h}NO{o})"
+            return f"Organic Compound (C{c}H{h}N{n}O{o})"
+
+    # C, H, halogen compounds
+    if cl > 0 or br > 0 or f_count > 0:
+        halogen_names = []
+        if f_count > 0:
+            f_prefix = {1: "", 2: "di", 3: "tri", 4: "tetra"}.get(f_count, str(f_count) + "-")
+            halogen_names.append(f"{f_prefix}fluoro")
+        if cl > 0:
+            cl_prefix = {1: "", 2: "di", 3: "tri", 4: "tetra"}.get(cl, str(cl) + "-")
+            halogen_names.append(f"{cl_prefix}chloro")
+        if br > 0:
+            br_prefix = {1: "", 2: "di", 3: "tri", 4: "tetra"}.get(br, str(br) + "-")
+            halogen_names.append(f"{br_prefix}bromo")
+        halogen_str = ",".join(halogen_names)
+        return f"{halogen_str.capitalize()}{prefix}ane"
+
+    # C, H, S compounds
+    if s > 0:
+        if s == 1 and o == 0:
+            return f"{prefix.capitalize()}anethiol"
+        return f"Sulfur Organic Compound (C{c}H{h}S{s})"
+
+    # General organic fallback -- still much better than listing element names
+    formula_parts = []
+    for sym in ["C", "H", "N", "O", "S", "P", "F", "Cl", "Br", "I"]:
+        if sym in counts:
+            formula_parts.append(f"{sym}{counts[sym]}" if counts[sym] > 1 else sym)
+    # Include any remaining elements not in the standard list
+    for sym in counts:
+        if sym not in {"C", "H", "N", "O", "S", "P", "F", "Cl", "Br", "I"}:
+            formula_parts.append(f"{sym}{counts[sym]}" if counts[sym] > 1 else sym)
+    return f"Organic Compound ({''.join(formula_parts)})"
+
+
 def _name_covalent(
     elements: list[tuple[str, int]],
     counts: dict[str, int],
     ordered_symbols: list[str],
 ) -> str:
-    """Name a binary covalent compound using Greek prefix system."""
+    """Name a covalent compound using Greek prefix system or organic naming."""
+    # If organic (contains C), use organic naming
+    if "C" in counts:
+        return _name_organic(counts)
+
+    # Binary covalent (existing logic for non-organic)
     if len(ordered_symbols) != 2:
         return _fallback_name(counts, ordered_symbols)
 
@@ -711,8 +831,20 @@ def _name_covalent(
 
 
 def _fallback_name(counts: dict[str, int], ordered_symbols: list[str]) -> str:
-    """Fallback naming: just use element names."""
+    """Generate a descriptive name for unrecognized compounds.
+
+    Uses Greek prefixes for element counts > 1 to produce a more
+    informative name than simply listing element names.
+    """
     parts = []
     for sym in ordered_symbols:
-        parts.append(_element_name(sym))
-    return " ".join(parts)
+        name = _element_name(sym)
+        count = counts[sym]
+        if count > 1:
+            prefix = _GREEK_PREFIXES.get(count, str(count) + "-")
+            parts.append(f"{prefix}{name.lower()}")
+        else:
+            parts.append(name)
+
+    # Join with spaces, capitalize properly
+    return " ".join(parts).title()
