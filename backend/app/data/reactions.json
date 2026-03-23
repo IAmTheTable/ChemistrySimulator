@@ -303,13 +303,13 @@
       {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
       {"formula": "O2", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": "MnO2"},
+    "conditions": {"temperature": 25, "catalyst": "MnO2", "alt_min_temperature": 60, "notes": "Catalyzed by MnO2, or slow decomposition above 60C"},
     "effects": {
       "color": {"from": "#e6f0ff", "to": "#cce5ff", "speed": "fast"},
       "gas": {"type": "O2", "rate": "vigorous"},
       "heat": "exothermic",
       "precipitate": null,
-      "special": ["foam", "rapid_bubbling"],
+      "special": ["foam", "rapid_bubbling", "elephant_toothpaste"],
       "sounds": ["fizz_vigorous", "whoosh"],
       "safety": ["oxidizer"]
     }
@@ -613,13 +613,13 @@
       {"formula": "FeCl2", "phase": "aq", "color": "#c8e6c9"},
       {"formula": "H2", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Slow at room temperature; heating accelerates. Iron is moderately reactive."},
     "effects": {
       "color": {"from": "#e0e0e0", "to": "#c8e6c9", "speed": "slow"},
       "gas": {"type": "H2", "rate": "slow"},
       "heat": "exothermic",
       "precipitate": null,
-      "special": ["color_change"],
+      "special": ["color_change", "slow_bubbling"],
       "sounds": ["fizz_moderate"],
       "safety": ["flammable_gas"]
     }
@@ -1118,13 +1118,13 @@
     "products_detail": [
       {"formula": "NH3", "phase": "g", "color": null}
     ],
-    "conditions": {"temperature": 450, "min_temperature": 400, "catalyst": "Fe"},
+    "conditions": {"temperature": 450, "min_temperature": 400, "catalyst": "Fe", "min_pressure_atm": 100, "notes": "Haber process: Fe catalyst, 400-500C, 150-300 atm for industrial yield"},
     "effects": {
       "color": {"from": null, "to": null, "speed": "slow"},
       "gas": {"type": "NH3", "rate": "slow"},
       "heat": "exothermic",
       "precipitate": null,
-      "special": ["high_pressure", "haber_process"],
+      "special": ["high_pressure", "haber_process", "industrial_process"],
       "sounds": [],
       "safety": ["toxic_gas", "high_pressure"]
     }
@@ -1195,7 +1195,7 @@
   {
     "reactants": ["Cu", "HNO3"],
     "products": ["Cu(NO3)2", "NO2", "H2O"],
-    "equation": "Cu + 4HNO3 -> Cu(NO3)2 + 2NO2 + 2H2O",
+    "equation": "Cu + 4HNO3(conc) -> Cu(NO3)2 + 2NO2 + 2H2O",
     "reaction_type": "redox",
     "delta_h": -64.0,
     "products_detail": [
@@ -1203,7 +1203,7 @@
       {"formula": "NO2", "phase": "g", "color": "#8b4513"},
       {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
     ],
-    "conditions": {"temperature": 25, "catalyst": null},
+    "conditions": {"temperature": 25, "catalyst": null, "min_concentration": 6, "notes": "Requires concentrated nitric acid"},
     "effects": {
       "color": {"from": "#b87333", "to": "#4fc3f7", "speed": "medium"},
       "gas": {"type": "NO2", "rate": "moderate"},
@@ -1211,7 +1211,7 @@
       "precipitate": null,
       "special": ["brown_gas", "color_change"],
       "sounds": ["fizz_moderate"],
-      "safety": ["toxic_gas", "corrosive"]
+      "safety": ["toxic_gas", "corrosive", "fume_hood_required"]
     }
   },
   {
@@ -2090,6 +2090,512 @@
       "heat": "exothermic",
       "precipitate": {"formula": "I2", "color": "#4b0082"},
       "special": ["color_change", "iodine_formation"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["MnO2", "HCl"],
+    "products": ["MnCl2", "Cl2", "H2O"],
+    "equation": "MnO2 + 4HCl -> MnCl2 + Cl2 + 2H2O",
+    "reaction_type": "redox",
+    "delta_h": -53.0,
+    "products_detail": [
+      {"formula": "MnCl2", "phase": "aq", "color": "#ffc0cb"},
+      {"formula": "Cl2", "phase": "g", "color": "#90ee90"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Classic chlorine gas preparation. Requires concentrated HCl."},
+    "effects": {
+      "color": {"from": "#1a1a1a", "to": "#ffc0cb", "speed": "medium"},
+      "gas": {"type": "Cl2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["green_gas", "pungent_odor", "chlorine_preparation"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["toxic_gas", "corrosive", "fume_hood_required"]
+    }
+  },
+  {
+    "reactants": ["Na2S2O3", "I2"],
+    "products": ["NaI", "Na2S4O6"],
+    "equation": "2Na2S2O3 + I2 -> 2NaI + Na2S4O6",
+    "reaction_type": "redox",
+    "delta_h": -85.0,
+    "products_detail": [
+      {"formula": "NaI", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "Na2S4O6", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Iodometric titration — iodine color disappears at endpoint"},
+    "effects": {
+      "color": {"from": "#4b0082", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["decolorization", "titration_endpoint", "iodometry"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Na2S2O3", "HCl"],
+    "products": ["NaCl", "S", "SO2", "H2O"],
+    "equation": "Na2S2O3 + 2HCl -> 2NaCl + S + SO2 + H2O",
+    "reaction_type": "double_displacement",
+    "delta_h": -32.0,
+    "products_detail": [
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "S", "phase": "s", "color": "#ffff00"},
+      {"formula": "SO2", "phase": "g", "color": null},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Thiosulfate decomposition — turbidity from sulfur, pungent SO2"},
+    "effects": {
+      "color": {"from": "#f8f8f8", "to": "#ffff99", "speed": "slow"},
+      "gas": {"type": "SO2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": {"formula": "S", "color": "#ffff00"},
+      "special": ["turbidity", "sulfur_precipitate", "pungent_odor"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["toxic_gas"]
+    }
+  },
+  {
+    "reactants": ["CoCl2"],
+    "products": ["CoCl2"],
+    "equation": "CoCl2 (pink) -heat-> CoCl2 (blue)",
+    "reaction_type": "physical_change",
+    "delta_h": 50.0,
+    "products_detail": [
+      {"formula": "CoCl2", "phase": "s", "color": "#0000ff"}
+    ],
+    "conditions": {"temperature": 120, "min_temperature": 100, "catalyst": null, "notes": "Thermochromic — loses water of crystallization, turns from pink to deep blue"},
+    "effects": {
+      "color": {"from": "#ff69b4", "to": "#0000ff", "speed": "slow"},
+      "gas": null,
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["thermochromic", "color_change", "dehydration"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["K2Cr2O7", "HCl"],
+    "products": ["KCl", "CrCl3", "Cl2", "H2O"],
+    "equation": "K2Cr2O7 + 14HCl -> 2KCl + 2CrCl3 + 3Cl2 + 7H2O",
+    "reaction_type": "redox",
+    "delta_h": -320.0,
+    "products_detail": [
+      {"formula": "KCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "CrCl3", "phase": "aq", "color": "#006400"},
+      {"formula": "Cl2", "phase": "g", "color": "#90ee90"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Orange dichromate turns green (Cr3+), releases Cl2 gas"},
+    "effects": {
+      "color": {"from": "#ff8c00", "to": "#006400", "speed": "medium"},
+      "gas": {"type": "Cl2", "rate": "moderate"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "green_gas", "orange_to_green"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["toxic_gas", "toxic", "corrosive", "fume_hood_required"]
+    }
+  },
+  {
+    "reactants": ["Pb(NO3)2", "HCl"],
+    "products": ["PbCl2", "HNO3"],
+    "equation": "Pb(NO3)2 + 2HCl -> PbCl2 + 2HNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -30.0,
+    "products_detail": [
+      {"formula": "PbCl2", "phase": "s", "color": "#f8f8f8"},
+      {"formula": "HNO3", "phase": "aq", "color": "#e0e0e0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "White PbCl2 precipitate — dissolves in hot water"},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#f8f8f8", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "PbCl2", "color": "#f8f8f8"},
+      "special": ["white_precipitate"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["Pb(NO3)2", "NaOH"],
+    "products": ["Pb(OH)2", "NaNO3"],
+    "equation": "Pb(NO3)2 + 2NaOH -> Pb(OH)2 + 2NaNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -42.0,
+    "products_detail": [
+      {"formula": "Pb(OH)2", "phase": "s", "color": "#f5f5f5"},
+      {"formula": "NaNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#e8e8e8", "to": "#f5f5f5", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Pb(OH)2", "color": "#f5f5f5"},
+      "special": ["white_precipitate"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["CuSO4", "Zn"],
+    "products": ["ZnSO4", "Cu"],
+    "equation": "CuSO4 + Zn -> ZnSO4 + Cu",
+    "reaction_type": "single_displacement",
+    "delta_h": -218.7,
+    "products_detail": [
+      {"formula": "ZnSO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "Cu", "phase": "s", "color": "#b87333"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#4fc3f7", "to": "#f0f0f0", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Cu", "color": "#b87333"},
+      "special": ["color_change", "copper_deposit"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["NiCl2", "NaOH"],
+    "products": ["Ni(OH)2", "NaCl"],
+    "equation": "NiCl2 + 2NaOH -> Ni(OH)2 + 2NaCl",
+    "reaction_type": "double_displacement",
+    "delta_h": -55.0,
+    "products_detail": [
+      {"formula": "Ni(OH)2", "phase": "s", "color": "#90ee90"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null},
+    "effects": {
+      "color": {"from": "#00cc00", "to": "#90ee90", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Ni(OH)2", "color": "#90ee90"},
+      "special": ["green_precipitate"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["CoCl2", "NaOH"],
+    "products": ["Co(OH)2", "NaCl"],
+    "equation": "CoCl2 + 2NaOH -> Co(OH)2 + 2NaCl",
+    "reaction_type": "double_displacement",
+    "delta_h": -52.0,
+    "products_detail": [
+      {"formula": "Co(OH)2", "phase": "s", "color": "#ff69b4"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Pink/blue precipitate depending on conditions"},
+    "effects": {
+      "color": {"from": "#ff69b4", "to": "#ff1493", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Co(OH)2", "color": "#ff69b4"},
+      "special": ["pink_precipitate"],
+      "sounds": [],
+      "safety": ["toxic"]
+    }
+  },
+  {
+    "reactants": ["Mg", "H2SO4"],
+    "products": ["MgSO4", "H2"],
+    "equation": "Mg + H2SO4 -> MgSO4 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -467.0,
+    "products_detail": [
+      {"formula": "MgSO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Very vigorous with dilute H2SO4"},
+    "effects": {
+      "color": {"from": "#d0d0d0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "H2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bubbling", "rapid_dissolving"],
+      "sounds": ["fizz_vigorous"],
+      "safety": ["flammable_gas", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["Ni", "HCl"],
+    "products": ["NiCl2", "H2"],
+    "equation": "Ni + 2HCl -> NiCl2 + H2",
+    "reaction_type": "single_displacement",
+    "delta_h": -73.0,
+    "products_detail": [
+      {"formula": "NiCl2", "phase": "aq", "color": "#00cc00"},
+      {"formula": "H2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Slow at room temperature, produces green solution"},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#00cc00", "speed": "slow"},
+      "gas": {"type": "H2", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "slow_bubbling"],
+      "sounds": ["fizz_moderate"],
+      "safety": ["flammable_gas", "toxic"]
+    }
+  },
+  {
+    "reactants": ["SnCl2", "FeCl3"],
+    "products": ["SnCl4", "FeCl2"],
+    "equation": "SnCl2 + 2FeCl3 -> SnCl4 + 2FeCl2",
+    "reaction_type": "redox",
+    "delta_h": -115.0,
+    "products_detail": [
+      {"formula": "SnCl4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "FeCl2", "phase": "aq", "color": "#c8e6c9"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Sn2+ reduces Fe3+ to Fe2+, color change from yellow-brown to pale green"},
+    "effects": {
+      "color": {"from": "#b8860b", "to": "#c8e6c9", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "decolorization"],
+      "sounds": [],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["I2", "KI"],
+    "products": ["KI3"],
+    "equation": "I2 + KI -> KI3",
+    "reaction_type": "synthesis",
+    "delta_h": -12.0,
+    "products_detail": [
+      {"formula": "KI3", "phase": "aq", "color": "#8b4513"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Triiodide formation — dissolves iodine into dark brown solution (Lugol's reagent)"},
+    "effects": {
+      "color": {"from": "#4b0082", "to": "#8b4513", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "dark_brown_solution", "lugols_reagent"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["K2Cr2O7", "H2SO4"],
+    "products": ["K2SO4", "Cr2(SO4)3", "H2O"],
+    "equation": "K2Cr2O7 + 4H2SO4 -> K2SO4 + Cr2(SO4)3 + 4H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -180.0,
+    "products_detail": [
+      {"formula": "K2SO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "Cr2(SO4)3", "phase": "aq", "color": "#006400"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Orange dichromate in acid — forms acidified dichromate solution used as oxidizer"},
+    "effects": {
+      "color": {"from": "#ff8c00", "to": "#006400", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["color_change", "orange_to_green"],
+      "sounds": [],
+      "safety": ["toxic", "corrosive", "oxidizer"]
+    }
+  },
+  {
+    "reactants": ["C12H22O11", "H2SO4"],
+    "products": ["C", "H2O"],
+    "equation": "C12H22O11 -H2SO4-> 12C + 11H2O",
+    "reaction_type": "decomposition",
+    "delta_h": -580.0,
+    "products_detail": [
+      {"formula": "C", "phase": "s", "color": "#000000"},
+      {"formula": "H2O", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Sugar dehydration — concentrated H2SO4 removes water, leaving carbon tower. Highly exothermic."},
+    "effects": {
+      "color": {"from": "#fffaf0", "to": "#000000", "speed": "medium"},
+      "gas": {"type": "H2O", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["carbon_tower", "sugar_snake", "steam", "expansion", "charring"],
+      "sounds": ["sizzle", "crackle"],
+      "safety": ["extreme_heat", "corrosive", "fume_hood_required"]
+    }
+  },
+  {
+    "reactants": ["CH4N2O", "H2O"],
+    "products": ["NH3", "CO2"],
+    "equation": "CH4N2O + H2O -> 2NH3 + CO2",
+    "reaction_type": "decomposition",
+    "delta_h": 87.0,
+    "products_detail": [
+      {"formula": "NH3", "phase": "aq", "color": "#e0f0e0"},
+      {"formula": "CO2", "phase": "g", "color": null}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Urea hydrolysis — endothermic dissolution, slow at room temp, faster with urease enzyme"},
+    "effects": {
+      "color": {"from": "#f5f5f5", "to": "#e0f0e0", "speed": "slow"},
+      "gas": {"type": "CO2", "rate": "slow"},
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["cooling_effect", "ammonia_smell"],
+      "sounds": [],
+      "safety": ["toxic_gas"]
+    }
+  },
+  {
+    "reactants": ["Br2", "KI"],
+    "products": ["KBr", "I2"],
+    "equation": "Br2 + 2KI -> 2KBr + I2",
+    "reaction_type": "single_displacement",
+    "delta_h": -92.0,
+    "products_detail": [
+      {"formula": "KBr", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "I2", "phase": "s", "color": "#4b0082"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Halogen displacement — Br2 oxidizes I- to I2, brown bromine color replaced by purple iodine"},
+    "effects": {
+      "color": {"from": "#8b0000", "to": "#4b0082", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "I2", "color": "#4b0082"},
+      "special": ["color_change", "halogen_displacement"],
+      "sounds": [],
+      "safety": ["toxic", "corrosive"]
+    }
+  },
+  {
+    "reactants": ["AgNO3", "KI"],
+    "products": ["AgI", "KNO3"],
+    "equation": "AgNO3 + KI -> AgI + KNO3",
+    "reaction_type": "double_displacement",
+    "delta_h": -110.0,
+    "products_detail": [
+      {"formula": "AgI", "phase": "s", "color": "#ffff00"},
+      {"formula": "KNO3", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Bright yellow precipitate of silver iodide — photosensitive"},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#ffff00", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "AgI", "color": "#ffff00"},
+      "special": ["yellow_precipitate", "photosensitive"],
+      "sounds": [],
+      "safety": []
+    }
+  },
+  {
+    "reactants": ["Cu", "Cl2"],
+    "products": ["CuCl2"],
+    "equation": "Cu + Cl2 -> CuCl2",
+    "reaction_type": "synthesis",
+    "delta_h": -220.0,
+    "products_detail": [
+      {"formula": "CuCl2", "phase": "s", "color": "#008b8b"}
+    ],
+    "conditions": {"temperature": 25, "min_temperature": 200, "catalyst": null, "notes": "Copper burns in chlorine gas with green flame"},
+    "effects": {
+      "color": {"from": "#b87333", "to": "#008b8b", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["green_flame", "sparks"],
+      "sounds": ["sizzle", "crackle"],
+      "safety": ["toxic_gas", "extreme_heat"]
+    }
+  },
+  {
+    "reactants": ["NH4NO3", "H2O"],
+    "products": ["NH4NO3"],
+    "equation": "NH4NO3 -dissolve-> NH4+(aq) + NO3-(aq)",
+    "reaction_type": "dissolution",
+    "delta_h": 25.7,
+    "products_detail": [
+      {"formula": "NH4NO3", "phase": "aq", "color": "#e8e8e8"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Strongly endothermic dissolution — used in cold packs"},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#e8e8e8", "speed": "fast"},
+      "gas": null,
+      "heat": "endothermic",
+      "precipitate": null,
+      "special": ["cooling_effect", "cold_pack", "temperature_drop"],
+      "sounds": [],
+      "safety": ["oxidizer"]
+    }
+  },
+  {
+    "reactants": ["CaCl2", "H2O"],
+    "products": ["CaCl2"],
+    "equation": "CaCl2 -dissolve-> Ca2+(aq) + 2Cl-(aq)",
+    "reaction_type": "dissolution",
+    "delta_h": -81.3,
+    "products_detail": [
+      {"formula": "CaCl2", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Strongly exothermic dissolution — used in heat packs"},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["heating_effect", "hot_pack", "temperature_rise"],
+      "sounds": [],
+      "safety": ["irritant"]
+    }
+  },
+  {
+    "reactants": ["Mg", "CO2"],
+    "products": ["MgO", "C"],
+    "equation": "2Mg + CO2 -> 2MgO + C",
+    "reaction_type": "redox",
+    "delta_h": -810.0,
+    "products_detail": [
+      {"formula": "MgO", "phase": "s", "color": "#ffffff"},
+      {"formula": "C", "phase": "s", "color": "#000000"}
+    ],
+    "conditions": {"temperature": 25, "min_temperature": 600, "catalyst": null, "notes": "Magnesium burns in CO2 — cannot be extinguished with CO2 fire extinguisher!"},
+    "effects": {
+      "color": {"from": "#d0d0d0", "to": "#ffffff", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["bright_white_light", "sparks", "black_carbon_specks"],
+      "sounds": ["sizzle", "crackle"],
+      "safety": ["extreme_heat", "blinding_light"]
+    }
+  },
+  {
+    "reactants": ["CuSO4", "KI"],
+    "products": ["CuI", "I2", "K2SO4"],
+    "equation": "2CuSO4 + 4KI -> 2CuI + I2 + 2K2SO4",
+    "reaction_type": "redox",
+    "delta_h": -95.0,
+    "products_detail": [
+      {"formula": "CuI", "phase": "s", "color": "#f8f8f8"},
+      {"formula": "I2", "phase": "aq", "color": "#8b4513"},
+      {"formula": "K2SO4", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25, "catalyst": null, "notes": "Cu2+ reduced to Cu+ by iodide, liberating I2 — brown color appears"},
+    "effects": {
+      "color": {"from": "#4fc3f7", "to": "#8b4513", "speed": "medium"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "CuI", "color": "#f8f8f8"},
+      "special": ["color_change", "iodine_liberation", "white_precipitate"],
       "sounds": [],
       "safety": []
     }

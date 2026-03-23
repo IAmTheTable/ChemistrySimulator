@@ -398,5 +398,261 @@
     "color": "#f0f0f0",
     "molar_mass": 74.09,
     "hazard_class": "corrosive"
+  },
+  {
+    "formula": "Na2S2O3",
+    "name": "Sodium Thiosulfate",
+    "phase": "s",
+    "color": "#f8f8f8",
+    "molar_mass": 158.1,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "K2Cr2O7",
+    "name": "Potassium Dichromate",
+    "phase": "s",
+    "color": "#ff8c00",
+    "molar_mass": 294.2,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "CoCl2",
+    "name": "Cobalt(II) Chloride",
+    "phase": "s",
+    "color": "#ff69b4",
+    "molar_mass": 129.8,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "NiCl2",
+    "name": "Nickel(II) Chloride",
+    "phase": "s",
+    "color": "#00cc00",
+    "molar_mass": 129.6,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "SnCl2",
+    "name": "Tin(II) Chloride",
+    "phase": "s",
+    "color": "#e8e8e8",
+    "molar_mass": 189.6,
+    "hazard_class": "corrosive"
+  },
+  {
+    "formula": "MnO2",
+    "name": "Manganese Dioxide",
+    "phase": "s",
+    "color": "#1a1a1a",
+    "molar_mass": 86.94,
+    "hazard_class": "oxidizer"
+  },
+  {
+    "formula": "Cr2O3",
+    "name": "Chromium(III) Oxide",
+    "phase": "s",
+    "color": "#006400",
+    "molar_mass": 152.0,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "TiO2",
+    "name": "Titanium Dioxide",
+    "phase": "s",
+    "color": "#ffffff",
+    "molar_mass": 79.87,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "SiO2",
+    "name": "Silicon Dioxide (Sand)",
+    "phase": "s",
+    "color": "#f5deb3",
+    "molar_mass": 60.08,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "C12H22O11",
+    "name": "Sucrose (Table Sugar)",
+    "phase": "s",
+    "color": "#fffaf0",
+    "molar_mass": 342.3,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "C2H6O2",
+    "name": "Ethylene Glycol",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 62.07,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "C3H8O3",
+    "name": "Glycerol",
+    "phase": "l",
+    "color": "#e8e8e8",
+    "molar_mass": 92.09,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "CS2",
+    "name": "Carbon Disulfide",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 76.14,
+    "hazard_class": "flammable"
+  },
+  {
+    "formula": "Br2",
+    "name": "Bromine",
+    "phase": "l",
+    "color": "#8b0000",
+    "molar_mass": 159.81,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "I2",
+    "name": "Iodine",
+    "phase": "s",
+    "color": "#4b0082",
+    "molar_mass": 253.81,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "Si",
+    "name": "Silicon",
+    "phase": "s",
+    "color": "#708090",
+    "molar_mass": 28.09,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "B",
+    "name": "Boron",
+    "phase": "s",
+    "color": "#8b4513",
+    "molar_mass": 10.81,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Ti",
+    "name": "Titanium",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 47.87,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "W",
+    "name": "Tungsten",
+    "phase": "s",
+    "color": "#808080",
+    "molar_mass": 183.84,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Pt",
+    "name": "Platinum",
+    "phase": "s",
+    "color": "#e5e4e2",
+    "molar_mass": 195.08,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Ag",
+    "name": "Silver",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 107.87,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Au",
+    "name": "Gold",
+    "phase": "s",
+    "color": "#ffd700",
+    "molar_mass": 196.97,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Pb",
+    "name": "Lead",
+    "phase": "s",
+    "color": "#696969",
+    "molar_mass": 207.2,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "Co",
+    "name": "Cobalt",
+    "phase": "s",
+    "color": "#6a6a6a",
+    "molar_mass": 58.93,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "C8H10N4O2",
+    "name": "Caffeine",
+    "phase": "s",
+    "color": "#f0f0f0",
+    "molar_mass": 194.19,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "C9H8O4",
+    "name": "Aspirin",
+    "phase": "s",
+    "color": "#f8f8f8",
+    "molar_mass": 180.16,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "C6H8O6",
+    "name": "Vitamin C",
+    "phase": "s",
+    "color": "#fffacd",
+    "molar_mass": 176.12,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "CH4N2O",
+    "name": "Urea",
+    "phase": "s",
+    "color": "#f5f5f5",
+    "molar_mass": 60.06,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "C2H6OS",
+    "name": "DMSO",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 78.13,
+    "hazard_class": "irritant"
+  },
+  {
+    "formula": "Hg",
+    "name": "Mercury",
+    "phase": "l",
+    "color": "#c0c0c0",
+    "molar_mass": 200.59,
+    "hazard_class": "toxic"
+  },
+  {
+    "formula": "Mn",
+    "name": "Manganese",
+    "phase": "s",
+    "color": "#9e9e9e",
+    "molar_mass": 54.94,
+    "hazard_class": "none"
+  },
+  {
+    "formula": "Cr",
+    "name": "Chromium",
+    "phase": "s",
+    "color": "#c0c0c0",
+    "molar_mass": 52.0,
+    "hazard_class": "none"
   }
 ]
