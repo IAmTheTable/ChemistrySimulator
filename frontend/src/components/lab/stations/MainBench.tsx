@@ -4,6 +4,7 @@ import { Html } from "@react-three/drei";
 import { useLabStore } from "../../../stores/labStore";
 import StationShell, { LABEL_STYLE } from "./StationShell";
 import { useStationTool } from "./useStationTool";
+import InteractiveTool from "./InteractiveTool";
 
 export default function MainBench() {
   const { selectedItem, selectedBenchItem, updateBenchItemContents, showNotification, setBenchItemEffects } = useStationTool();
@@ -254,96 +255,102 @@ export default function MainBench() {
       </Html>
 
       {/* ── Bunsen burner — detailed ── */}
-      <group onClick={handleBunsenBurner}>
+      <InteractiveTool
+        name="Bunsen Burner"
+        description="Click to heat selected container +50°C"
+        onClick={handleBunsenBurner}
+        position={[1.5, 0, 0.5]}
+        labelOffset={[0, 0.5, 0]}
+      >
         {/* Base */}
-        <mesh position={[1.5, 0.03, 0.5]} castShadow>
+        <mesh position={[0, 0.03, 0]} castShadow>
           <boxGeometry args={[0.14, 0.05, 0.12]} />
           <meshStandardMaterial color="#3a3a40" metalness={0.6} roughness={0.3} />
         </mesh>
         {/* Barrel */}
-        <mesh position={[1.5, 0.14, 0.5]} castShadow>
+        <mesh position={[0, 0.14, 0]} castShadow>
           <cylinderGeometry args={[0.022, 0.03, 0.18, 14]} />
           <meshStandardMaterial color="#52525b" metalness={0.6} roughness={0.3} />
         </mesh>
         {/* Air collar ring */}
-        <mesh position={[1.5, 0.1, 0.5]}>
+        <mesh position={[0, 0.1, 0]}>
           <cylinderGeometry args={[0.032, 0.032, 0.025, 14]} />
           <meshStandardMaterial color="#444450" metalness={0.7} roughness={0.2} />
         </mesh>
         {/* Gas inlet tube (side) */}
-        <mesh position={[1.44, 0.04, 0.5]} rotation={[0, 0, Math.PI / 2]}>
+        <mesh position={[-0.06, 0.04, 0]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.007, 0.007, 0.1, 8]} />
           <meshStandardMaterial color="#666670" metalness={0.6} roughness={0.3} />
         </mesh>
         {/* Flame effect when active */}
         {burnerActive && (
           <>
-            <mesh position={[1.5, 0.28, 0.5]}>
+            <mesh position={[0, 0.28, 0]}>
               <coneGeometry args={[0.03, 0.12, 8]} />
               <meshStandardMaterial color="#3388ff" emissive="#3388ff" emissiveIntensity={2} transparent opacity={0.7} />
             </mesh>
-            <mesh position={[1.5, 0.35, 0.5]}>
+            <mesh position={[0, 0.35, 0]}>
               <coneGeometry args={[0.02, 0.08, 8]} />
               <meshStandardMaterial color="#ffaa22" emissive="#ffaa22" emissiveIntensity={2} transparent opacity={0.6} />
             </mesh>
-            <pointLight position={[1.5, 0.35, 0.5]} color="#ffaa22" intensity={0.5} distance={1.5} />
+            <pointLight position={[0, 0.35, 0]} color="#ffaa22" intensity={0.5} distance={1.5} />
           </>
         )}
-      </group>
-      <Html position={[1.5, 0.42, 0.5]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Bunsen Burner</span>
-      </Html>
+      </InteractiveTool>
 
       {/* ── Analytical balance — enclosed glass housing ── */}
-      <group onClick={handleBalance}>
+      <InteractiveTool
+        name="Analytical Balance"
+        description="Click to weigh selected container"
+        onClick={handleBalance}
+        position={[-1.5, 0, 0.8]}
+        labelOffset={[0, 0.4, 0]}
+      >
         {/* Base platform */}
-        <mesh position={[-1.5, 0.035, 0.8]} receiveShadow>
+        <mesh position={[0, 0.035, 0]} receiveShadow>
           <boxGeometry args={[0.48, 0.06, 0.38]} />
           <meshStandardMaterial color="#2a2a2a" roughness={0.4} metalness={0.4} />
         </mesh>
         {/* Housing frame */}
-        <mesh position={[-1.5, 0.13, 0.8]}>
+        <mesh position={[0, 0.13, 0]}>
           <boxGeometry args={[0.44, 0.12, 0.34]} />
           <meshStandardMaterial color="#1c1917" roughness={0.5} />
         </mesh>
         {/* Glass front panel */}
-        <mesh position={[-1.5, 0.13, 0.63]}>
+        <mesh position={[0, 0.13, -0.17]}>
           <boxGeometry args={[0.42, 0.1, 0.01]} />
           <meshPhysicalMaterial color="#c8e4ff" transparent opacity={0.18} roughness={0.05} transmission={0.82} />
         </mesh>
         {/* Glass side panels */}
-        <mesh position={[-1.28, 0.13, 0.8]}>
+        <mesh position={[0.22, 0.13, 0]}>
           <boxGeometry args={[0.01, 0.1, 0.32]} />
           <meshPhysicalMaterial color="#c8e4ff" transparent opacity={0.18} roughness={0.05} transmission={0.82} />
         </mesh>
-        <mesh position={[-1.72, 0.13, 0.8]}>
+        <mesh position={[-0.22, 0.13, 0]}>
           <boxGeometry args={[0.01, 0.1, 0.32]} />
           <meshPhysicalMaterial color="#c8e4ff" transparent opacity={0.18} roughness={0.05} transmission={0.82} />
         </mesh>
         {/* Weighing pan inside */}
-        <mesh position={[-1.5, 0.09, 0.8]}>
+        <mesh position={[0, 0.09, 0]}>
           <cylinderGeometry args={[0.07, 0.07, 0.01, 16]} />
           <meshStandardMaterial color="#cccccc" metalness={0.7} roughness={0.2} />
         </mesh>
         {/* Pan support column */}
-        <mesh position={[-1.5, 0.075, 0.8]}>
+        <mesh position={[0, 0.075, 0]}>
           <cylinderGeometry args={[0.007, 0.007, 0.025, 8]} />
           <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
         </mesh>
         {/* Digital display */}
-        <mesh position={[-1.5, 0.18, 0.628]}>
+        <mesh position={[0, 0.18, -0.172]}>
           <boxGeometry args={[0.18, 0.04, 0.005]} />
           <meshStandardMaterial color="#001100" emissive="#00ff66" emissiveIntensity={0.7} roughness={0.2} />
         </mesh>
         {/* Level bubble indicator */}
-        <mesh position={[-1.3, 0.065, 0.82]}>
+        <mesh position={[0.2, 0.065, 0.02]}>
           <sphereGeometry args={[0.012, 8, 8]} />
           <meshStandardMaterial color="#aaffaa" transparent opacity={0.6} roughness={0.1} />
         </mesh>
-      </group>
-      <Html position={[-1.5, 0.3, 0.8]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Analytical Balance</span>
-      </Html>
+      </InteractiveTool>
 
     </StationShell>
   );

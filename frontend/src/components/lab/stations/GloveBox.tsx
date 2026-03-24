@@ -3,6 +3,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import StationShell, { LABEL_STYLE } from "./StationShell";
 import { useStationTool } from "./useStationTool";
+import InteractiveTool from "./InteractiveTool";
 
 export default function GloveBox() {
   const { selectedItem, showNotification } = useStationTool();
@@ -120,10 +121,12 @@ export default function GloveBox() {
       ))}
 
       {/* ── Airlock chamber — smaller box on right side ── */}
-      <Html position={[1.52, 0.98, -0.4]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Airlock (click to transfer)</span>
-      </Html>
-      <group onClick={handleAirlock}>
+      <InteractiveTool
+        name="Airlock"
+        description="Click to transfer container into inert atmosphere"
+        onClick={handleAirlock}
+        labelOffset={[0, 0.6, 0]}
+      >
         {/* Airlock body */}
         <mesh position={[1.52, 0.51, -0.4]} castShadow>
           <boxGeometry args={[0.45, 0.7, 0.7]} />
@@ -144,44 +147,57 @@ export default function GloveBox() {
           <boxGeometry args={[0.02, 0.06, 0.02]} />
           <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
         </mesh>
-      </group>
+      </InteractiveTool>
 
       {/* ── Gas line connections at top ── */}
-      <Html position={[0, 1.3, -0.4]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>N2/Ar Gas Lines</span>
-      </Html>
-      {/* Argon line pipe */}
+      {/* Argon line pipe (non-interactive) */}
       <mesh position={[-0.6, 1.02, -0.4]}>
         <cylinderGeometry args={[0.018, 0.018, 0.25, 8]} />
         <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
       </mesh>
-      {/* Nitrogen line pipe */}
+      {/* Nitrogen line pipe (non-interactive) */}
       <mesh position={[0.6, 1.02, -0.4]}>
         <cylinderGeometry args={[0.018, 0.018, 0.25, 8]} />
         <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
       </mesh>
-      {/* Gas valve knobs — Ar (orange, left) */}
-      <mesh position={[-0.6, 1.16, -0.4]} onClick={handleGasLine("Ar")}>
-        <cylinderGeometry args={[0.032, 0.032, 0.025, 8]} />
-        <meshStandardMaterial
-          color={atmosphere === "Ar" ? "#ff8800" : "#cc6600"}
-          emissive={atmosphere === "Ar" ? "#ff6600" : "#000000"}
-          emissiveIntensity={atmosphere === "Ar" ? 0.5 : 0}
-          roughness={0.4}
-          metalness={0.3}
-        />
-      </mesh>
-      {/* Gas valve knobs — N2 (blue, right) */}
-      <mesh position={[0.6, 1.16, -0.4]} onClick={handleGasLine("N2")}>
-        <cylinderGeometry args={[0.032, 0.032, 0.025, 8]} />
-        <meshStandardMaterial
-          color={atmosphere === "N2" ? "#4488ff" : "#3366cc"}
-          emissive={atmosphere === "N2" ? "#2266ff" : "#000000"}
-          emissiveIntensity={atmosphere === "N2" ? 0.5 : 0}
-          roughness={0.4}
-          metalness={0.3}
-        />
-      </mesh>
+      {/* Gas valve knob — Ar (orange, left) */}
+      <InteractiveTool
+        name="Gas Lines (Ar)"
+        description="Click to purge with Ar"
+        onClick={handleGasLine("Ar")}
+        position={[-0.6, 1.16, -0.4]}
+        labelOffset={[0, 0.2, 0]}
+      >
+        <mesh>
+          <cylinderGeometry args={[0.032, 0.032, 0.025, 8]} />
+          <meshStandardMaterial
+            color={atmosphere === "Ar" ? "#ff8800" : "#cc6600"}
+            emissive={atmosphere === "Ar" ? "#ff6600" : "#000000"}
+            emissiveIntensity={atmosphere === "Ar" ? 0.5 : 0}
+            roughness={0.4}
+            metalness={0.3}
+          />
+        </mesh>
+      </InteractiveTool>
+      {/* Gas valve knob — N2 (blue, right) */}
+      <InteractiveTool
+        name="Gas Lines (N\u2082)"
+        description="Click to purge with N\u2082"
+        onClick={handleGasLine("N2")}
+        position={[0.6, 1.16, -0.4]}
+        labelOffset={[0, 0.2, 0]}
+      >
+        <mesh>
+          <cylinderGeometry args={[0.032, 0.032, 0.025, 8]} />
+          <meshStandardMaterial
+            color={atmosphere === "N2" ? "#4488ff" : "#3366cc"}
+            emissive={atmosphere === "N2" ? "#2266ff" : "#000000"}
+            emissiveIntensity={atmosphere === "N2" ? 0.5 : 0}
+            roughness={0.4}
+            metalness={0.3}
+          />
+        </mesh>
+      </InteractiveTool>
 
       {/* ── Vacuum gauge (circular dial) on front face ── */}
       <group position={[-0.7, 0.06, 0.15]}>

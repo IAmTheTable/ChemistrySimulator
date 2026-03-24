@@ -2,6 +2,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import StationShell, { LABEL_STYLE } from "./StationShell";
 import { useStationTool } from "./useStationTool";
+import InteractiveTool from "./InteractiveTool";
 
 // Simple SDS safety data
 const SDS_DATA: Record<string, { hazard: string; ghs: string; firstAid: string }> = {
@@ -61,35 +62,38 @@ export default function StorageSafety() {
   return (
     <StationShell wallColor="#2a2820" showShelf={false}>
       {/* ── Chemical storage cabinet ── */}
-      <Html position={[-1.55, 1.02, -0.85]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Chemical Storage Cabinet</span>
-      </Html>
-      <group onClick={handleChemicalCabinet}>
+      <InteractiveTool
+        name="Chemical Cabinet"
+        description="Click to browse available substances"
+        onClick={handleChemicalCabinet}
+        position={[-1.55, 0, -0.85]}
+        labelOffset={[0, 1.1, 0]}
+      >
         {/* Cabinet body */}
-        <mesh position={[-1.55, 0.5, -0.85]} castShadow>
+        <mesh position={[0, 0.5, 0]} castShadow>
           <boxGeometry args={[0.55, 0.9, 0.4]} />
           <meshStandardMaterial color="#8a6a30" roughness={0.6} metalness={0.2} />
         </mesh>
         {/* Cabinet door lines (decorative) */}
-        <mesh position={[-1.4, 0.5, -0.64]}>
+        <mesh position={[0.15, 0.5, 0.21]}>
           <boxGeometry args={[0.01, 0.82, 0.005]} />
           <meshStandardMaterial color="#6a5020" roughness={0.7} />
         </mesh>
-        <mesh position={[-1.68, 0.5, -0.64]}>
+        <mesh position={[-0.13, 0.5, 0.21]}>
           <boxGeometry args={[0.01, 0.82, 0.005]} />
           <meshStandardMaterial color="#6a5020" roughness={0.7} />
         </mesh>
-        <mesh position={[-1.54, 0.5, -0.64]}>
+        <mesh position={[0.01, 0.5, 0.21]}>
           <boxGeometry args={[0.28, 0.005, 0.005]} />
           <meshStandardMaterial color="#6a5020" roughness={0.7} />
         </mesh>
         {/* Cabinet handle */}
-        <mesh position={[-1.45, 0.5, -0.638]}>
+        <mesh position={[0.1, 0.5, 0.212]}>
           <boxGeometry args={[0.025, 0.09, 0.012]} />
           <meshStandardMaterial color="#c0a040" metalness={0.7} roughness={0.3} />
         </mesh>
         {/* Hazard label (yellow rectangle) */}
-        <mesh position={[-1.54, 0.68, -0.638]}>
+        <mesh position={[0.01, 0.68, 0.212]}>
           <boxGeometry args={[0.18, 0.1, 0.005]} />
           <meshStandardMaterial
             color="#ffcc00"
@@ -98,13 +102,15 @@ export default function StorageSafety() {
             roughness={0.5}
           />
         </mesh>
-      </group>
+      </InteractiveTool>
 
       {/* ── Safety shower ── */}
-      <Html position={[1.5, 1.72, -1.0]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Emergency Shower</span>
-      </Html>
-      <group onClick={handleSafetyShower}>
+      <InteractiveTool
+        name="Emergency Shower"
+        description="Click to repair all damaged containers"
+        onClick={handleSafetyShower}
+        labelOffset={[0, 0.4, 0]}
+      >
         {/* Vertical pipe */}
         <mesh position={[1.5, 0.85, -1.0]} castShadow>
           <cylinderGeometry args={[0.025, 0.025, 1.55, 10]} />
@@ -129,66 +135,72 @@ export default function StorageSafety() {
           <boxGeometry args={[0.06, 0.02, 0.04]} />
           <meshStandardMaterial color="#cc8800" roughness={0.4} />
         </mesh>
-      </group>
+      </InteractiveTool>
 
       {/* ── Eye wash station ── */}
-      <Html position={[0.85, 0.62, -1.0]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Eye Wash Station</span>
-      </Html>
-      <group onClick={handleEyeWash}>
+      <InteractiveTool
+        name="Eye Wash Station"
+        description="Click to repair damaged containers"
+        onClick={handleEyeWash}
+        position={[0.85, 0, -1.0]}
+        labelOffset={[0, 0.72, 0]}
+      >
         {/* Pedestal */}
-        <mesh position={[0.85, 0.2, -1.0]} castShadow>
+        <mesh position={[0, 0.2, 0]} castShadow>
           <cylinderGeometry args={[0.06, 0.08, 0.35, 12]} />
           <meshStandardMaterial color="#999999" metalness={0.6} roughness={0.3} />
         </mesh>
         {/* Basin */}
-        <mesh position={[0.85, 0.42, -1.0]}>
+        <mesh position={[0, 0.42, 0]}>
           <cylinderGeometry args={[0.12, 0.1, 0.06, 14]} />
           <meshStandardMaterial color="#aaaaaa" metalness={0.5} roughness={0.35} />
         </mesh>
         {/* Nozzle left */}
-        <mesh position={[0.78, 0.48, -1.0]} rotation={[0.4, 0, 0.2]}>
+        <mesh position={[-0.07, 0.48, 0]} rotation={[0.4, 0, 0.2]}>
           <cylinderGeometry args={[0.008, 0.01, 0.06, 8]} />
           <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
         </mesh>
         {/* Nozzle right */}
-        <mesh position={[0.92, 0.48, -1.0]} rotation={[0.4, 0, -0.2]}>
+        <mesh position={[0.07, 0.48, 0]} rotation={[0.4, 0, -0.2]}>
           <cylinderGeometry args={[0.008, 0.01, 0.06, 8]} />
           <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
         </mesh>
         {/* Activation lever */}
-        <mesh position={[0.85, 0.38, -0.88]}>
+        <mesh position={[0, 0.38, 0.12]}>
           <boxGeometry args={[0.12, 0.018, 0.015]} />
           <meshStandardMaterial color="#cc4400" roughness={0.4} metalness={0.3} />
         </mesh>
-      </group>
+      </InteractiveTool>
 
       {/* ── Fire extinguisher ── */}
-      <Html position={[-0.3, 0.78, -1.15]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Fire Extinguisher</span>
-      </Html>
-      <group onClick={handleFireExtinguisher}>
+      <InteractiveTool
+        name="Fire Extinguisher"
+        description="Click to clear all fire effects"
+        onClick={handleFireExtinguisher}
+        position={[-0.3, 0, -1.15]}
+        labelOffset={[0, 0.85, 0]}
+      >
         {/* Body (red cylinder) */}
-        <mesh position={[-0.3, 0.28, -1.15]} castShadow>
+        <mesh position={[0, 0.28, 0]} castShadow>
           <cylinderGeometry args={[0.065, 0.07, 0.5, 14]} />
           <meshStandardMaterial color="#cc1111" roughness={0.4} metalness={0.3} />
         </mesh>
         {/* Neck */}
-        <mesh position={[-0.3, 0.56, -1.15]}>
+        <mesh position={[0, 0.56, 0]}>
           <cylinderGeometry args={[0.025, 0.055, 0.07, 12]} />
           <meshStandardMaterial color="#cc1111" roughness={0.4} metalness={0.3} />
         </mesh>
         {/* Valve handle */}
-        <mesh position={[-0.3, 0.63, -1.15]}>
+        <mesh position={[0, 0.63, 0]}>
           <boxGeometry args={[0.1, 0.02, 0.025]} />
           <meshStandardMaterial color="#111111" roughness={0.5} metalness={0.5} />
         </mesh>
         {/* Hose */}
-        <mesh position={[-0.23, 0.5, -1.1]} rotation={[0.3, 0.5, -0.8]}>
+        <mesh position={[0.07, 0.5, 0.05]} rotation={[0.3, 0.5, -0.8]}>
           <cylinderGeometry args={[0.01, 0.01, 0.2, 6]} />
           <meshStandardMaterial color="#111111" roughness={0.7} />
         </mesh>
-      </group>
+      </InteractiveTool>
 
       {/* ── Waste containers ── */}
       <Html position={[0.5, 0.48, 0.8]} center distanceFactor={10}>
@@ -223,17 +235,20 @@ export default function StorageSafety() {
       </mesh>
 
       {/* ── SDS reference terminal ── */}
-      <Html position={[-0.5, 0.68, 0.7]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>SDS Reference Terminal</span>
-      </Html>
-      <group onClick={handleSDSTerminal}>
+      <InteractiveTool
+        name="SDS Terminal"
+        description="Click to view safety data for selected substance"
+        onClick={handleSDSTerminal}
+        position={[-0.5, 0, 0.7]}
+        labelOffset={[0, 0.72, 0]}
+      >
         {/* Terminal body */}
-        <mesh position={[-0.5, 0.3, 0.7]} castShadow>
+        <mesh position={[0, 0.3, 0]} castShadow>
           <boxGeometry args={[0.3, 0.5, 0.22]} />
           <meshStandardMaterial color="#1a1a22" roughness={0.5} metalness={0.3} />
         </mesh>
         {/* Screen */}
-        <mesh position={[-0.5, 0.38, 0.59]}>
+        <mesh position={[0, 0.38, -0.11]}>
           <boxGeometry args={[0.22, 0.26, 0.01]} />
           <meshStandardMaterial
             color="#001122"
@@ -244,7 +259,7 @@ export default function StorageSafety() {
         </mesh>
         {/* SDS text lines (emissive strips) */}
         {([0.12, 0.06, 0.0, -0.06] as number[]).map((y, i) => (
-          <mesh key={i} position={[-0.5, 0.38 + y, 0.585]}>
+          <mesh key={i} position={[0, 0.38 + y, -0.115]}>
             <boxGeometry args={[0.15, 0.012, 0.005]} />
             <meshStandardMaterial
               color="#aaccff"
@@ -254,16 +269,16 @@ export default function StorageSafety() {
           </mesh>
         ))}
         {/* Terminal base */}
-        <mesh position={[-0.5, 0.04, 0.7]}>
+        <mesh position={[0, 0.04, 0]}>
           <boxGeometry args={[0.35, 0.06, 0.28]} />
           <meshStandardMaterial color="#111118" roughness={0.6} metalness={0.3} />
         </mesh>
         {/* Keyboard panel */}
-        <mesh position={[-0.5, 0.08, 0.82]}>
+        <mesh position={[0, 0.08, 0.12]}>
           <boxGeometry args={[0.28, 0.015, 0.1]} />
           <meshStandardMaterial color="#1a1a22" roughness={0.7} />
         </mesh>
-      </group>
+      </InteractiveTool>
 
       {/* ── Spill cleanup kit (yellow bucket) ── */}
       <group position={[-1.55, 0.06, 0.7]}>

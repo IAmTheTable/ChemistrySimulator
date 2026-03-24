@@ -2,6 +2,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import StationShell, { LABEL_STYLE } from "./StationShell";
 import { useStationTool } from "./useStationTool";
+import InteractiveTool from "./InteractiveTool";
 
 export default function InstrumentRoom() {
   const { selectedItem, openStructureViewer, setActiveRightTab, showNotification } = useStationTool();
@@ -67,7 +68,12 @@ export default function InstrumentRoom() {
       </mesh>
 
       {/* ── Instrument 1: Mass spectrometer (large box, left) ── */}
-      <group onClick={handleMassSpec}>
+      <InteractiveTool
+        name="Mass Spectrometer"
+        description="Click to analyze mass spectrum of selected substance"
+        onClick={handleMassSpec}
+        labelOffset={[0, 0.35, 0]}
+      >
         <mesh position={[-1.4, 0.28, -0.95]} castShadow>
           <boxGeometry args={[0.7, 0.4, 0.5]} />
           <meshStandardMaterial color="#252a3d" roughness={0.4} metalness={0.4} />
@@ -96,13 +102,15 @@ export default function InstrumentRoom() {
           <cylinderGeometry args={[0.025, 0.025, 0.08, 10]} />
           <meshStandardMaterial color="#444455" metalness={0.8} roughness={0.2} />
         </mesh>
-      </group>
-      <Html position={[-1.4, 0.56, -0.95]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Mass Spec</span>
-      </Html>
+      </InteractiveTool>
 
       {/* ── Instrument 2: HPLC / chromatograph (medium, center-left) ── */}
-      <group onClick={handleHPLC}>
+      <InteractiveTool
+        name="HPLC"
+        description="Click to run chromatography on selected substance"
+        onClick={handleHPLC}
+        labelOffset={[0, 0.3, 0]}
+      >
         <mesh position={[-0.4, 0.22, -0.97]} castShadow>
           <boxGeometry args={[0.55, 0.28, 0.45]} />
           <meshStandardMaterial color="#1e2840" roughness={0.5} metalness={0.3} />
@@ -124,13 +132,15 @@ export default function InstrumentRoom() {
             <meshStandardMaterial color="#334466" metalness={0.6} roughness={0.4} />
           </mesh>
         ))}
-      </group>
-      <Html position={[-0.4, 0.44, -0.97]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>HPLC</span>
-      </Html>
+      </InteractiveTool>
 
       {/* ── Instrument 3: UV/Vis spectrophotometer (medium, center-right) ── */}
-      <group onClick={handleUVVis}>
+      <InteractiveTool
+        name="UV-Vis Spectrophotometer"
+        description="Click to measure UV-Vis spectrum"
+        onClick={handleUVVis}
+        labelOffset={[0, 0.3, 0]}
+      >
         <mesh position={[0.55, 0.2, -0.97]} castShadow>
           <boxGeometry args={[0.5, 0.24, 0.42]} />
           <meshStandardMaterial color="#22273d" roughness={0.5} metalness={0.3} />
@@ -150,13 +160,15 @@ export default function InstrumentRoom() {
             roughness={0.2}
           />
         </mesh>
-      </group>
-      <Html position={[0.55, 0.42, -0.97]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>UV-Vis Spectrophotometer</span>
-      </Html>
+      </InteractiveTool>
 
       {/* ── Instrument 4: NMR / large analyzer (right, tall) ── */}
-      <group onClick={handleNMR}>
+      <InteractiveTool
+        name="NMR Spectrometer"
+        description="Click to analyze NMR spectrum (coming soon)"
+        onClick={handleNMR}
+        labelOffset={[0, 0.4, 0]}
+      >
         <mesh position={[1.45, 0.35, -0.93]} castShadow>
           <boxGeometry args={[0.55, 0.55, 0.5]} />
           <meshStandardMaterial color="#1c2035" roughness={0.45} metalness={0.35} />
@@ -182,10 +194,7 @@ export default function InstrumentRoom() {
             />
           </mesh>
         ))}
-      </group>
-      <Html position={[1.45, 0.68, -0.93]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>NMR</span>
-      </Html>
+      </InteractiveTool>
 
       {/* ── Computer workstation ── */}
       <Html position={[0.05, 0.72, 0.6]} center distanceFactor={10}>

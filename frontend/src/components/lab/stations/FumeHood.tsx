@@ -3,6 +3,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import StationShell, { LABEL_STYLE } from "./StationShell";
 import { useStationTool } from "./useStationTool";
+import InteractiveTool from "./InteractiveTool";
 
 export default function FumeHood() {
   const { selectedItem, selectedBenchItem, updateBenchItemContents, showNotification } = useStationTool();
@@ -58,27 +59,30 @@ export default function FumeHood() {
         <meshStandardMaterial color="#4a4a55" roughness={0.7} metalness={0.3} />
       </mesh>
 
-      {/* Glass sash panel — click to toggle open/closed */}
-      <mesh position={[0, sashY, 0.1]} onClick={handleSash}>
-        <boxGeometry args={[3.1, 0.9, 0.03]} />
-        <meshPhysicalMaterial
-          color="#a8c8ff"
-          transparent
-          opacity={0.22}
-          roughness={0.05}
-          metalness={0.0}
-          transmission={0.8}
-        />
-      </mesh>
-      <Html position={[0, 1.32, 0.1]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Sash (click to toggle)</span>
-      </Html>
-
-      {/* Sash frame top bar */}
-      <mesh position={[0, sashBarY, 0.1]} castShadow onClick={handleSash}>
-        <boxGeometry args={[3.15, 0.05, 0.04]} />
-        <meshStandardMaterial color="#5a5a66" roughness={0.5} metalness={0.5} />
-      </mesh>
+      {/* Glass sash panel + frame bar — wrapped together as one interactive tool */}
+      <InteractiveTool
+        name="Sash"
+        description="Click to open/close fume hood"
+        onClick={handleSash}
+        labelOffset={[0, 0.6, 0]}
+      >
+        <mesh position={[0, sashY, 0.1]}>
+          <boxGeometry args={[3.1, 0.9, 0.03]} />
+          <meshPhysicalMaterial
+            color="#a8c8ff"
+            transparent
+            opacity={0.22}
+            roughness={0.05}
+            metalness={0.0}
+            transmission={0.8}
+          />
+        </mesh>
+        {/* Sash frame top bar */}
+        <mesh position={[0, sashBarY, 0.1]} castShadow>
+          <boxGeometry args={[3.15, 0.05, 0.04]} />
+          <meshStandardMaterial color="#5a5a66" roughness={0.5} metalness={0.5} />
+        </mesh>
+      </InteractiveTool>
 
       {/* Interior workspace surface */}
       <mesh position={[0, 0.08, -0.7]} receiveShadow>
@@ -95,10 +99,12 @@ export default function FumeHood() {
       ))}
 
       {/* Distillation flask (round bottom) — click to distill */}
-      <Html position={[-0.1, 0.72, -0.75]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Distillation Setup</span>
-      </Html>
-      <group onClick={handleDistillation}>
+      <InteractiveTool
+        name="Distillation Setup"
+        description="Click to separate mixture by boiling point"
+        onClick={handleDistillation}
+        labelOffset={[0, 0.6, 0]}
+      >
         <mesh position={[-0.5, 0.22, -0.75]} castShadow>
           <sphereGeometry args={[0.12, 16, 16]} />
           <meshPhysicalMaterial
@@ -145,7 +151,7 @@ export default function FumeHood() {
             transmission={0.75}
           />
         </mesh>
-      </group>
+      </InteractiveTool>
 
       {/* Stand rod for condenser */}
       <mesh position={[0.1, 0.6, -0.9]} castShadow>
