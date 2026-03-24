@@ -168,6 +168,129 @@ export default function FumeHood() {
         <cylinderGeometry args={[0.018, 0.018, 0.05, 8]} />
         <meshStandardMaterial color="#667788" roughness={0.4} />
       </mesh>
+
+      {/* ── Interior light strip at top of hood ── */}
+      <mesh position={[0, 1.46, -0.6]}>
+        <boxGeometry args={[2.8, 0.04, 0.12]} />
+        <meshStandardMaterial color="#ffffee" emissive="#ffffcc" emissiveIntensity={1.2} roughness={0.8} />
+      </mesh>
+      <pointLight position={[0, 1.3, -0.7]} color="#fffde8" intensity={0.6} distance={2.5} />
+
+      {/* ── Vacuum line nozzle on interior left wall ── */}
+      <mesh position={[-1.54, 0.65, -0.8]} rotation={[0, Math.PI / 2, 0]}>
+        <cylinderGeometry args={[0.014, 0.018, 0.06, 10]} />
+        <meshStandardMaterial color="#555560" metalness={0.7} roughness={0.3} />
+      </mesh>
+      <mesh position={[-1.52, 0.65, -0.8]} rotation={[0, Math.PI / 2, 0]}>
+        <cylinderGeometry args={[0.022, 0.022, 0.015, 10]} />
+        <meshStandardMaterial color="#444450" metalness={0.8} roughness={0.2} />
+      </mesh>
+      <Html position={[-1.4, 0.8, -0.8]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Vacuum Line</span>
+      </Html>
+
+      {/* ── Gas nozzle on interior right wall ── */}
+      <mesh position={[1.54, 0.55, -0.75]} rotation={[0, -Math.PI / 2, 0]}>
+        <cylinderGeometry args={[0.012, 0.016, 0.055, 10]} />
+        <meshStandardMaterial color="#cc6600" metalness={0.5} roughness={0.3} />
+      </mesh>
+      <mesh position={[1.52, 0.55, -0.75]} rotation={[0, -Math.PI / 2, 0]}>
+        <cylinderGeometry args={[0.022, 0.022, 0.01, 10]} />
+        <meshStandardMaterial color="#aa5500" metalness={0.5} roughness={0.3} />
+      </mesh>
+      <Html position={[1.4, 0.7, -0.75]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Gas Nozzle</span>
+      </Html>
+
+      {/* ── Separating funnel on clamp ── */}
+      {/* Clamp stand vertical rod */}
+      <mesh position={[1.1, 0.58, -0.85]} castShadow>
+        <cylinderGeometry args={[0.01, 0.01, 0.88, 8]} />
+        <meshStandardMaterial color="#707070" metalness={0.7} roughness={0.3} />
+      </mesh>
+      {/* Stand base */}
+      <mesh position={[1.1, 0.1, -0.85]}>
+        <boxGeometry args={[0.2, 0.035, 0.14]} />
+        <meshStandardMaterial color="#606060" metalness={0.7} roughness={0.3} />
+      </mesh>
+      {/* Clamp arm */}
+      <mesh position={[1.16, 0.68, -0.85]}>
+        <boxGeometry args={[0.13, 0.02, 0.018]} />
+        <meshStandardMaterial color="#707070" metalness={0.7} roughness={0.3} />
+      </mesh>
+      {/* Separating funnel body — inverted cone top */}
+      <mesh position={[1.25, 0.6, -0.85]} rotation={[Math.PI, 0, 0]}>
+        <coneGeometry args={[0.075, 0.18, 14]} />
+        <meshPhysicalMaterial color="#c8e0ff" transparent opacity={0.28} roughness={0.05} transmission={0.78} />
+      </mesh>
+      {/* Funnel neck/stem */}
+      <mesh position={[1.25, 0.44, -0.85]} castShadow>
+        <cylinderGeometry args={[0.014, 0.014, 0.1, 10]} />
+        <meshPhysicalMaterial color="#c8e0ff" transparent opacity={0.28} roughness={0.05} transmission={0.78} />
+      </mesh>
+      {/* Stopcock */}
+      <mesh position={[1.25, 0.38, -0.85]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.009, 0.009, 0.06, 8]} />
+        <meshStandardMaterial color="#333344" metalness={0.5} roughness={0.4} />
+      </mesh>
+      {/* Liquid inside funnel */}
+      <mesh position={[1.25, 0.58, -0.85]} rotation={[Math.PI, 0, 0]}>
+        <coneGeometry args={[0.065, 0.12, 14]} />
+        <meshStandardMaterial color="#cc9933" transparent opacity={0.5} roughness={0.1} />
+      </mesh>
+      <Html position={[1.25, 0.88, -0.85]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Separating Funnel</span>
+      </Html>
+
+      {/* ── Rotary evaporator (Rotovap) — left side ── */}
+      {/* Rotovap stand */}
+      <mesh position={[-1.1, 0.52, -0.85]}>
+        <cylinderGeometry args={[0.012, 0.012, 0.82, 8]} />
+        <meshStandardMaterial color="#606068" metalness={0.7} roughness={0.3} />
+      </mesh>
+      <mesh position={[-1.1, 0.1, -0.85]}>
+        <boxGeometry args={[0.22, 0.04, 0.16]} />
+        <meshStandardMaterial color="#505058" metalness={0.7} roughness={0.3} />
+      </mesh>
+      {/* Motor housing box */}
+      <mesh position={[-1.1, 0.72, -0.85]} castShadow>
+        <boxGeometry args={[0.14, 0.1, 0.12]} />
+        <meshStandardMaterial color="#2a2a35" roughness={0.4} metalness={0.4} />
+      </mesh>
+      {/* Motor indicator LED */}
+      <mesh position={[-1.04, 0.74, -0.79]}>
+        <sphereGeometry args={[0.008, 6, 6]} />
+        <meshStandardMaterial color="#00ff44" emissive="#00ff44" emissiveIntensity={1.5} />
+      </mesh>
+      {/* Rotating flask neck (angled) */}
+      <mesh position={[-1.18, 0.64, -0.82]} rotation={[0, 0, -Math.PI / 4]}>
+        <cylinderGeometry args={[0.014, 0.014, 0.22, 10]} />
+        <meshPhysicalMaterial color="#c8e0ff" transparent opacity={0.28} roughness={0.05} transmission={0.78} />
+      </mesh>
+      {/* Round bottom flask */}
+      <mesh position={[-1.3, 0.5, -0.78]}>
+        <sphereGeometry args={[0.085, 14, 14]} />
+        <meshPhysicalMaterial color="#c8e0ff" transparent opacity={0.28} roughness={0.05} transmission={0.78} />
+      </mesh>
+      {/* Condenser tube (vertical) */}
+      <mesh position={[-0.95, 0.6, -0.88]}>
+        <cylinderGeometry args={[0.018, 0.018, 0.36, 10]} />
+        <meshPhysicalMaterial color="#c8e0ff" transparent opacity={0.25} roughness={0.05} transmission={0.78} />
+      </mesh>
+      {/* Collection flask */}
+      <mesh position={[-0.95, 0.32, -0.88]}>
+        <sphereGeometry args={[0.065, 12, 12]} />
+        <meshPhysicalMaterial color="#c8e0ff" transparent opacity={0.28} roughness={0.05} transmission={0.78} />
+      </mesh>
+      <Html position={[-1.1, 0.98, -0.85]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Rotary Evaporator</span>
+      </Html>
+
+      {/* ── Sash handle bar (visible grip) ── */}
+      <mesh position={[0, sashBarY - 0.03, 0.12]}>
+        <boxGeometry args={[0.28, 0.025, 0.025]} />
+        <meshStandardMaterial color="#888890" metalness={0.6} roughness={0.3} />
+      </mesh>
     </StationShell>
   );
 }

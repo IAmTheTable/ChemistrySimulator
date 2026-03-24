@@ -45,20 +45,235 @@ export default function MainBench() {
 
   return (
     <StationShell>
-      {/* Test tube rack on shelf */}
-      <mesh position={[-1.2, 0.42, -1.05]}>
-        <boxGeometry args={[0.4, 0.1, 0.15]} />
-        <meshStandardMaterial color="#78716c" />
-      </mesh>
-      <Html position={[-1.2, 0.58, -1.05]} center distanceFactor={10}>
+      {/* ── Test tube rack — detailed with tube slots ── */}
+      <group position={[-1.2, 0.42, -1.05]}>
+        {/* Rack body */}
+        <mesh>
+          <boxGeometry args={[0.42, 0.08, 0.15]} />
+          <meshStandardMaterial color="#78716c" roughness={0.6} />
+        </mesh>
+        {/* Individual tube holes — 5 cylinders */}
+        {([-0.16, -0.08, 0, 0.08, 0.16] as number[]).map((x, i) => (
+          <mesh key={i} position={[x, 0.06, 0]}>
+            <cylinderGeometry args={[0.016, 0.016, 0.06, 10]} />
+            <meshStandardMaterial color="#58534e" roughness={0.7} />
+          </mesh>
+        ))}
+        {/* Test tubes in rack */}
+        {([-0.16, -0.08, 0, 0.08] as number[]).map((x, i) => (
+          <mesh key={i} position={[x, 0.14, 0]}>
+            <cylinderGeometry args={[0.012, 0.01, 0.12, 10]} />
+            <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.3} roughness={0.05} transmission={0.78} />
+          </mesh>
+        ))}
+      </group>
+      <Html position={[-1.2, 0.6, -1.05]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Test Tube Rack</span>
       </Html>
 
-      {/* Bunsen burner spot (placeholder cylinder) */}
+      {/* ── Ring stand with adjustable ring and wire gauze ── */}
+      <group position={[0.5, 0.0, -0.8]}>
+        {/* Vertical rod */}
+        <mesh position={[0, 0.55, 0]} castShadow>
+          <cylinderGeometry args={[0.01, 0.01, 1.0, 8]} />
+          <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
+        </mesh>
+        {/* Heavy base */}
+        <mesh position={[0, 0.03, 0]}>
+          <boxGeometry args={[0.22, 0.05, 0.15]} />
+          <meshStandardMaterial color="#606068" metalness={0.7} roughness={0.3} />
+        </mesh>
+        {/* Adjustable ring clamp arm */}
+        <mesh position={[0.06, 0.38, 0]}>
+          <boxGeometry args={[0.14, 0.018, 0.018]} />
+          <meshStandardMaterial color="#707078" metalness={0.6} roughness={0.3} />
+        </mesh>
+        {/* Ring (torus) */}
+        <mesh position={[0.18, 0.38, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.065, 0.008, 8, 24]} />
+          <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
+        </mesh>
+        {/* Wire gauze (flat square on ring) */}
+        <mesh position={[0.18, 0.4, 0]}>
+          <boxGeometry args={[0.13, 0.006, 0.13]} />
+          <meshStandardMaterial color="#999980" roughness={0.8} metalness={0.3} />
+        </mesh>
+        {/* Gauze grid lines */}
+        {([-0.04, 0, 0.04] as number[]).map((v, i) => (
+          <mesh key={`gx${i}`} position={[0.18 + v, 0.407, 0]}>
+            <boxGeometry args={[0.005, 0.004, 0.13]} />
+            <meshStandardMaterial color="#777760" roughness={0.9} />
+          </mesh>
+        ))}
+        {([-0.04, 0, 0.04] as number[]).map((v, i) => (
+          <mesh key={`gz${i}`} position={[0.18, 0.407, v]}>
+            <boxGeometry args={[0.13, 0.004, 0.005]} />
+            <meshStandardMaterial color="#777760" roughness={0.9} />
+          </mesh>
+        ))}
+      </group>
+      <Html position={[0.5, 0.72, -0.8]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Ring Stand</span>
+      </Html>
+
+      {/* ── Sink with faucet — at right end ── */}
+      <group position={[1.55, 0.06, -0.6]}>
+        {/* Sink basin */}
+        <mesh castShadow>
+          <boxGeometry args={[0.45, 0.12, 0.38]} />
+          <meshStandardMaterial color="#c0c8cc" metalness={0.5} roughness={0.3} />
+        </mesh>
+        {/* Basin interior (hollow appearance) */}
+        <mesh position={[0, 0.04, 0]}>
+          <boxGeometry args={[0.38, 0.08, 0.3]} />
+          <meshStandardMaterial color="#a8b4b8" metalness={0.4} roughness={0.4} />
+        </mesh>
+        {/* Drain circle */}
+        <mesh position={[0, 0.065, 0]}>
+          <cylinderGeometry args={[0.025, 0.025, 0.01, 12]} />
+          <meshStandardMaterial color="#707878" metalness={0.8} roughness={0.2} />
+        </mesh>
+        {/* Faucet base */}
+        <mesh position={[0, 0.12, -0.16]}>
+          <cylinderGeometry args={[0.018, 0.022, 0.06, 10]} />
+          <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
+        </mesh>
+        {/* Curved faucet pipe */}
+        <mesh position={[0, 0.2, -0.12]} rotation={[Math.PI / 4, 0, 0]}>
+          <cylinderGeometry args={[0.012, 0.012, 0.14, 8]} />
+          <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
+        </mesh>
+        {/* Faucet spout (horizontal) */}
+        <mesh position={[0, 0.24, -0.06]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.01, 0.012, 0.1, 8]} />
+          <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
+        </mesh>
+        {/* Hot/cold knobs */}
+        <mesh position={[-0.06, 0.14, -0.165]}>
+          <cylinderGeometry args={[0.014, 0.014, 0.02, 8]} />
+          <meshStandardMaterial color="#cc3333" metalness={0.5} roughness={0.3} />
+        </mesh>
+        <mesh position={[0.06, 0.14, -0.165]}>
+          <cylinderGeometry args={[0.014, 0.014, 0.02, 8]} />
+          <meshStandardMaterial color="#3366cc" metalness={0.5} roughness={0.3} />
+        </mesh>
+      </group>
+      <Html position={[1.55, 0.28, -0.6]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Sink</span>
+      </Html>
+
+      {/* ── Wash bottle — squeeze bottle shape ── */}
+      <group position={[1.1, 0.06, 0.2]}>
+        {/* Body */}
+        <mesh castShadow>
+          <cylinderGeometry args={[0.038, 0.042, 0.22, 12]} />
+          <meshStandardMaterial color="#ddee88" roughness={0.5} transparent opacity={0.85} />
+        </mesh>
+        {/* Cap */}
+        <mesh position={[0, 0.13, 0]}>
+          <cylinderGeometry args={[0.03, 0.038, 0.04, 12]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.4} />
+        </mesh>
+        {/* Nozzle tube */}
+        <mesh position={[0, 0.2, 0]} rotation={[0.3, 0, 0]}>
+          <cylinderGeometry args={[0.005, 0.007, 0.1, 8]} />
+          <meshStandardMaterial color="#cccccc" roughness={0.4} />
+        </mesh>
+      </group>
+
+      {/* ── Spatula rack — horizontal bars ── */}
+      <group position={[-0.3, 0.38, -1.1]}>
+        {/* Rack back plate */}
+        <mesh>
+          <boxGeometry args={[0.22, 0.12, 0.02]} />
+          <meshStandardMaterial color="#5a5a60" roughness={0.5} metalness={0.4} />
+        </mesh>
+        {/* Horizontal bars */}
+        {([0.02, -0.02] as number[]).map((y, i) => (
+          <mesh key={i} position={[0, y, 0.02]}>
+            <boxGeometry args={[0.2, 0.012, 0.015]} />
+            <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
+          </mesh>
+        ))}
+        {/* Spatulas hanging on rack */}
+        {([-0.07, -0.02, 0.06] as number[]).map((x, i) => (
+          <mesh key={i} position={[x, -0.04, 0.015]}>
+            <boxGeometry args={[0.008, 0.14, 0.004]} />
+            <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
+          </mesh>
+        ))}
+      </group>
+
+      {/* ── Lab notebook / clipboard on bench ── */}
+      <group position={[0.0, 0.075, 0.6]}>
+        {/* Clipboard backing */}
+        <mesh rotation={[-Math.PI / 2, 0, 0.15]}>
+          <boxGeometry args={[0.22, 0.28, 0.008]} />
+          <meshStandardMaterial color="#8b6914" roughness={0.7} />
+        </mesh>
+        {/* Paper */}
+        <mesh position={[0.005, 0.004, -0.005]} rotation={[-Math.PI / 2, 0, 0.15]}>
+          <boxGeometry args={[0.18, 0.24, 0.003]} />
+          <meshStandardMaterial color="#f5f0e8" roughness={0.9} />
+        </mesh>
+        {/* Clip at top */}
+        <mesh position={[0, 0.006, -0.11]} rotation={[-Math.PI / 2, 0, 0.15]}>
+          <boxGeometry args={[0.07, 0.025, 0.006]} />
+          <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
+        </mesh>
+        {/* Pen resting on notebook */}
+        <mesh position={[0.08, 0.007, 0.05]} rotation={[-Math.PI / 2, 0, 0.6]}>
+          <cylinderGeometry args={[0.005, 0.005, 0.18, 6]} />
+          <meshStandardMaterial color="#2244aa" roughness={0.4} />
+        </mesh>
+      </group>
+      <Html position={[0.0, 0.2, 0.6]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Lab Notebook</span>
+      </Html>
+
+      {/* ── Paper towel dispenser on back wall ── */}
+      <group position={[-0.7, 0.85, -1.22]}>
+        {/* Box body */}
+        <mesh castShadow>
+          <boxGeometry args={[0.22, 0.28, 0.1]} />
+          <meshStandardMaterial color="#e8e8e0" roughness={0.6} />
+        </mesh>
+        {/* Front panel detail */}
+        <mesh position={[0, 0, 0.051]}>
+          <boxGeometry args={[0.18, 0.1, 0.005]} />
+          <meshStandardMaterial color="#d0d0c8" roughness={0.7} />
+        </mesh>
+        {/* Dispenser slot */}
+        <mesh position={[0, -0.1, 0.051]}>
+          <boxGeometry args={[0.14, 0.015, 0.003]} />
+          <meshStandardMaterial color="#aaaaaa" roughness={0.5} />
+        </mesh>
+      </group>
+      <Html position={[-0.7, 1.08, -1.22]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Paper Towels</span>
+      </Html>
+
+      {/* ── Bunsen burner — detailed ── */}
       <group onClick={handleBunsenBurner}>
-        <mesh position={[1.5, 0.12, 0.5]} castShadow>
-          <cylinderGeometry args={[0.06, 0.08, 0.15, 16]} />
+        {/* Base */}
+        <mesh position={[1.5, 0.03, 0.5]} castShadow>
+          <boxGeometry args={[0.14, 0.05, 0.12]} />
+          <meshStandardMaterial color="#3a3a40" metalness={0.6} roughness={0.3} />
+        </mesh>
+        {/* Barrel */}
+        <mesh position={[1.5, 0.14, 0.5]} castShadow>
+          <cylinderGeometry args={[0.022, 0.03, 0.18, 14]} />
           <meshStandardMaterial color="#52525b" metalness={0.6} roughness={0.3} />
+        </mesh>
+        {/* Air collar ring */}
+        <mesh position={[1.5, 0.1, 0.5]}>
+          <cylinderGeometry args={[0.032, 0.032, 0.025, 14]} />
+          <meshStandardMaterial color="#444450" metalness={0.7} roughness={0.2} />
+        </mesh>
+        {/* Gas inlet tube (side) */}
+        <mesh position={[1.44, 0.04, 0.5]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.007, 0.007, 0.1, 8]} />
+          <meshStandardMaterial color="#666670" metalness={0.6} roughness={0.3} />
         </mesh>
         {/* Flame effect when active */}
         {burnerActive && (
@@ -75,16 +290,58 @@ export default function MainBench() {
           </>
         )}
       </group>
-      <Html position={[1.5, 0.35, 0.5]} center distanceFactor={10}>
+      <Html position={[1.5, 0.42, 0.5]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Bunsen Burner</span>
       </Html>
 
-      {/* Analytics balance area marker */}
-      <mesh position={[-1.5, 0.06, 0.8]} receiveShadow onClick={handleBalance}>
-        <boxGeometry args={[0.5, 0.02, 0.4]} />
-        <meshStandardMaterial color="#1c1917" roughness={0.5} />
-      </mesh>
-      <Html position={[-1.5, 0.22, 0.8]} center distanceFactor={10}>
+      {/* ── Analytical balance — enclosed glass housing ── */}
+      <group onClick={handleBalance}>
+        {/* Base platform */}
+        <mesh position={[-1.5, 0.035, 0.8]} receiveShadow>
+          <boxGeometry args={[0.48, 0.06, 0.38]} />
+          <meshStandardMaterial color="#2a2a2a" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Housing frame */}
+        <mesh position={[-1.5, 0.13, 0.8]}>
+          <boxGeometry args={[0.44, 0.12, 0.34]} />
+          <meshStandardMaterial color="#1c1917" roughness={0.5} />
+        </mesh>
+        {/* Glass front panel */}
+        <mesh position={[-1.5, 0.13, 0.63]}>
+          <boxGeometry args={[0.42, 0.1, 0.01]} />
+          <meshPhysicalMaterial color="#c8e4ff" transparent opacity={0.18} roughness={0.05} transmission={0.82} />
+        </mesh>
+        {/* Glass side panels */}
+        <mesh position={[-1.28, 0.13, 0.8]}>
+          <boxGeometry args={[0.01, 0.1, 0.32]} />
+          <meshPhysicalMaterial color="#c8e4ff" transparent opacity={0.18} roughness={0.05} transmission={0.82} />
+        </mesh>
+        <mesh position={[-1.72, 0.13, 0.8]}>
+          <boxGeometry args={[0.01, 0.1, 0.32]} />
+          <meshPhysicalMaterial color="#c8e4ff" transparent opacity={0.18} roughness={0.05} transmission={0.82} />
+        </mesh>
+        {/* Weighing pan inside */}
+        <mesh position={[-1.5, 0.09, 0.8]}>
+          <cylinderGeometry args={[0.07, 0.07, 0.01, 16]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.7} roughness={0.2} />
+        </mesh>
+        {/* Pan support column */}
+        <mesh position={[-1.5, 0.075, 0.8]}>
+          <cylinderGeometry args={[0.007, 0.007, 0.025, 8]} />
+          <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
+        </mesh>
+        {/* Digital display */}
+        <mesh position={[-1.5, 0.18, 0.628]}>
+          <boxGeometry args={[0.18, 0.04, 0.005]} />
+          <meshStandardMaterial color="#001100" emissive="#00ff66" emissiveIntensity={0.7} roughness={0.2} />
+        </mesh>
+        {/* Level bubble indicator */}
+        <mesh position={[-1.3, 0.065, 0.82]}>
+          <sphereGeometry args={[0.012, 8, 8]} />
+          <meshStandardMaterial color="#aaffaa" transparent opacity={0.6} roughness={0.1} />
+        </mesh>
+      </group>
+      <Html position={[-1.5, 0.3, 0.8]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Analytical Balance</span>
       </Html>
 

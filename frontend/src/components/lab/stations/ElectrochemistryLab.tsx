@@ -261,6 +261,193 @@ export default function ElectrochemistryLab() {
           transmission={0.78}
         />
       </mesh>
+
+      {/* ── Galvanic cell setup — two beakers + salt bridge ── */}
+      {/* Left half-cell beaker */}
+      <group position={[-0.6, 0.06, 0.65]}>
+        <mesh castShadow>
+          <cylinderGeometry args={[0.065, 0.07, 0.16, 14]} />
+          <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.28} roughness={0.05} transmission={0.78} />
+        </mesh>
+        {/* Solution (ZnSO4 — blue-ish) */}
+        <mesh position={[0, -0.02, 0]}>
+          <cylinderGeometry args={[0.058, 0.062, 0.1, 14]} />
+          <meshStandardMaterial color="#aaccee" transparent opacity={0.5} roughness={0.1} />
+        </mesh>
+        {/* Zinc working electrode rod */}
+        <mesh position={[0.02, 0.14, 0]} castShadow>
+          <cylinderGeometry args={[0.008, 0.008, 0.22, 8]} />
+          <meshStandardMaterial color="#9999aa" roughness={0.3} metalness={0.8} />
+        </mesh>
+        {/* Label strip */}
+        <mesh position={[0, -0.02, 0.068]}>
+          <boxGeometry args={[0.06, 0.06, 0.002]} />
+          <meshStandardMaterial color="#eedd88" roughness={0.8} />
+        </mesh>
+      </group>
+
+      {/* Right half-cell beaker */}
+      <group position={[0.1, 0.06, 0.65]}>
+        <mesh castShadow>
+          <cylinderGeometry args={[0.065, 0.07, 0.16, 14]} />
+          <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.28} roughness={0.05} transmission={0.78} />
+        </mesh>
+        {/* Solution (CuSO4 — blue) */}
+        <mesh position={[0, -0.02, 0]}>
+          <cylinderGeometry args={[0.058, 0.062, 0.1, 14]} />
+          <meshStandardMaterial color="#2255cc" transparent opacity={0.45} roughness={0.1} />
+        </mesh>
+        {/* Copper working electrode */}
+        <mesh position={[-0.02, 0.14, 0]} castShadow>
+          <cylinderGeometry args={[0.009, 0.009, 0.22, 8]} />
+          <meshStandardMaterial color="#cc6633" roughness={0.3} metalness={0.7} />
+        </mesh>
+        {/* Label strip */}
+        <mesh position={[0, -0.02, 0.068]}>
+          <boxGeometry args={[0.06, 0.06, 0.002]} />
+          <meshStandardMaterial color="#88ccee" roughness={0.8} />
+        </mesh>
+      </group>
+
+      {/* Salt bridge — U-tube over both beakers */}
+      {/* Left arm */}
+      <mesh position={[-0.54, 0.28, 0.65]} rotation={[0.5, 0, 0]}>
+        <cylinderGeometry args={[0.009, 0.009, 0.22, 8]} />
+        <meshPhysicalMaterial color="#ffe8aa" transparent opacity={0.5} roughness={0.05} transmission={0.6} />
+      </mesh>
+      {/* Bridge top horizontal */}
+      <mesh position={[-0.25, 0.34, 0.55]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.009, 0.009, 0.62, 8]} />
+        <meshPhysicalMaterial color="#ffe8aa" transparent opacity={0.5} roughness={0.05} transmission={0.6} />
+      </mesh>
+      {/* Right arm */}
+      <mesh position={[0.04, 0.28, 0.65]} rotation={[0.5, 0, 0]}>
+        <cylinderGeometry args={[0.009, 0.009, 0.22, 8]} />
+        <meshPhysicalMaterial color="#ffe8aa" transparent opacity={0.5} roughness={0.05} transmission={0.6} />
+      </mesh>
+      {/* Salt bridge fill */}
+      <mesh position={[-0.25, 0.334, 0.555]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.006, 0.006, 0.58, 8]} />
+        <meshStandardMaterial color="#ffee88" transparent opacity={0.55} roughness={0.1} />
+      </mesh>
+      <Html position={[-0.25, 0.52, 0.55]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Galvanic Cell + Salt Bridge</span>
+      </Html>
+
+      {/* ── Ammeter/Voltmeter display boxes ── */}
+      {/* Voltmeter */}
+      <group position={[-0.25, 0.12, 0.95]}>
+        <mesh castShadow>
+          <boxGeometry args={[0.18, 0.14, 0.1]} />
+          <meshStandardMaterial color="#2a2a2a" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Display */}
+        <mesh position={[0, 0.02, 0.051]}>
+          <boxGeometry args={[0.12, 0.07, 0.005]} />
+          <meshStandardMaterial color="#001100" emissive="#00ff66" emissiveIntensity={1.0} roughness={0.2} />
+        </mesh>
+        {/* Label */}
+        <mesh position={[0, -0.04, 0.051]}>
+          <boxGeometry args={[0.1, 0.02, 0.003]} />
+          <meshStandardMaterial color="#444444" roughness={0.7} />
+        </mesh>
+        {/* Terminal posts */}
+        <mesh position={[-0.04, 0.065, 0]}>
+          <cylinderGeometry args={[0.007, 0.007, 0.025, 8]} />
+          <meshStandardMaterial color="#cc2200" metalness={0.5} roughness={0.3} />
+        </mesh>
+        <mesh position={[0.04, 0.065, 0]}>
+          <cylinderGeometry args={[0.007, 0.007, 0.025, 8]} />
+          <meshStandardMaterial color="#111111" metalness={0.5} roughness={0.3} />
+        </mesh>
+      </group>
+      <Html position={[-0.25, 0.38, 0.95]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Voltmeter</span>
+      </Html>
+
+      {/* Ammeter */}
+      <group position={[0.3, 0.12, 0.95]}>
+        <mesh castShadow>
+          <boxGeometry args={[0.16, 0.13, 0.09]} />
+          <meshStandardMaterial color="#2a2222" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Display */}
+        <mesh position={[0, 0.02, 0.046]}>
+          <boxGeometry args={[0.1, 0.06, 0.005]} />
+          <meshStandardMaterial color="#110011" emissive="#ff8800" emissiveIntensity={0.9} roughness={0.2} />
+        </mesh>
+        {/* Terminals */}
+        <mesh position={[-0.035, 0.06, 0]}>
+          <cylinderGeometry args={[0.007, 0.007, 0.025, 8]} />
+          <meshStandardMaterial color="#cc2200" metalness={0.5} roughness={0.3} />
+        </mesh>
+        <mesh position={[0.035, 0.06, 0]}>
+          <cylinderGeometry args={[0.007, 0.007, 0.025, 8]} />
+          <meshStandardMaterial color="#111111" metalness={0.5} roughness={0.3} />
+        </mesh>
+      </group>
+      <Html position={[0.3, 0.36, 0.95]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Ammeter</span>
+      </Html>
+
+      {/* ── Alligator clip wires connecting instruments to galvanic cell ── */}
+      {/* Red wire from voltmeter to Zn electrode */}
+      <mesh position={[-0.44, 0.28, 0.78]} rotation={[0.4, 0.3, 0.1]}>
+        <cylinderGeometry args={[0.005, 0.005, 0.36, 6]} />
+        <meshStandardMaterial color="#cc2200" roughness={0.7} />
+      </mesh>
+      {/* Black wire from voltmeter to Cu electrode */}
+      <mesh position={[-0.1, 0.28, 0.8]} rotation={[0.4, -0.3, -0.1]}>
+        <cylinderGeometry args={[0.005, 0.005, 0.32, 6]} />
+        <meshStandardMaterial color="#111111" roughness={0.7} />
+      </mesh>
+      {/* Alligator clip (red) — small flattened cylinder */}
+      <mesh position={[-0.56, 0.22, 0.68]} rotation={[0, 0.3, 0.2]}>
+        <boxGeometry args={[0.025, 0.01, 0.01]} />
+        <meshStandardMaterial color="#cc2200" roughness={0.4} metalness={0.4} />
+      </mesh>
+      {/* Alligator clip (black) */}
+      <mesh position={[0.08, 0.22, 0.68]} rotation={[0, -0.3, -0.2]}>
+        <boxGeometry args={[0.025, 0.01, 0.01]} />
+        <meshStandardMaterial color="#111111" roughness={0.4} metalness={0.4} />
+      </mesh>
+
+      {/* ── Electrode holder/stand for reference electrode ── */}
+      <group position={[0.5, 0.06, -1.07]}>
+        {/* Stand vertical rod */}
+        <mesh position={[0.08, 0.25, 0]}>
+          <cylinderGeometry args={[0.008, 0.008, 0.4, 8]} />
+          <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
+        </mesh>
+        {/* Stand base */}
+        <mesh>
+          <boxGeometry args={[0.2, 0.03, 0.12]} />
+          <meshStandardMaterial color="#707078" metalness={0.6} roughness={0.3} />
+        </mesh>
+        {/* Clamp arm holding ref electrode */}
+        <mesh position={[0.04, 0.36, 0]}>
+          <boxGeometry args={[0.1, 0.014, 0.014]} />
+          <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
+        </mesh>
+        {/* Reference electrode glass tube */}
+        <mesh position={[0, 0.28, 0]}>
+          <cylinderGeometry args={[0.012, 0.012, 0.28, 10]} />
+          <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.35} roughness={0.05} transmission={0.75} />
+        </mesh>
+        {/* Ag/AgCl wire inside ref electrode */}
+        <mesh position={[0, 0.28, 0]}>
+          <cylinderGeometry args={[0.004, 0.004, 0.22, 6]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.85} roughness={0.2} />
+        </mesh>
+        {/* Solution in reference electrode */}
+        <mesh position={[0, 0.24, 0]}>
+          <cylinderGeometry args={[0.009, 0.009, 0.18, 10]} />
+          <meshStandardMaterial color="#cceeaa" transparent opacity={0.5} roughness={0.1} />
+        </mesh>
+      </group>
+      <Html position={[0.5, 0.62, -1.07]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Reference Electrode</span>
+      </Html>
     </StationShell>
   );
 }

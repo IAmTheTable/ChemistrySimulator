@@ -183,7 +183,50 @@ export default function GloveBox() {
         />
       </mesh>
 
-      {/* Pressure gauge on top */}
+      {/* ── Vacuum gauge (circular dial) on front face ── */}
+      <group position={[-0.7, 0.06, 0.15]}>
+        {/* Gauge body */}
+        <mesh>
+          <cylinderGeometry args={[0.042, 0.042, 0.04, 16]} />
+          <meshStandardMaterial color="#222225" roughness={0.4} metalness={0.6} />
+        </mesh>
+        {/* Gauge face */}
+        <mesh position={[0, 0.021, 0]}>
+          <cylinderGeometry args={[0.036, 0.036, 0.005, 16]} />
+          <meshStandardMaterial color="#f0f0e8" roughness={0.7} />
+        </mesh>
+        {/* Needle */}
+        <mesh position={[0.012, 0.025, 0]} rotation={[0, 0, -0.8]}>
+          <boxGeometry args={[0.028, 0.003, 0.002]} />
+          <meshStandardMaterial color="#cc2200" roughness={0.4} />
+        </mesh>
+      </group>
+      <Html position={[-0.7, 0.2, 0.15]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Vacuum Gauge</span>
+      </Html>
+
+      {/* ── Pressure digital display on front ── */}
+      <group position={[0.7, 0.06, 0.15]}>
+        <mesh castShadow>
+          <boxGeometry args={[0.18, 0.1, 0.06]} />
+          <meshStandardMaterial color="#1a1a22" roughness={0.4} metalness={0.3} />
+        </mesh>
+        {/* Digital readout */}
+        <mesh position={[0, 0.01, 0.031]}>
+          <boxGeometry args={[0.12, 0.05, 0.005]} />
+          <meshStandardMaterial color="#001100" emissive="#00ff88" emissiveIntensity={0.8} roughness={0.2} />
+        </mesh>
+        {/* Unit label area */}
+        <mesh position={[0, -0.03, 0.031]}>
+          <boxGeometry args={[0.1, 0.015, 0.003]} />
+          <meshStandardMaterial color="#333344" roughness={0.7} />
+        </mesh>
+      </group>
+      <Html position={[0.7, 0.22, 0.15]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Pressure Display</span>
+      </Html>
+
+      {/* ── Pressure gauge on top (existing) ── */}
       <mesh position={[0, 1.06, -0.55]}>
         <cylinderGeometry args={[0.045, 0.045, 0.05, 16]} />
         <meshStandardMaterial color="#222225" roughness={0.4} metalness={0.6} />
@@ -196,6 +239,111 @@ export default function GloveBox() {
           emissiveIntensity={0.5}
           roughness={0.2}
         />
+      </mesh>
+
+      {/* ── Gas purification cartridge on top ── */}
+      <group position={[-0.3, 1.06, -0.4]}>
+        {/* Cylinder body */}
+        <mesh castShadow>
+          <cylinderGeometry args={[0.055, 0.055, 0.28, 14]} />
+          <meshStandardMaterial color="#c8c8c0" roughness={0.4} metalness={0.5} />
+        </mesh>
+        {/* Top cap */}
+        <mesh position={[0, 0.15, 0]}>
+          <cylinderGeometry args={[0.058, 0.058, 0.025, 14]} />
+          <meshStandardMaterial color="#aaaaaa" roughness={0.3} metalness={0.6} />
+        </mesh>
+        {/* Bottom cap */}
+        <mesh position={[0, -0.15, 0]}>
+          <cylinderGeometry args={[0.058, 0.058, 0.025, 14]} />
+          <meshStandardMaterial color="#aaaaaa" roughness={0.3} metalness={0.6} />
+        </mesh>
+        {/* Inlet/outlet nozzles */}
+        <mesh position={[0, 0.16, 0.04]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.01, 0.01, 0.04, 8]} />
+          <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
+        </mesh>
+        <mesh position={[0, -0.16, -0.04]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.01, 0.01, 0.04, 8]} />
+          <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
+        </mesh>
+      </group>
+      <Html position={[-0.3, 1.38, -0.4]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Gas Purification Cartridge</span>
+      </Html>
+
+      {/* ── Internal shelving ── */}
+      {/* Shelf plank */}
+      <mesh position={[0.5, 0.38, -0.6]}>
+        <boxGeometry args={[0.8, 0.025, 0.3]} />
+        <meshStandardMaterial color="#555558" roughness={0.6} metalness={0.3} />
+      </mesh>
+      {/* Shelf brackets */}
+      <mesh position={[0.18, 0.32, -0.6]}>
+        <boxGeometry args={[0.015, 0.1, 0.015]} />
+        <meshStandardMaterial color="#444448" metalness={0.6} roughness={0.3} />
+      </mesh>
+      <mesh position={[0.82, 0.32, -0.6]}>
+        <boxGeometry args={[0.015, 0.1, 0.015]} />
+        <meshStandardMaterial color="#444448" metalness={0.6} roughness={0.3} />
+      </mesh>
+      {/* Items on shelf */}
+      <mesh position={[0.35, 0.44, -0.6]}>
+        <cylinderGeometry args={[0.02, 0.02, 0.1, 10]} />
+        <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.3} roughness={0.05} transmission={0.75} />
+      </mesh>
+      <mesh position={[0.55, 0.44, -0.6]}>
+        <cylinderGeometry args={[0.02, 0.02, 0.1, 10]} />
+        <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.3} roughness={0.05} transmission={0.75} />
+      </mesh>
+
+      {/* ── Tool holder strip on interior back wall ── */}
+      <mesh position={[-0.4, 0.7, -0.92]}>
+        <boxGeometry args={[0.5, 0.04, 0.025]} />
+        <meshStandardMaterial color="#444448" roughness={0.5} metalness={0.4} />
+      </mesh>
+      {/* Hanging tools — small spatulas */}
+      {([-0.55, -0.42, -0.28] as number[]).map((x, i) => (
+        <mesh key={i} position={[x, 0.62, -0.91]}>
+          <boxGeometry args={[0.007, 0.12, 0.005]} />
+          <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
+        </mesh>
+      ))}
+      {/* Tool holder hooks */}
+      {([-0.55, -0.42, -0.28] as number[]).map((x, i) => (
+        <mesh key={i} position={[x, 0.71, -0.91]}>
+          <boxGeometry args={[0.018, 0.012, 0.02]} />
+          <meshStandardMaterial color="#666668" metalness={0.7} roughness={0.3} />
+        </mesh>
+      ))}
+
+      {/* ── Enhanced glove ports — thicker rubber torus ── */}
+      {/* Left glove — inner rubber disc */}
+      <mesh position={[-0.42, 0.48, 0.13]}>
+        <cylinderGeometry args={[0.11, 0.13, 0.04, 20]} />
+        <meshStandardMaterial color="#1a1a1a" roughness={0.95} />
+      </mesh>
+      {/* Right glove — inner rubber disc */}
+      <mesh position={[0.42, 0.48, 0.13]}>
+        <cylinderGeometry args={[0.11, 0.13, 0.04, 20]} />
+        <meshStandardMaterial color="#1a1a1a" roughness={0.95} />
+      </mesh>
+
+      {/* ── Antechamber door details ── */}
+      {/* Inner door porthole window */}
+      <mesh position={[1.3, 0.51, -0.4]}>
+        <cylinderGeometry args={[0.08, 0.08, 0.005, 16]} />
+        <meshPhysicalMaterial color="#b8d8ff" transparent opacity={0.3} roughness={0.04} transmission={0.78} />
+      </mesh>
+      {/* Outer door handle */}
+      <mesh position={[1.77, 0.55, -0.38]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.012, 0.012, 0.06, 8]} />
+        <meshStandardMaterial color="#cccccc" metalness={0.8} roughness={0.2} />
+      </mesh>
+      {/* Outer door latch lever */}
+      <mesh position={[1.77, 0.46, -0.55]}>
+        <boxGeometry args={[0.015, 0.07, 0.015]} />
+        <meshStandardMaterial color="#aaaaaa" metalness={0.7} roughness={0.2} />
       </mesh>
     </StationShell>
   );

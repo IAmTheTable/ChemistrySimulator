@@ -227,19 +227,203 @@ export default function ThermalAnalysis() {
         )
       )}
 
-      {/* DSC/TGA instrument on shelf */}
-      <mesh position={[1.0, 0.42, -1.05]} castShadow>
-        <boxGeometry args={[0.55, 0.15, 0.2]} />
-        <meshStandardMaterial color="#2a2a35" roughness={0.4} metalness={0.4} />
+      {/* ── DSC/TGA instrument on shelf — detailed ── */}
+      <group position={[1.0, 0.42, -1.05]}>
+        {/* Main body */}
+        <mesh castShadow>
+          <boxGeometry args={[0.55, 0.15, 0.2]} />
+          <meshStandardMaterial color="#2a2a35" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Display */}
+        <mesh position={[0, 0.085, -0.1]}>
+          <boxGeometry args={[0.28, 0.08, 0.01]} />
+          <meshStandardMaterial color="#000811" emissive="#ffaa00" emissiveIntensity={0.45} roughness={0.2} />
+        </mesh>
+        {/* Sample port holes (2 circles) */}
+        <mesh position={[-0.1, 0.08, 0.101]}>
+          <cylinderGeometry args={[0.018, 0.018, 0.01, 12]} />
+          <meshStandardMaterial color="#111118" roughness={0.4} metalness={0.5} />
+        </mesh>
+        <mesh position={[0.1, 0.08, 0.101]}>
+          <cylinderGeometry args={[0.018, 0.018, 0.01, 12]} />
+          <meshStandardMaterial color="#111118" roughness={0.4} metalness={0.5} />
+        </mesh>
+        {/* Sample lids */}
+        <mesh position={[-0.1, 0.09, 0.101]}>
+          <cylinderGeometry args={[0.016, 0.016, 0.005, 12]} />
+          <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.2} />
+        </mesh>
+        <mesh position={[0.1, 0.09, 0.101]}>
+          <cylinderGeometry args={[0.016, 0.016, 0.005, 12]} />
+          <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.2} />
+        </mesh>
+      </group>
+      <Html position={[1.0, 0.66, -1.05]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>DSC / TGA</span>
+      </Html>
+
+      {/* ── Crucible furnace ── */}
+      <group position={[-1.5, 0.06, 0.6]}>
+        {/* Furnace body */}
+        <mesh castShadow>
+          <cylinderGeometry args={[0.14, 0.16, 0.32, 18]} />
+          <meshStandardMaterial color="#555550" roughness={0.6} metalness={0.3} />
+        </mesh>
+        {/* Open top rim */}
+        <mesh position={[0, 0.175, 0]}>
+          <cylinderGeometry args={[0.135, 0.14, 0.025, 18]} />
+          <meshStandardMaterial color="#666660" roughness={0.5} metalness={0.4} />
+        </mesh>
+        {/* Glowing interior */}
+        <mesh position={[0, 0.14, 0]}>
+          <cylinderGeometry args={[0.1, 0.1, 0.18, 16]} />
+          <meshStandardMaterial color="#ff4400" emissive="#ff2200" emissiveIntensity={1.5} roughness={0.8} />
+        </mesh>
+        <pointLight position={[0, 0.3, 0]} color="#ff6600" intensity={0.8} distance={1.0} />
+        {/* Ceramic crucible inside */}
+        <mesh position={[0, 0.18, 0]}>
+          <cylinderGeometry args={[0.042, 0.05, 0.07, 12]} />
+          <meshStandardMaterial color="#e8e0d8" roughness={0.8} />
+        </mesh>
+        {/* Thermocouple wire */}
+        <mesh position={[0.08, 0.22, 0]}>
+          <cylinderGeometry args={[0.004, 0.004, 0.18, 6]} />
+          <meshStandardMaterial color="#cc4400" roughness={0.5} />
+        </mesh>
+      </group>
+      <Html position={[-1.5, 0.5, 0.6]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Crucible Furnace</span>
+      </Html>
+
+      {/* ── Cooling rack (wire grid) ── */}
+      <group position={[0.3, 0.075, 0.7]}>
+        {/* Rack frame */}
+        <mesh>
+          <boxGeometry args={[0.38, 0.015, 0.28]} />
+          <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
+        </mesh>
+        {/* Legs */}
+        {([[-0.17, -0.13], [-0.17, 0.13], [0.17, -0.13], [0.17, 0.13]] as [number, number][]).map(([x, z], i) => (
+          <mesh key={i} position={[x, -0.035, z]}>
+            <cylinderGeometry args={[0.008, 0.008, 0.055, 6]} />
+            <meshStandardMaterial color="#777777" metalness={0.6} roughness={0.3} />
+          </mesh>
+        ))}
+        {/* Wire cross members */}
+        {([-0.12, -0.04, 0.04, 0.12] as number[]).map((z, i) => (
+          <mesh key={`z${i}`} position={[0, 0.008, z]}>
+            <boxGeometry args={[0.36, 0.004, 0.003]} />
+            <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
+          </mesh>
+        ))}
+        {([-0.14, -0.06, 0.02, 0.1, 0.18] as number[]).map((x, i) => (
+          <mesh key={`x${i}`} position={[x - 0.04, 0.008, 0]}>
+            <boxGeometry args={[0.003, 0.004, 0.26]} />
+            <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
+          </mesh>
+        ))}
+      </group>
+      <Html position={[0.3, 0.2, 0.7]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Cooling Rack</span>
+      </Html>
+
+      {/* ── Heat gun ── */}
+      <group position={[-0.1, 0.06, 0.45]}>
+        {/* Handle */}
+        <mesh rotation={[0.4, 0, 0]}>
+          <boxGeometry args={[0.06, 0.18, 0.06]} />
+          <meshStandardMaterial color="#222222" roughness={0.5} />
+        </mesh>
+        {/* Barrel */}
+        <mesh position={[0, 0.1, -0.08]}>
+          <cylinderGeometry args={[0.028, 0.032, 0.2, 12]} />
+          <meshStandardMaterial color="#333333" roughness={0.4} metalness={0.3} />
+        </mesh>
+        {/* Nozzle */}
+        <mesh position={[0, 0.1, -0.18]}>
+          <cylinderGeometry args={[0.022, 0.028, 0.05, 10]} />
+          <meshStandardMaterial color="#444444" roughness={0.5} />
+        </mesh>
+        {/* Air vents on barrel */}
+        {([0, Math.PI * 0.5, Math.PI, Math.PI * 1.5] as number[]).map((angle, i) => (
+          <mesh key={i} position={[0.03 * Math.cos(angle), 0.12, -0.08 + 0.03 * Math.sin(angle)]}>
+            <boxGeometry args={[0.005, 0.04, 0.005]} />
+            <meshStandardMaterial color="#111111" roughness={0.7} />
+          </mesh>
+        ))}
+      </group>
+
+      {/* ── Infrared thermometer (gun-shaped) ── */}
+      <group position={[0.75, 0.06, 0.55]}>
+        {/* Grip handle */}
+        <mesh rotation={[0.2, 0, 0]}>
+          <boxGeometry args={[0.055, 0.14, 0.055]} />
+          <meshStandardMaterial color="#cc4400" roughness={0.5} />
+        </mesh>
+        {/* Body barrel */}
+        <mesh position={[0, 0.08, -0.07]}>
+          <boxGeometry args={[0.05, 0.06, 0.14]} />
+          <meshStandardMaterial color="#cc4400" roughness={0.5} />
+        </mesh>
+        {/* Sensor lens */}
+        <mesh position={[0, 0.08, -0.14]}>
+          <cylinderGeometry args={[0.014, 0.014, 0.012, 10]} />
+          <meshStandardMaterial color="#111122" roughness={0.1} metalness={0.3} />
+        </mesh>
+        {/* Digital screen */}
+        <mesh position={[0, 0.1, -0.05]}>
+          <boxGeometry args={[0.04, 0.028, 0.005]} />
+          <meshStandardMaterial color="#001100" emissive="#cc4400" emissiveIntensity={0.6} roughness={0.2} />
+        </mesh>
+        {/* Trigger */}
+        <mesh position={[0, -0.02, -0.04]}>
+          <boxGeometry args={[0.02, 0.04, 0.025]} />
+          <meshStandardMaterial color="#aa3300" roughness={0.5} />
+        </mesh>
+      </group>
+      <Html position={[0.75, 0.3, 0.55]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>IR Thermometer</span>
+      </Html>
+
+      {/* ── Tongs — long metal grabbing tool ── */}
+      <group position={[-1.2, 0.42, -1.06]} rotation={[0, 0.3, 0]}>
+        {/* Left arm */}
+        <mesh position={[-0.012, 0, 0]} rotation={[0, 0, 0.05]}>
+          <boxGeometry args={[0.008, 0.26, 0.008]} />
+          <meshStandardMaterial color="#aaaaaa" metalness={0.75} roughness={0.2} />
+        </mesh>
+        {/* Right arm */}
+        <mesh position={[0.012, 0, 0]} rotation={[0, 0, -0.05]}>
+          <boxGeometry args={[0.008, 0.26, 0.008]} />
+          <meshStandardMaterial color="#aaaaaa" metalness={0.75} roughness={0.2} />
+        </mesh>
+        {/* Spring hinge ring at top */}
+        <mesh position={[0, 0.13, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.018, 0.004, 6, 16]} />
+          <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
+        </mesh>
+        {/* Gripping tips */}
+        <mesh position={[-0.008, -0.14, 0]} rotation={[0, 0, -0.3]}>
+          <boxGeometry args={[0.02, 0.025, 0.012]} />
+          <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
+        </mesh>
+        <mesh position={[0.008, -0.14, 0]} rotation={[0, 0, 0.3]}>
+          <boxGeometry args={[0.02, 0.025, 0.012]} />
+          <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
+        </mesh>
+      </group>
+      <Html position={[-1.2, 0.62, -1.06]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Tongs</span>
+      </Html>
+
+      {/* ── Insulation blocks (white/ceramic) ── */}
+      <mesh position={[-1.5, 0.42, -1.06]} castShadow>
+        <boxGeometry args={[0.12, 0.06, 0.1]} />
+        <meshStandardMaterial color="#f0ede8" roughness={0.8} />
       </mesh>
-      <mesh position={[1.0, 0.52, -1.06]}>
-        <boxGeometry args={[0.28, 0.08, 0.01]} />
-        <meshStandardMaterial
-          color="#000811"
-          emissive="#ffaa00"
-          emissiveIntensity={0.45}
-          roughness={0.2}
-        />
+      <mesh position={[-1.35, 0.42, -1.06]} castShadow>
+        <boxGeometry args={[0.1, 0.04, 0.08]} />
+        <meshStandardMaterial color="#e8e5e0" roughness={0.9} />
       </mesh>
     </StationShell>
   );

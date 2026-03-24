@@ -232,6 +232,217 @@ export default function InstrumentRoom() {
         <boxGeometry args={[3.5, 0.03, 0.1]} />
         <meshStandardMaterial color="#161b2e" roughness={0.8} />
       </mesh>
+
+      {/* ── Analytical balance (enclosed glass case) ── */}
+      <group position={[-1.4, 0.1, 0.2]}>
+        {/* Base */}
+        <mesh castShadow>
+          <boxGeometry args={[0.38, 0.06, 0.3]} />
+          <meshStandardMaterial color="#1a1a2a" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Glass housing */}
+        <mesh position={[0, 0.09, 0]}>
+          <boxGeometry args={[0.36, 0.12, 0.28]} />
+          <meshPhysicalMaterial color="#a8c8ff" transparent opacity={0.12} roughness={0.05} transmission={0.88} />
+        </mesh>
+        {/* Glass frame sides */}
+        <mesh position={[-0.18, 0.09, 0]}>
+          <boxGeometry args={[0.01, 0.12, 0.28]} />
+          <meshStandardMaterial color="#2a3050" roughness={0.4} metalness={0.5} />
+        </mesh>
+        <mesh position={[0.18, 0.09, 0]}>
+          <boxGeometry args={[0.01, 0.12, 0.28]} />
+          <meshStandardMaterial color="#2a3050" roughness={0.4} metalness={0.5} />
+        </mesh>
+        {/* Balance pan */}
+        <mesh position={[0, 0.05, 0]}>
+          <cylinderGeometry args={[0.065, 0.065, 0.008, 16]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.7} roughness={0.2} />
+        </mesh>
+        {/* Display */}
+        <mesh position={[0.12, 0.14, -0.14]}>
+          <boxGeometry args={[0.1, 0.035, 0.005]} />
+          <meshStandardMaterial color="#001100" emissive="#00ff44" emissiveIntensity={0.8} roughness={0.2} />
+        </mesh>
+      </group>
+      <Html position={[-1.4, 0.32, 0.2]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Analytical Balance</span>
+      </Html>
+
+      {/* ── pH meter with probe ── */}
+      <group position={[-0.4, 0.08, 0.35]}>
+        {/* Meter body */}
+        <mesh castShadow>
+          <boxGeometry args={[0.1, 0.2, 0.06]} />
+          <meshStandardMaterial color="#e8e0d0" roughness={0.5} />
+        </mesh>
+        {/* Screen */}
+        <mesh position={[0, 0.04, 0.031]}>
+          <boxGeometry args={[0.07, 0.08, 0.005]} />
+          <meshStandardMaterial color="#001122" emissive="#00aaff" emissiveIntensity={0.7} roughness={0.2} />
+        </mesh>
+        {/* Buttons */}
+        {([-0.025, 0.025] as number[]).map((x, i) => (
+          <mesh key={i} position={[x, -0.06, 0.031]}>
+            <boxGeometry args={[0.025, 0.018, 0.005]} />
+            <meshStandardMaterial color="#3344aa" roughness={0.5} />
+          </mesh>
+        ))}
+        {/* Probe cable */}
+        <mesh position={[0, 0.1, 0]} rotation={[0.2, 0, 0]}>
+          <cylinderGeometry args={[0.005, 0.005, 0.14, 6]} />
+          <meshStandardMaterial color="#333333" roughness={0.7} />
+        </mesh>
+        {/* Probe tip */}
+        <mesh position={[0, 0.2, 0.025]}>
+          <cylinderGeometry args={[0.007, 0.004, 0.1, 8]} />
+          <meshStandardMaterial color="#888888" metalness={0.5} roughness={0.4} />
+        </mesh>
+        {/* Probe bulb */}
+        <mesh position={[0, 0.245, 0.025]}>
+          <sphereGeometry args={[0.01, 8, 8]} />
+          <meshStandardMaterial color="#aacccc" metalness={0.3} roughness={0.3} />
+        </mesh>
+      </group>
+      <Html position={[-0.4, 0.42, 0.35]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>pH Meter</span>
+      </Html>
+
+      {/* ── Centrifuge ── */}
+      <group position={[0.55, 0.1, 0.25]}>
+        {/* Body */}
+        <mesh castShadow>
+          <cylinderGeometry args={[0.14, 0.16, 0.22, 20]} />
+          <meshStandardMaterial color="#ddd8d0" roughness={0.4} metalness={0.2} />
+        </mesh>
+        {/* Lid */}
+        <mesh position={[0, 0.14, 0]}>
+          <cylinderGeometry args={[0.13, 0.14, 0.06, 20]} />
+          <meshStandardMaterial color="#ccccc8" roughness={0.3} metalness={0.2} />
+        </mesh>
+        {/* Lid hinge */}
+        <mesh position={[-0.1, 0.14, 0.0]}>
+          <boxGeometry args={[0.04, 0.02, 0.025]} />
+          <meshStandardMaterial color="#aaaaaa" metalness={0.7} roughness={0.3} />
+        </mesh>
+        {/* Control panel front */}
+        <mesh position={[0, -0.04, 0.16]}>
+          <boxGeometry args={[0.14, 0.05, 0.01]} />
+          <meshStandardMaterial color="#222230" roughness={0.4} />
+        </mesh>
+        {/* RPM display */}
+        <mesh position={[0, -0.03, 0.166]}>
+          <boxGeometry args={[0.07, 0.025, 0.005]} />
+          <meshStandardMaterial color="#001100" emissive="#00ee44" emissiveIntensity={0.6} roughness={0.2} />
+        </mesh>
+        {/* Start button */}
+        <mesh position={[0.05, -0.055, 0.161]}>
+          <cylinderGeometry args={[0.01, 0.01, 0.01, 8]} />
+          <meshStandardMaterial color="#44cc44" emissive="#22aa22" emissiveIntensity={0.4} roughness={0.4} />
+        </mesh>
+      </group>
+      <Html position={[0.55, 0.44, 0.25]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Centrifuge</span>
+      </Html>
+
+      {/* ── Microscope ── */}
+      <group position={[1.45, 0.06, 0.3]}>
+        {/* Heavy base */}
+        <mesh castShadow>
+          <boxGeometry args={[0.18, 0.04, 0.2]} />
+          <meshStandardMaterial color="#222228" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Arm pillar */}
+        <mesh position={[-0.05, 0.22, 0]}>
+          <boxGeometry args={[0.04, 0.4, 0.04]} />
+          <meshStandardMaterial color="#222228" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Stage platform */}
+        <mesh position={[0.02, 0.2, 0]}>
+          <boxGeometry args={[0.14, 0.02, 0.12]} />
+          <meshStandardMaterial color="#333338" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Objective turret */}
+        <mesh position={[0.0, 0.36, 0]} >
+          <cylinderGeometry args={[0.025, 0.025, 0.05, 10]} />
+          <meshStandardMaterial color="#444448" roughness={0.3} metalness={0.5} />
+        </mesh>
+        {/* Objectives (3 lenses) */}
+        {([0, Math.PI * 0.66, Math.PI * 1.33] as number[]).map((angle, i) => (
+          <mesh key={i} position={[0.025 * Math.cos(angle), 0.3, 0.025 * Math.sin(angle)]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.007, 0.01, 0.06, 8]} />
+            <meshStandardMaterial color="#111118" metalness={0.6} roughness={0.3} />
+          </mesh>
+        ))}
+        {/* Binocular head */}
+        <mesh position={[-0.01, 0.46, 0]}>
+          <boxGeometry args={[0.06, 0.06, 0.06]} />
+          <meshStandardMaterial color="#333338" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Eyepiece tubes */}
+        <mesh position={[-0.02, 0.52, 0.025]} rotation={[0.3, 0, 0]}>
+          <cylinderGeometry args={[0.01, 0.01, 0.07, 8]} />
+          <meshStandardMaterial color="#222228" roughness={0.4} metalness={0.4} />
+        </mesh>
+        <mesh position={[0.02, 0.52, 0.025]} rotation={[0.3, 0, 0]}>
+          <cylinderGeometry args={[0.01, 0.01, 0.07, 8]} />
+          <meshStandardMaterial color="#222228" roughness={0.4} metalness={0.4} />
+        </mesh>
+        {/* Focus knob */}
+        <mesh position={[-0.065, 0.25, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.02, 0.02, 0.02, 12]} />
+          <meshStandardMaterial color="#555558" metalness={0.5} roughness={0.3} />
+        </mesh>
+      </group>
+      <Html position={[1.45, 0.72, 0.3]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Microscope</span>
+      </Html>
+
+      {/* ── Vortex mixer ── */}
+      <group position={[1.05, 0.08, 0.55]}>
+        {/* Body */}
+        <mesh castShadow>
+          <cylinderGeometry args={[0.07, 0.08, 0.14, 16]} />
+          <meshStandardMaterial color="#cc6600" roughness={0.5} metalness={0.1} />
+        </mesh>
+        {/* Rubber cup on top */}
+        <mesh position={[0, 0.09, 0]}>
+          <coneGeometry args={[0.045, 0.06, 14]} />
+          <meshStandardMaterial color="#222222" roughness={0.8} />
+        </mesh>
+        {/* On/off switch on side */}
+        <mesh position={[0.075, 0.0, 0]}>
+          <boxGeometry args={[0.01, 0.03, 0.03]} />
+          <meshStandardMaterial color="#111111" roughness={0.5} />
+        </mesh>
+        {/* Speed dial */}
+        <mesh position={[0, -0.04, 0.08]}>
+          <cylinderGeometry args={[0.015, 0.015, 0.015, 10]} />
+          <meshStandardMaterial color="#333333" roughness={0.4} metalness={0.4} />
+        </mesh>
+      </group>
+      <Html position={[1.05, 0.35, 0.55]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Vortex Mixer</span>
+      </Html>
+
+      {/* ── Small printer next to each major instrument ── */}
+      {/* Printer (compact box, beside Mass Spec) */}
+      <group position={[-1.4, 0.06, 0.55]}>
+        <mesh castShadow>
+          <boxGeometry args={[0.24, 0.1, 0.18]} />
+          <meshStandardMaterial color="#d8d4cc" roughness={0.5} />
+        </mesh>
+        {/* Paper slot */}
+        <mesh position={[0, 0.04, -0.09]}>
+          <boxGeometry args={[0.18, 0.015, 0.005]} />
+          <meshStandardMaterial color="#aaaaaa" roughness={0.6} />
+        </mesh>
+        {/* Status LED */}
+        <mesh position={[0.09, 0.052, 0.09]}>
+          <sphereGeometry args={[0.006, 6, 6]} />
+          <meshStandardMaterial color="#00ff44" emissive="#00ff44" emissiveIntensity={1.0} />
+        </mesh>
+      </group>
     </StationShell>
   );
 }
