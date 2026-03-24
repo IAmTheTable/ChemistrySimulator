@@ -144,6 +144,7 @@ export default function MainBench() {
         description="Click to rinse selected container to room temp"
         onClick={handleSink}
         position={[1.55, 0.06, -0.6]}
+        hitboxSize={[0.5, 0.35, 0.42]}
         labelOffset={[0, 0.35, 0]}
       >
         {/* Sink basin */}
@@ -193,6 +194,7 @@ export default function MainBench() {
         description="Click to add 10mL distilled water"
         onClick={handleWashBottle}
         position={[1.1, 0.06, 0.2]}
+        hitboxSize={[0.12, 0.35, 0.12]}
         labelOffset={[0, 0.35, 0]}
       >
         {/* Body */}
@@ -348,6 +350,7 @@ export default function MainBench() {
         description="Click to heat selected container +50\u00B0C"
         onClick={handleBunsenBurner}
         position={[1.5, 0, 0.5]}
+        hitboxSize={[0.18, 0.45, 0.16]}
         labelOffset={[0, 0.5, 0]}
       >
         {/* Base */}
@@ -392,6 +395,7 @@ export default function MainBench() {
         description="Click to weigh selected container"
         onClick={handleBalance}
         position={[-1.5, 0, 0.8]}
+        hitboxSize={[0.52, 0.28, 0.42]}
         labelOffset={[0, 0.4, 0]}
       >
         {/* Base platform */}

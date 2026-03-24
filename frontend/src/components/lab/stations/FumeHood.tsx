@@ -129,9 +129,11 @@ export default function FumeHood() {
         name="Sash"
         description="Click to open/close fume hood"
         onClick={handleSash}
+        position={[0, sashY, 0.1]}
+        hitboxSize={[3.15, 0.95, 0.08]}
         labelOffset={[0, 0.6, 0]}
       >
-        <mesh position={[0, sashY, 0.1]}>
+        <mesh>
           <boxGeometry args={[3.1, 0.9, 0.03]} />
           <meshPhysicalMaterial
             color="#a8c8ff"
@@ -143,7 +145,7 @@ export default function FumeHood() {
           />
         </mesh>
         {/* Sash frame top bar */}
-        <mesh position={[0, sashBarY, 0.1]} castShadow>
+        <mesh position={[0, sashBarY - sashY, 0]} castShadow>
           <boxGeometry args={[3.15, 0.05, 0.04]} />
           <meshStandardMaterial color="#5a5a66" roughness={0.5} metalness={0.5} />
         </mesh>
@@ -168,9 +170,11 @@ export default function FumeHood() {
         name="Distillation Setup"
         description="Click to separate mixture by boiling point"
         onClick={handleDistillation}
-        labelOffset={[0, 0.6, 0]}
+        position={[0, 0.33, -0.75]}
+        hitboxSize={[1.1, 0.5, 0.35]}
+        labelOffset={[0, 0.4, 0]}
       >
-        <mesh position={[-0.5, 0.22, -0.75]} castShadow>
+        <mesh position={[-0.5, -0.11, 0]} castShadow>
           <sphereGeometry args={[0.12, 16, 16]} />
           <meshPhysicalMaterial
             color="#c8e0ff"
@@ -182,7 +186,7 @@ export default function FumeHood() {
         </mesh>
 
         {/* Distillation neck */}
-        <mesh position={[-0.5, 0.42, -0.75]} castShadow>
+        <mesh position={[-0.5, 0.09, 0]} castShadow>
           <cylinderGeometry args={[0.025, 0.025, 0.24, 12]} />
           <meshPhysicalMaterial
             color="#c8e0ff"
@@ -194,7 +198,7 @@ export default function FumeHood() {
         </mesh>
 
         {/* Condenser tube (angled) -- approximated as cylinder */}
-        <mesh position={[0.1, 0.45, -0.75]} rotation={[0, 0, -Math.PI / 5]} castShadow>
+        <mesh position={[0.1, 0.12, 0]} rotation={[0, 0, -Math.PI / 5]} castShadow>
           <cylinderGeometry args={[0.018, 0.018, 0.5, 12]} />
           <meshPhysicalMaterial
             color="#c8e0ff"
@@ -206,7 +210,7 @@ export default function FumeHood() {
         </mesh>
 
         {/* Collection flask */}
-        <mesh position={[0.45, 0.18, -0.75]} castShadow>
+        <mesh position={[0.45, -0.15, 0]} castShadow>
           <sphereGeometry args={[0.09, 16, 16]} />
           <meshPhysicalMaterial
             color="#c8e0ff"
@@ -253,6 +257,7 @@ export default function FumeHood() {
         description="Click to apply gas heating to selected container (+30\u00B0C)"
         onClick={handleGasNozzle}
         position={[-1.54, 0.55, -0.75]}
+        hitboxSize={[0.12, 0.18, 0.12]}
         labelOffset={[0.15, 0.25, 0]}
       >
         <mesh rotation={[0, Math.PI / 2, 0]}>
@@ -276,6 +281,7 @@ export default function FumeHood() {
         description="Click to extract gas from selected container"
         onClick={handleVacuumLine}
         position={[1.54, 0.65, -0.8]}
+        hitboxSize={[0.12, 0.18, 0.12]}
         labelOffset={[-0.15, 0.2, 0]}
       >
         <mesh rotation={[0, -Math.PI / 2, 0]}>
@@ -339,6 +345,7 @@ export default function FumeHood() {
         description="Click to evaporate most volatile substance"
         onClick={handleRotavap}
         position={[-1.1, 0, -0.85]}
+        hitboxSize={[0.5, 0.9, 0.4]}
         labelOffset={[0, 1.0, 0]}
       >
         {/* Rotovap stand */}

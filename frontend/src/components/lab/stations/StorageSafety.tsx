@@ -82,6 +82,7 @@ export default function StorageSafety() {
         description="Click to browse available substances"
         onClick={handleChemicalCabinet}
         position={[-1.55, 0, -0.85]}
+        hitboxSize={[0.6, 1.05, 0.45]}
         labelOffset={[0, 1.1, 0]}
       >
         {/* Cabinet body */}
@@ -124,29 +125,31 @@ export default function StorageSafety() {
         name="Emergency Shower"
         description="Click to repair all damaged containers"
         onClick={handleSafetyShower}
-        labelOffset={[0, 0.4, 0]}
+        position={[1.5, 0.85, -1.0]}
+        hitboxSize={[0.25, 1.6, 0.35]}
+        labelOffset={[0, 0.95, 0]}
       >
         {/* Vertical pipe */}
-        <mesh position={[1.5, 0.85, -1.0]} castShadow>
+        <mesh castShadow>
           <cylinderGeometry args={[0.025, 0.025, 1.55, 10]} />
           <meshStandardMaterial color="#bbbbbb" metalness={0.7} roughness={0.25} />
         </mesh>
         {/* Horizontal arm */}
-        <mesh position={[1.5, 1.6, -0.85]} rotation={[Math.PI / 2, 0, 0]}>
+        <mesh position={[0, 0.75, 0.15]} rotation={[Math.PI / 2, 0, 0]}>
           <cylinderGeometry args={[0.02, 0.02, 0.28, 8]} />
           <meshStandardMaterial color="#bbbbbb" metalness={0.7} roughness={0.25} />
         </mesh>
         {/* Shower head */}
-        <mesh position={[1.5, 1.6, -0.72]}>
+        <mesh position={[0, 0.75, 0.28]}>
           <cylinderGeometry args={[0.09, 0.07, 0.04, 16]} />
           <meshStandardMaterial color="#999999" metalness={0.6} roughness={0.3} />
         </mesh>
         {/* Pull handle / chain */}
-        <mesh position={[1.5, 1.3, -0.95]}>
+        <mesh position={[0, 0.45, 0.05]}>
           <cylinderGeometry args={[0.008, 0.008, 0.22, 6]} />
           <meshStandardMaterial color="#cc8800" roughness={0.5} />
         </mesh>
-        <mesh position={[1.5, 1.18, -0.95]}>
+        <mesh position={[0, 0.33, 0.05]}>
           <boxGeometry args={[0.06, 0.02, 0.04]} />
           <meshStandardMaterial color="#cc8800" roughness={0.4} />
         </mesh>
@@ -158,6 +161,7 @@ export default function StorageSafety() {
         description="Click to repair damaged containers"
         onClick={handleEyeWash}
         position={[0.85, 0, -1.0]}
+        hitboxSize={[0.28, 0.55, 0.28]}
         labelOffset={[0, 0.72, 0]}
       >
         {/* Pedestal */}
@@ -193,6 +197,7 @@ export default function StorageSafety() {
         description="Click to clear all fire effects"
         onClick={handleFireExtinguisher}
         position={[-0.3, 0, -1.15]}
+        hitboxSize={[0.18, 0.72, 0.18]}
         labelOffset={[0, 0.85, 0]}
       >
         {/* Body (red cylinder) */}
@@ -255,6 +260,7 @@ export default function StorageSafety() {
         description="Click to view safety data for selected substance"
         onClick={handleSDSTerminal}
         position={[-0.5, 0, 0.7]}
+        hitboxSize={[0.38, 0.62, 0.28]}
         labelOffset={[0, 0.72, 0]}
       >
         {/* Terminal body */}
@@ -322,6 +328,7 @@ export default function StorageSafety() {
         description="Click to access acid storage"
         onClick={handleAcidCabinet}
         position={[-0.5, 0.42, -0.9]}
+        hitboxSize={[0.55, 0.85, 0.42]}
         labelOffset={[0, 0.55, 0]}
       >
         <mesh castShadow>
@@ -358,6 +365,7 @@ export default function StorageSafety() {
         description="Click to access flammable storage"
         onClick={handleFlammableCabinet}
         position={[0.3, 0.42, -0.9]}
+        hitboxSize={[0.55, 0.85, 0.42]}
         labelOffset={[0, 0.55, 0]}
       >
         <mesh castShadow>
@@ -433,6 +441,7 @@ export default function StorageSafety() {
         description="Click for first aid instructions"
         onClick={handleFirstAidKit}
         position={[0.85, 0.72, -1.12]}
+        hitboxSize={[0.28, 0.22, 0.14]}
         labelOffset={[0, 0.25, 0]}
       >
         {/* Box */}

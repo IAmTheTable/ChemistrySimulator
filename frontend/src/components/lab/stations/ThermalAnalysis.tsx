@@ -102,6 +102,7 @@ export default function ThermalAnalysis() {
         description="Click to measure heat capacity"
         onClick={handleCalorimeter}
         position={[-0.8, 0, 0.2]}
+        hitboxSize={[0.45, 0.75, 0.45]}
         labelOffset={[0, 0.75, 0]}
       >
         {/* Outer cylinder */}
@@ -142,6 +143,7 @@ export default function ThermalAnalysis() {
         description="Click to cool container to 0\u00B0C"
         onClick={handleIceBath}
         position={[0.5, 0, 0.3]}
+        hitboxSize={[0.7, 0.45, 0.6]}
         labelOffset={[0, 0.4, 0]}
       >
         {/* Outer container */}
@@ -190,6 +192,7 @@ export default function ThermalAnalysis() {
         description="Click to heat container +100\u00B0C"
         onClick={handleHotPlate}
         position={[1.3, 0, 0.0]}
+        hitboxSize={[0.4, 0.6, 0.36]}
         labelOffset={[0, 0.65, 0]}
       >
         {/* Hot plate body */}
@@ -237,6 +240,7 @@ export default function ThermalAnalysis() {
         description="Click to read precise temperature"
         onClick={handleThermometer}
         position={[0.0, 0, -0.5]}
+        hitboxSize={[0.22, 0.82, 0.18]}
         labelOffset={[0, 0.9, 0]}
       >
         {/* Stand */}
@@ -381,6 +385,7 @@ export default function ThermalAnalysis() {
         description="Click to apply directional heat +75\u00B0C"
         onClick={handleHeatGun}
         position={[-0.1, 0.06, 0.45]}
+        hitboxSize={[0.12, 0.32, 0.28]}
         labelOffset={[0, 0.3, 0]}
       >
         {/* Handle */}
@@ -413,6 +418,7 @@ export default function ThermalAnalysis() {
         description="Click to scan temperature of selected container"
         onClick={handleIRThermometer}
         position={[0.75, 0.06, 0.55]}
+        hitboxSize={[0.12, 0.22, 0.22]}
         labelOffset={[0, 0.3, 0]}
       >
         {/* Grip handle */}
@@ -448,6 +454,7 @@ export default function ThermalAnalysis() {
         description="Click to safely handle hot container with tongs"
         onClick={handleTongs}
         position={[-1.2, 0.42, -1.06]}
+        hitboxSize={[0.1, 0.3, 0.1]}
         labelOffset={[0, 0.25, 0]}
       >
         <group rotation={[0, 0.3, 0]}>

@@ -117,10 +117,12 @@ export default function ElectrochemistryLab() {
         name="Electrolysis Cell"
         description="Click to electrolyze ionic solution"
         onClick={handleElectrolysis}
-        labelOffset={[0, 0.6, 0]}
+        position={[0, 0.2, 0]}
+        hitboxSize={[0.65, 0.6, 0.42]}
+        labelOffset={[0, 0.45, 0]}
       >
         {/* Cell body -- transparent box */}
-        <mesh position={[0, 0.2, 0]}>
+        <mesh>
           <boxGeometry args={[0.55, 0.32, 0.35]} />
           <meshPhysicalMaterial
             color="#a0d0ff"
@@ -131,12 +133,12 @@ export default function ElectrochemistryLab() {
           />
         </mesh>
         {/* Cell bottom/rim */}
-        <mesh position={[0, 0.05, 0]} castShadow>
+        <mesh position={[0, -0.15, 0]} castShadow>
           <boxGeometry args={[0.58, 0.04, 0.38]} />
           <meshStandardMaterial color="#4a5540" roughness={0.6} metalness={0.2} />
         </mesh>
         {/* Electrolyte solution (blue fill) */}
-        <mesh position={[0, 0.14, 0]}>
+        <mesh position={[0, -0.06, 0]}>
           <boxGeometry args={[0.52, 0.16, 0.32]} />
           <meshStandardMaterial
             color="#3399cc"
@@ -146,18 +148,18 @@ export default function ElectrochemistryLab() {
           />
         </mesh>
         {/* Electrode rod -- anode (left, dark) */}
-        <mesh position={[-0.15, 0.32, 0]} castShadow>
+        <mesh position={[-0.15, 0.12, 0]} castShadow>
           <cylinderGeometry args={[0.018, 0.018, 0.45, 10]} />
           <meshStandardMaterial color="#1a1a1a" roughness={0.5} metalness={0.7} />
         </mesh>
         {/* Electrode rod -- cathode (right, silver) */}
-        <mesh position={[0.15, 0.32, 0]} castShadow>
+        <mesh position={[0.15, 0.12, 0]} castShadow>
           <cylinderGeometry args={[0.018, 0.018, 0.45, 10]} />
           <meshStandardMaterial color="#c0c0c0" roughness={0.3} metalness={0.85} />
         </mesh>
         {/* Bubble indicators near anode */}
         {([0.04, 0.09, 0.14] as number[]).map((y, i) => (
-          <mesh key={i} position={[-0.15 + i * 0.02, y + 0.2, 0.04]}>
+          <mesh key={i} position={[-0.15 + i * 0.02, y - 0.0, 0.04]}>
             <sphereGeometry args={[0.012, 8, 8]} />
             <meshStandardMaterial color="#ffffff" transparent opacity={0.5} />
           </mesh>
@@ -170,6 +172,7 @@ export default function ElectrochemistryLab() {
         description="Click to toggle power on/off"
         onClick={handlePowerSupply}
         position={[1.1, 0, 0.3]}
+        hitboxSize={[0.42, 0.4, 0.32]}
         labelOffset={[0, 0.5, 0]}
       >
         <mesh position={[0, 0.18, 0]} castShadow>
@@ -222,6 +225,7 @@ export default function ElectrochemistryLab() {
         description="Click to measure pH of selected solution"
         onClick={handlePHMeter}
         position={[-1.0, 0, 0.4]}
+        hitboxSize={[0.28, 0.5, 0.2]}
         labelOffset={[0, 0.65, 0]}
       >
         {/* Body */}
@@ -383,6 +387,7 @@ export default function ElectrochemistryLab() {
         description="Click to read voltage between electrodes"
         onClick={handleVoltmeter}
         position={[-0.25, 0.12, 0.95]}
+        hitboxSize={[0.22, 0.22, 0.15]}
         labelOffset={[0, 0.3, 0]}
       >
         <mesh castShadow>

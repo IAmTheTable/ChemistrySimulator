@@ -135,25 +135,27 @@ export default function GloveBox() {
         name="Airlock"
         description="Click to transfer container into inert atmosphere"
         onClick={handleAirlock}
-        labelOffset={[0, 0.6, 0]}
+        position={[1.52, 0.51, -0.4]}
+        hitboxSize={[0.52, 0.75, 0.75]}
+        labelOffset={[0, 0.5, 0]}
       >
         {/* Airlock body */}
-        <mesh position={[1.52, 0.51, -0.4]} castShadow>
+        <mesh castShadow>
           <boxGeometry args={[0.45, 0.7, 0.7]} />
           <meshStandardMaterial color="#343438" roughness={0.5} metalness={0.4} />
         </mesh>
         {/* Airlock inner door (left face) */}
-        <mesh position={[1.3, 0.51, -0.4]}>
+        <mesh position={[-0.22, 0, 0]}>
           <boxGeometry args={[0.03, 0.5, 0.5]} />
           <meshStandardMaterial color="#505058" roughness={0.4} metalness={0.5} />
         </mesh>
         {/* Airlock outer door (right face) */}
-        <mesh position={[1.75, 0.51, -0.4]}>
+        <mesh position={[0.23, 0, 0]}>
           <boxGeometry args={[0.03, 0.5, 0.5]} />
           <meshStandardMaterial color="#505058" roughness={0.4} metalness={0.5} />
         </mesh>
         {/* Airlock handle */}
-        <mesh position={[1.77, 0.51, -0.55]}>
+        <mesh position={[0.25, 0, -0.15]}>
           <boxGeometry args={[0.02, 0.06, 0.02]} />
           <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
         </mesh>
@@ -176,6 +178,7 @@ export default function GloveBox() {
         description="Click to purge with Ar"
         onClick={handleGasLine("Ar")}
         position={[-0.6, 1.16, -0.4]}
+        hitboxSize={[0.12, 0.1, 0.12]}
         labelOffset={[0, 0.2, 0]}
       >
         <mesh>
@@ -195,6 +198,7 @@ export default function GloveBox() {
         description="Click to purge with N\u2082"
         onClick={handleGasLine("N2")}
         position={[0.6, 1.16, -0.4]}
+        hitboxSize={[0.12, 0.1, 0.12]}
         labelOffset={[0, 0.2, 0]}
       >
         <mesh>
@@ -215,6 +219,7 @@ export default function GloveBox() {
         description="Click to read vacuum level"
         onClick={handleVacuumGauge}
         position={[-0.7, 0.06, 0.15]}
+        hitboxSize={[0.12, 0.1, 0.12]}
         labelOffset={[0, 0.18, 0]}
       >
         {/* Gauge body */}
