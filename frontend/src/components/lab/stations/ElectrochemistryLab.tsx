@@ -251,7 +251,7 @@ export default function ElectrochemistryLab() {
       </InteractiveTool>
 
       {/* Burette on clamp stand */}
-      <Html position={[-1.3, 0.95, -0.3]} center distanceFactor={10}>
+      <Html position={[-1.3, 0.95, -0.3]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Burette</span>
       </Html>
       {/* Stand vertical rod */}
@@ -377,7 +377,7 @@ export default function ElectrochemistryLab() {
         <cylinderGeometry args={[0.006, 0.006, 0.58, 8]} />
         <meshStandardMaterial color="#ffee88" transparent opacity={0.55} roughness={0.1} />
       </mesh>
-      <Html position={[-0.25, 0.52, 0.55]} center distanceFactor={10}>
+      <Html position={[-0.25, 0.52, 0.55]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Galvanic Cell + Salt Bridge</span>
       </Html>
 
@@ -436,7 +436,7 @@ export default function ElectrochemistryLab() {
           <meshStandardMaterial color="#111111" metalness={0.5} roughness={0.3} />
         </mesh>
       </group>
-      <Html position={[0.3, 0.36, 0.95]} center distanceFactor={10}>
+      <Html position={[0.3, 0.36, 0.95]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Ammeter</span>
       </Html>
 
@@ -495,7 +495,7 @@ export default function ElectrochemistryLab() {
           <meshStandardMaterial color="#cceeaa" transparent opacity={0.5} roughness={0.1} />
         </mesh>
       </group>
-      <Html position={[0.5, 0.62, -1.07]} center distanceFactor={10}>
+      <Html position={[0.5, 0.62, -1.07]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Reference Electrode</span>
       </Html>
 
@@ -521,7 +521,7 @@ export default function ElectrochemistryLab() {
           <meshStandardMaterial color="#336699" roughness={0.7} />
         </mesh>
       </group>
-      <Html position={[1.4, 0.28, -0.8]} center distanceFactor={10}>
+      <Html position={[1.4, 0.28, -0.8]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Electrode Cleaner</span>
       </Html>
 
@@ -553,7 +553,7 @@ export default function ElectrochemistryLab() {
           <meshStandardMaterial color="#ffffff" roughness={0.3} />
         </mesh>
       </group>
-      <Html position={[1.4, 0.22, 0.7]} center distanceFactor={10}>
+      <Html position={[1.4, 0.22, 0.7]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Magnetic Stirrer</span>
       </Html>
     </StationShell>

@@ -17,12 +17,13 @@ import VacuumFilter from "../equipment/VacuumFilter";
 
 export const LABEL_STYLE: React.CSSProperties = {
   color: "#9ca3af",
-  fontSize: "6px",
+  fontSize: "5px",
   whiteSpace: "nowrap",
-  background: "rgba(0,0,0,0.4)",
-  padding: "0px 3px",
+  background: "rgba(0,0,0,0.3)",
+  padding: "0px 2px",
   borderRadius: "2px",
   pointerEvents: "none",
+  userSelect: "none",
 };
 
 const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {

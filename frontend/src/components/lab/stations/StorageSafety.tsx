@@ -223,7 +223,7 @@ export default function StorageSafety() {
       </InteractiveTool>
 
       {/* Waste containers */}
-      <Html position={[0.5, 0.48, 0.8]} center distanceFactor={10}>
+      <Html position={[0.5, 0.48, 0.8]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Chemical Waste</span>
       </Html>
       {/* Red sharps bin */}
@@ -318,7 +318,7 @@ export default function StorageSafety() {
           <meshStandardMaterial color="#ffcc00" roughness={0.6} />
         </mesh>
       </group>
-      <Html position={[-1.55, 0.28, 0.7]} center distanceFactor={10}>
+      <Html position={[-1.55, 0.28, 0.7]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Spill Kit</span>
       </Html>
 
@@ -431,7 +431,7 @@ export default function StorageSafety() {
           </mesh>
         ))}
       </group>
-      <Html position={[1.55, 1.08, -0.85]} center distanceFactor={10}>
+      <Html position={[1.55, 1.08, -0.85]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Chemical Shelving</span>
       </Html>
 
@@ -489,7 +489,7 @@ export default function StorageSafety() {
           <meshStandardMaterial color="#880000" roughness={0.6} />
         </mesh>
       </group>
-      <Html position={[-0.3, 0.34, 0.4]} center distanceFactor={10}>
+      <Html position={[-0.3, 0.34, 0.4]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Sharps Container</span>
       </Html>
 
@@ -511,7 +511,7 @@ export default function StorageSafety() {
           <meshStandardMaterial color="#1a3388" roughness={0.5} metalness={0.3} />
         </mesh>
       </group>
-      <Html position={[-0.5, 1.02, -1.12]} center distanceFactor={10}>
+      <Html position={[-0.5, 1.02, -1.12]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>SDS Binder</span>
       </Html>
 
@@ -548,7 +548,7 @@ export default function StorageSafety() {
           <meshStandardMaterial color="#aaaaaa" metalness={0.7} roughness={0.3} />
         </mesh>
       </group>
-      <Html position={[1.55, 1.02, -0.5]} center distanceFactor={10}>
+      <Html position={[1.55, 1.02, -0.5]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>PPE Station</span>
       </Html>
 
@@ -581,7 +581,7 @@ export default function StorageSafety() {
           )
         )}
       </group>
-      <Html position={[-1.55, 1.18, -1.12]} center distanceFactor={10}>
+      <Html position={[-1.55, 1.18, -1.12]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Safety Poster</span>
       </Html>
 
@@ -622,7 +622,7 @@ export default function StorageSafety() {
           <meshStandardMaterial color="#ffcc00" roughness={0.6} />
         </mesh>
       </group>
-      <Html position={[1.55, 0.78, -1.12]} center distanceFactor={10}>
+      <Html position={[1.55, 0.78, -1.12]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Emergency Phone</span>
       </Html>
     </StationShell>

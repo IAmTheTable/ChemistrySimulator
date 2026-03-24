@@ -108,7 +108,7 @@ export default function FumeHood() {
         <boxGeometry args={[3.2, 0.06, 1.4]} />
         <meshStandardMaterial color="#4a4a55" roughness={0.7} metalness={0.3} />
       </mesh>
-      <Html position={[0, 1.65, -0.6]} center distanceFactor={10}>
+      <Html position={[0, 1.65, -0.6]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Fume Hood</span>
       </Html>
 
@@ -335,7 +335,7 @@ export default function FumeHood() {
         <coneGeometry args={[0.065, 0.12, 14]} />
         <meshStandardMaterial color="#cc9933" transparent opacity={0.5} roughness={0.1} />
       </mesh>
-      <Html position={[1.25, 0.88, -0.85]} center distanceFactor={10}>
+      <Html position={[1.25, 0.88, -0.85]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Separating Funnel</span>
       </Html>
 

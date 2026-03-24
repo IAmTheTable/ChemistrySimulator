@@ -89,7 +89,7 @@ export default function MainBench() {
           </mesh>
         ))}
       </group>
-      <Html position={[-1.2, 0.6, -1.05]} center distanceFactor={10}>
+      <Html position={[-1.2, 0.6, -1.05]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Test Tube Rack</span>
       </Html>
 
@@ -134,7 +134,7 @@ export default function MainBench() {
           </mesh>
         ))}
       </group>
-      <Html position={[0.5, 0.72, -0.8]} center distanceFactor={10}>
+      <Html position={[0.5, 0.72, -0.8]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Ring Stand</span>
       </Html>
 
@@ -265,7 +265,7 @@ export default function MainBench() {
           <meshStandardMaterial color="#2244aa" roughness={0.4} />
         </mesh>
       </group>
-      <Html position={[0.0, 0.2, 0.6]} center distanceFactor={10}>
+      <Html position={[0.0, 0.2, 0.6]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Lab Notebook</span>
       </Html>
 
@@ -287,7 +287,7 @@ export default function MainBench() {
           <meshStandardMaterial color="#aaaaaa" roughness={0.5} />
         </mesh>
       </group>
-      <Html position={[-0.7, 1.08, -1.22]} center distanceFactor={10}>
+      <Html position={[-0.7, 1.08, -1.22]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Paper Towels</span>
       </Html>
 
@@ -311,7 +311,7 @@ export default function MainBench() {
           </mesh>
         ))}
       </group>
-      <Html position={[0.4, 1.02, -1.22]} center distanceFactor={10}>
+      <Html position={[0.4, 1.02, -1.22]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Lab Timer</span>
       </Html>
 

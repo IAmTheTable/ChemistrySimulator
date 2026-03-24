@@ -39,7 +39,7 @@ export default function GloveBox() {
   return (
     <StationShell wallColor="#303035" showShelf={false}>
       {/* Main glove box body -- frame */}
-      <Html position={[0, 1.12, -0.4]} center distanceFactor={10}>
+      <Html position={[0, 1.12, -0.4]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Inert Atmosphere Glove Box ({atmosphere})</span>
       </Html>
       {/* Bottom panel */}
@@ -82,7 +82,7 @@ export default function GloveBox() {
       </mesh>
 
       {/* Glove ports (torus shapes) */}
-      <Html position={[0, 0.7, 0.14]} center distanceFactor={10}>
+      <Html position={[0, 0.7, 0.14]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Glove Ports</span>
       </Html>
       <mesh position={[-0.42, 0.48, 0.14]} rotation={[Math.PI / 2, 0, 0]}>
@@ -256,7 +256,7 @@ export default function GloveBox() {
           <meshStandardMaterial color="#333344" roughness={0.7} />
         </mesh>
       </group>
-      <Html position={[0.7, 0.22, 0.15]} center distanceFactor={10}>
+      <Html position={[0.7, 0.22, 0.15]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Pressure Display</span>
       </Html>
 
@@ -302,7 +302,7 @@ export default function GloveBox() {
           <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
         </mesh>
       </group>
-      <Html position={[-0.3, 1.38, -0.4]} center distanceFactor={10}>
+      <Html position={[-0.3, 1.38, -0.4]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Gas Purification Cartridge</span>
       </Html>
 
@@ -350,7 +350,7 @@ export default function GloveBox() {
         <cylinderGeometry args={[0.02, 0.02, 0.1, 10]} />
         <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.3} roughness={0.05} transmission={0.75} />
       </mesh>
-      <Html position={[0.5, 0.56, -0.6]} center distanceFactor={10}>
+      <Html position={[0.5, 0.56, -0.6]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Transfer Tools</span>
       </Html>
 
@@ -374,7 +374,7 @@ export default function GloveBox() {
           </mesh>
         ))}
       </group>
-      <Html position={[-0.6, 0.28, -0.3]} center distanceFactor={10}>
+      <Html position={[-0.6, 0.28, -0.3]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Drying Agent</span>
       </Html>
 

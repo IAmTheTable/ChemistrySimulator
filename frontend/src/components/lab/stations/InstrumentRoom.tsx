@@ -254,7 +254,7 @@ export default function InstrumentRoom() {
       </InteractiveTool>
 
       {/* Computer workstation */}
-      <Html position={[0.05, 0.72, 0.6]} center distanceFactor={10}>
+      <Html position={[0.05, 0.72, 0.6]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Data Workstation</span>
       </Html>
       {/* Monitor stand */}
@@ -331,7 +331,7 @@ export default function InstrumentRoom() {
           <meshStandardMaterial color="#001100" emissive="#00ff44" emissiveIntensity={0.8} roughness={0.2} />
         </mesh>
       </group>
-      <Html position={[-1.4, 0.32, 0.2]} center distanceFactor={10}>
+      <Html position={[-1.4, 0.32, 0.2]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Analytical Balance</span>
       </Html>
 
@@ -370,7 +370,7 @@ export default function InstrumentRoom() {
           <meshStandardMaterial color="#aacccc" metalness={0.3} roughness={0.3} />
         </mesh>
       </group>
-      <Html position={[-0.4, 0.42, 0.35]} center distanceFactor={10}>
+      <Html position={[-0.4, 0.42, 0.35]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>pH Meter</span>
       </Html>
 
@@ -495,7 +495,7 @@ export default function InstrumentRoom() {
           <meshStandardMaterial color="#333333" roughness={0.4} metalness={0.4} />
         </mesh>
       </group>
-      <Html position={[1.05, 0.35, 0.55]} center distanceFactor={10}>
+      <Html position={[1.05, 0.35, 0.55]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Vortex Mixer</span>
       </Html>
 
@@ -545,7 +545,7 @@ export default function InstrumentRoom() {
           <meshStandardMaterial color="#b0a898" roughness={0.6} />
         </mesh>
       </group>
-      <Html position={[-0.8, 0.22, 0.7]} center distanceFactor={10}>
+      <Html position={[-0.8, 0.22, 0.7]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Sample Prep</span>
       </Html>
 
@@ -570,7 +570,7 @@ export default function InstrumentRoom() {
           </group>
         ))}
       </group>
-      <Html position={[1.5, 0.28, -0.7]} center distanceFactor={10}>
+      <Html position={[1.5, 0.28, -0.7]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Reagents</span>
       </Html>
     </StationShell>

@@ -310,7 +310,7 @@ export default function ThermalAnalysis() {
           <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.2} />
         </mesh>
       </group>
-      <Html position={[1.0, 0.66, -1.05]} center distanceFactor={10}>
+      <Html position={[1.0, 0.66, -1.05]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>DSC / TGA</span>
       </Html>
 
@@ -343,7 +343,7 @@ export default function ThermalAnalysis() {
           <meshStandardMaterial color="#cc4400" roughness={0.5} />
         </mesh>
       </group>
-      <Html position={[-1.5, 0.5, 0.6]} center distanceFactor={10}>
+      <Html position={[-1.5, 0.5, 0.6]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Crucible Furnace</span>
       </Html>
 
@@ -375,7 +375,7 @@ export default function ThermalAnalysis() {
           </mesh>
         ))}
       </group>
-      <Html position={[0.3, 0.2, 0.7]} center distanceFactor={10}>
+      <Html position={[0.3, 0.2, 0.7]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Cooling Rack</span>
       </Html>
 
@@ -500,7 +500,7 @@ export default function ThermalAnalysis() {
           </mesh>
         ))}
       </group>
-      <Html position={[-0.5, 0.2, 0.7]} center distanceFactor={10}>
+      <Html position={[-0.5, 0.2, 0.7]} center distanceFactor={15}>
         <span style={LABEL_STYLE}>Insulation Mat</span>
       </Html>
 
