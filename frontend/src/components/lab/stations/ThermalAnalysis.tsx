@@ -12,7 +12,7 @@ const HEAT_CAPACITY_MAP: Record<string, number> = {
 };
 
 export default function ThermalAnalysis() {
-  const { selectedItem, selectedBenchItem, updateBenchItemContents, showNotification } = useStationTool();
+  const { selectedItem, selectedBenchItem, updateBenchItemContents, showNotification, setBenchItemEffects } = useStationTool();
 
   const handleCalorimeter = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -59,9 +59,44 @@ export default function ThermalAnalysis() {
     showNotification(`Digital Thermometer -- ${selectedItem.type}: ${selectedItem.temperature.toFixed(1)}\u00B0C`);
   };
 
+  const handleTongs = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container first");
+      return;
+    }
+    if (selectedItem.damaged) {
+      // Remove damage flag via effects
+      setBenchItemEffects(selectedBenchItem, selectedItem.activeEffects.filter((ef) => ef !== "damaged"));
+      showNotification(`Safely handled ${selectedItem.type} with tongs -- damage cleared`);
+    } else {
+      showNotification(`Tongs: ${selectedItem.type} safely gripped (no damage to clear)`);
+    }
+  };
+
+  const handleHeatGun = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container first");
+      return;
+    }
+    const newTemp = selectedItem.temperature + 75;
+    updateBenchItemContents(selectedBenchItem, selectedItem.contents, newTemp);
+    showNotification(`Heat gun -- ${selectedItem.type} heated to ${newTemp}\u00B0C`);
+  };
+
+  const handleIRThermometer = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container first");
+      return;
+    }
+    showNotification(`IR Thermometer -- ${selectedItem.type}: ${selectedItem.temperature.toFixed(1)}\u00B0C (surface temp)`);
+  };
+
   return (
     <StationShell wallColor="#2e2820">
-      {/* ── Calorimeter ── */}
+      {/* Calorimeter */}
       <InteractiveTool
         name="Bomb Calorimeter"
         description="Click to measure heat capacity"
@@ -101,10 +136,10 @@ export default function ThermalAnalysis() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Ice bath (shallow box) ── */}
+      {/* Ice bath (shallow box) */}
       <InteractiveTool
         name="Ice Bath"
-        description="Click to cool container to 0°C"
+        description="Click to cool container to 0\u00B0C"
         onClick={handleIceBath}
         position={[0.5, 0, 0.3]}
         labelOffset={[0, 0.4, 0]}
@@ -149,10 +184,10 @@ export default function ThermalAnalysis() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Bunsen burner / hot plate ── */}
+      {/* Bunsen burner / hot plate */}
       <InteractiveTool
         name="Hot Plate"
-        description="Click to heat container +100°C"
+        description="Click to heat container +100\u00B0C"
         onClick={handleHotPlate}
         position={[1.3, 0, 0.0]}
         labelOffset={[0, 0.65, 0]}
@@ -196,7 +231,7 @@ export default function ThermalAnalysis() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Thermometer standing in holder ── */}
+      {/* Thermometer standing in holder */}
       <InteractiveTool
         name="Digital Thermometer"
         description="Click to read precise temperature"
@@ -230,7 +265,7 @@ export default function ThermalAnalysis() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Sample holder cups (small cylinders) ── */}
+      {/* Sample holder cups (small cylinders) */}
       {([[-1.5, 0.42, -1.06], [-1.2, 0.42, -1.06], [-0.9, 0.42, -1.06]] as [number, number, number][]).map(
         (pos, i) => (
           <mesh key={i} position={pos}>
@@ -240,7 +275,7 @@ export default function ThermalAnalysis() {
         )
       )}
 
-      {/* ── DSC/TGA instrument on shelf — detailed ── */}
+      {/* DSC/TGA instrument on shelf -- detailed */}
       <group position={[1.0, 0.42, -1.05]}>
         {/* Main body */}
         <mesh castShadow>
@@ -275,7 +310,7 @@ export default function ThermalAnalysis() {
         <span style={LABEL_STYLE}>DSC / TGA</span>
       </Html>
 
-      {/* ── Crucible furnace ── */}
+      {/* Crucible furnace */}
       <group position={[-1.5, 0.06, 0.6]}>
         {/* Furnace body */}
         <mesh castShadow>
@@ -308,7 +343,7 @@ export default function ThermalAnalysis() {
         <span style={LABEL_STYLE}>Crucible Furnace</span>
       </Html>
 
-      {/* ── Cooling rack (wire grid) ── */}
+      {/* Cooling rack (wire grid) */}
       <group position={[0.3, 0.075, 0.7]}>
         {/* Rack frame */}
         <mesh>
@@ -340,8 +375,14 @@ export default function ThermalAnalysis() {
         <span style={LABEL_STYLE}>Cooling Rack</span>
       </Html>
 
-      {/* ── Heat gun ── */}
-      <group position={[-0.1, 0.06, 0.45]}>
+      {/* Heat gun -- now interactive */}
+      <InteractiveTool
+        name="Heat Gun"
+        description="Click to apply directional heat +75\u00B0C"
+        onClick={handleHeatGun}
+        position={[-0.1, 0.06, 0.45]}
+        labelOffset={[0, 0.3, 0]}
+      >
         {/* Handle */}
         <mesh rotation={[0.4, 0, 0]}>
           <boxGeometry args={[0.06, 0.18, 0.06]} />
@@ -364,10 +405,16 @@ export default function ThermalAnalysis() {
             <meshStandardMaterial color="#111111" roughness={0.7} />
           </mesh>
         ))}
-      </group>
+      </InteractiveTool>
 
-      {/* ── Infrared thermometer (gun-shaped) ── */}
-      <group position={[0.75, 0.06, 0.55]}>
+      {/* Infrared thermometer (gun-shaped) -- now interactive */}
+      <InteractiveTool
+        name="IR Thermometer"
+        description="Click to scan temperature of selected container"
+        onClick={handleIRThermometer}
+        position={[0.75, 0.06, 0.55]}
+        labelOffset={[0, 0.3, 0]}
+      >
         {/* Grip handle */}
         <mesh rotation={[0.2, 0, 0]}>
           <boxGeometry args={[0.055, 0.14, 0.055]} />
@@ -393,43 +440,64 @@ export default function ThermalAnalysis() {
           <boxGeometry args={[0.02, 0.04, 0.025]} />
           <meshStandardMaterial color="#aa3300" roughness={0.5} />
         </mesh>
+      </InteractiveTool>
+
+      {/* Tongs -- now interactive */}
+      <InteractiveTool
+        name="Tongs"
+        description="Click to safely handle hot container with tongs"
+        onClick={handleTongs}
+        position={[-1.2, 0.42, -1.06]}
+        labelOffset={[0, 0.25, 0]}
+      >
+        <group rotation={[0, 0.3, 0]}>
+          {/* Left arm */}
+          <mesh position={[-0.012, 0, 0]} rotation={[0, 0, 0.05]}>
+            <boxGeometry args={[0.008, 0.26, 0.008]} />
+            <meshStandardMaterial color="#aaaaaa" metalness={0.75} roughness={0.2} />
+          </mesh>
+          {/* Right arm */}
+          <mesh position={[0.012, 0, 0]} rotation={[0, 0, -0.05]}>
+            <boxGeometry args={[0.008, 0.26, 0.008]} />
+            <meshStandardMaterial color="#aaaaaa" metalness={0.75} roughness={0.2} />
+          </mesh>
+          {/* Spring hinge ring at top */}
+          <mesh position={[0, 0.13, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <torusGeometry args={[0.018, 0.004, 6, 16]} />
+            <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
+          </mesh>
+          {/* Gripping tips */}
+          <mesh position={[-0.008, -0.14, 0]} rotation={[0, 0, -0.3]}>
+            <boxGeometry args={[0.02, 0.025, 0.012]} />
+            <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
+          </mesh>
+          <mesh position={[0.008, -0.14, 0]} rotation={[0, 0, 0.3]}>
+            <boxGeometry args={[0.02, 0.025, 0.012]} />
+            <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
+          </mesh>
+        </group>
+      </InteractiveTool>
+
+      {/* Insulation mat on bench */}
+      <group position={[-0.5, 0.075, 0.7]}>
+        {/* Mat body */}
+        <mesh>
+          <boxGeometry args={[0.35, 0.015, 0.25]} />
+          <meshStandardMaterial color="#a0a090" roughness={0.9} />
+        </mesh>
+        {/* Textured surface pattern */}
+        {([-0.1, 0, 0.1] as number[]).map((x, i) => (
+          <mesh key={i} position={[x, 0.009, 0]}>
+            <boxGeometry args={[0.08, 0.003, 0.22]} />
+            <meshStandardMaterial color="#909080" roughness={0.95} />
+          </mesh>
+        ))}
       </group>
-      <Html position={[0.75, 0.3, 0.55]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>IR Thermometer</span>
+      <Html position={[-0.5, 0.2, 0.7]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Insulation Mat</span>
       </Html>
 
-      {/* ── Tongs — long metal grabbing tool ── */}
-      <group position={[-1.2, 0.42, -1.06]} rotation={[0, 0.3, 0]}>
-        {/* Left arm */}
-        <mesh position={[-0.012, 0, 0]} rotation={[0, 0, 0.05]}>
-          <boxGeometry args={[0.008, 0.26, 0.008]} />
-          <meshStandardMaterial color="#aaaaaa" metalness={0.75} roughness={0.2} />
-        </mesh>
-        {/* Right arm */}
-        <mesh position={[0.012, 0, 0]} rotation={[0, 0, -0.05]}>
-          <boxGeometry args={[0.008, 0.26, 0.008]} />
-          <meshStandardMaterial color="#aaaaaa" metalness={0.75} roughness={0.2} />
-        </mesh>
-        {/* Spring hinge ring at top */}
-        <mesh position={[0, 0.13, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[0.018, 0.004, 6, 16]} />
-          <meshStandardMaterial color="#888888" metalness={0.7} roughness={0.3} />
-        </mesh>
-        {/* Gripping tips */}
-        <mesh position={[-0.008, -0.14, 0]} rotation={[0, 0, -0.3]}>
-          <boxGeometry args={[0.02, 0.025, 0.012]} />
-          <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
-        </mesh>
-        <mesh position={[0.008, -0.14, 0]} rotation={[0, 0, 0.3]}>
-          <boxGeometry args={[0.02, 0.025, 0.012]} />
-          <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
-        </mesh>
-      </group>
-      <Html position={[-1.2, 0.62, -1.06]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Tongs</span>
-      </Html>
-
-      {/* ── Insulation blocks (white/ceramic) ── */}
+      {/* Insulation blocks (white/ceramic) */}
       <mesh position={[-1.5, 0.42, -1.06]} castShadow>
         <boxGeometry args={[0.12, 0.06, 0.1]} />
         <meshStandardMaterial color="#f0ede8" roughness={0.8} />

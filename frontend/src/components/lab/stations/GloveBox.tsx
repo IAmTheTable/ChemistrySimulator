@@ -26,9 +26,19 @@ export default function GloveBox() {
     showNotification(`Glove box purged -- atmosphere set to ${gas}`);
   };
 
+  const handleVacuumGauge = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    const pressures: Record<string, string> = {
+      Air: "760 torr (atmospheric)",
+      N2: "2.3 torr (inert, N\u2082)",
+      Ar: "1.8 torr (inert, Ar)",
+    };
+    showNotification(`Vacuum Gauge: ${pressures[atmosphere]}`);
+  };
+
   return (
     <StationShell wallColor="#303035" showShelf={false}>
-      {/* ── Main glove box body — frame ── */}
+      {/* Main glove box body -- frame */}
       <Html position={[0, 1.12, -0.4]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Inert Atmosphere Glove Box ({atmosphere})</span>
       </Html>
@@ -71,7 +81,7 @@ export default function GloveBox() {
         />
       </mesh>
 
-      {/* ── Glove ports (torus shapes) ── */}
+      {/* Glove ports (torus shapes) */}
       <Html position={[0, 0.7, 0.14]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Glove Ports</span>
       </Html>
@@ -93,7 +103,7 @@ export default function GloveBox() {
         <meshStandardMaterial color="#222" roughness={0.9} transparent opacity={0.7} />
       </mesh>
 
-      {/* ── Interior workspace ── */}
+      {/* Interior workspace */}
       <mesh position={[0, 0.12, -0.45]} receiveShadow>
         <boxGeometry args={[2.0, 0.04, 0.9]} />
         <meshStandardMaterial color="#e0ddd8" roughness={0.7} />
@@ -120,7 +130,7 @@ export default function GloveBox() {
         </mesh>
       ))}
 
-      {/* ── Airlock chamber — smaller box on right side ── */}
+      {/* Airlock chamber -- smaller box on right side */}
       <InteractiveTool
         name="Airlock"
         description="Click to transfer container into inert atmosphere"
@@ -149,18 +159,18 @@ export default function GloveBox() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Gas line connections at top ── */}
-      {/* Argon line pipe (non-interactive) */}
+      {/* Gas line connections at top */}
+      {/* Argon line pipe */}
       <mesh position={[-0.6, 1.02, -0.4]}>
         <cylinderGeometry args={[0.018, 0.018, 0.25, 8]} />
         <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
       </mesh>
-      {/* Nitrogen line pipe (non-interactive) */}
+      {/* Nitrogen line pipe */}
       <mesh position={[0.6, 1.02, -0.4]}>
         <cylinderGeometry args={[0.018, 0.018, 0.25, 8]} />
         <meshStandardMaterial color="#888890" metalness={0.7} roughness={0.3} />
       </mesh>
-      {/* Gas valve knob — Ar (orange, left) */}
+      {/* Gas valve knob -- Ar (orange, left) */}
       <InteractiveTool
         name="Gas Lines (Ar)"
         description="Click to purge with Ar"
@@ -179,7 +189,7 @@ export default function GloveBox() {
           />
         </mesh>
       </InteractiveTool>
-      {/* Gas valve knob — N2 (blue, right) */}
+      {/* Gas valve knob -- N2 (blue, right) */}
       <InteractiveTool
         name="Gas Lines (N\u2082)"
         description="Click to purge with N\u2082"
@@ -199,8 +209,14 @@ export default function GloveBox() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Vacuum gauge (circular dial) on front face ── */}
-      <group position={[-0.7, 0.06, 0.15]}>
+      {/* Vacuum gauge (circular dial) on front face -- now interactive */}
+      <InteractiveTool
+        name="Vacuum Gauge"
+        description="Click to read vacuum level"
+        onClick={handleVacuumGauge}
+        position={[-0.7, 0.06, 0.15]}
+        labelOffset={[0, 0.18, 0]}
+      >
         {/* Gauge body */}
         <mesh>
           <cylinderGeometry args={[0.042, 0.042, 0.04, 16]} />
@@ -216,12 +232,9 @@ export default function GloveBox() {
           <boxGeometry args={[0.028, 0.003, 0.002]} />
           <meshStandardMaterial color="#cc2200" roughness={0.4} />
         </mesh>
-      </group>
-      <Html position={[-0.7, 0.2, 0.15]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Vacuum Gauge</span>
-      </Html>
+      </InteractiveTool>
 
-      {/* ── Pressure digital display on front ── */}
+      {/* Pressure digital display on front */}
       <group position={[0.7, 0.06, 0.15]}>
         <mesh castShadow>
           <boxGeometry args={[0.18, 0.1, 0.06]} />
@@ -242,7 +255,7 @@ export default function GloveBox() {
         <span style={LABEL_STYLE}>Pressure Display</span>
       </Html>
 
-      {/* ── Pressure gauge on top (existing) ── */}
+      {/* Pressure gauge on top */}
       <mesh position={[0, 1.06, -0.55]}>
         <cylinderGeometry args={[0.045, 0.045, 0.05, 16]} />
         <meshStandardMaterial color="#222225" roughness={0.4} metalness={0.6} />
@@ -257,7 +270,7 @@ export default function GloveBox() {
         />
       </mesh>
 
-      {/* ── Gas purification cartridge on top ── */}
+      {/* Gas purification cartridge on top */}
       <group position={[-0.3, 1.06, -0.4]}>
         {/* Cylinder body */}
         <mesh castShadow>
@@ -288,7 +301,7 @@ export default function GloveBox() {
         <span style={LABEL_STYLE}>Gas Purification Cartridge</span>
       </Html>
 
-      {/* ── Internal shelving ── */}
+      {/* Internal shelving */}
       {/* Shelf plank */}
       <mesh position={[0.5, 0.38, -0.6]}>
         <boxGeometry args={[0.8, 0.025, 0.3]} />
@@ -303,22 +316,69 @@ export default function GloveBox() {
         <boxGeometry args={[0.015, 0.1, 0.015]} />
         <meshStandardMaterial color="#444448" metalness={0.6} roughness={0.3} />
       </mesh>
-      {/* Items on shelf */}
-      <mesh position={[0.35, 0.44, -0.6]}>
+      {/* Items on shelf -- transfer tools (tweezers, scoop) */}
+      {/* Tweezers */}
+      <mesh position={[0.3, 0.42, -0.6]} rotation={[-Math.PI / 2, 0, 0.2]}>
+        <boxGeometry args={[0.006, 0.12, 0.003]} />
+        <meshStandardMaterial color="#cccccc" metalness={0.8} roughness={0.2} />
+      </mesh>
+      <mesh position={[0.31, 0.42, -0.6]} rotation={[-Math.PI / 2, 0, 0.2]}>
+        <boxGeometry args={[0.006, 0.12, 0.003]} />
+        <meshStandardMaterial color="#cccccc" metalness={0.8} roughness={0.2} />
+      </mesh>
+      {/* Scoop / spatula */}
+      <mesh position={[0.5, 0.42, -0.6]} rotation={[-Math.PI / 2, 0, -0.1]}>
+        <boxGeometry args={[0.008, 0.1, 0.003]} />
+        <meshStandardMaterial color="#aaaaaa" metalness={0.8} roughness={0.2} />
+      </mesh>
+      {/* Scoop head */}
+      <mesh position={[0.505, 0.42, -0.55]}>
+        <boxGeometry args={[0.018, 0.003, 0.015]} />
+        <meshStandardMaterial color="#aaaaaa" metalness={0.7} roughness={0.3} />
+      </mesh>
+      {/* Vials on shelf */}
+      <mesh position={[0.65, 0.44, -0.6]}>
         <cylinderGeometry args={[0.02, 0.02, 0.1, 10]} />
         <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.3} roughness={0.05} transmission={0.75} />
       </mesh>
-      <mesh position={[0.55, 0.44, -0.6]}>
+      <mesh position={[0.75, 0.44, -0.6]}>
         <cylinderGeometry args={[0.02, 0.02, 0.1, 10]} />
         <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.3} roughness={0.05} transmission={0.75} />
       </mesh>
+      <Html position={[0.5, 0.56, -0.6]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Transfer Tools</span>
+      </Html>
 
-      {/* ── Tool holder strip on interior back wall ── */}
+      {/* Drying agent tray inside the box */}
+      <group position={[-0.6, 0.14, -0.3]}>
+        {/* Tray */}
+        <mesh>
+          <boxGeometry args={[0.2, 0.03, 0.14]} />
+          <meshStandardMaterial color="#888880" roughness={0.6} metalness={0.3} />
+        </mesh>
+        {/* Desiccant granules (rough textured fill) */}
+        <mesh position={[0, 0.025, 0]}>
+          <boxGeometry args={[0.17, 0.02, 0.11]} />
+          <meshStandardMaterial color="#e8c888" roughness={0.9} />
+        </mesh>
+        {/* A few granule bumps */}
+        {([[-0.04, 0.04, -0.02], [0.03, 0.04, 0.02], [-0.02, 0.04, 0.03], [0.05, 0.04, -0.01]] as [number, number, number][]).map((pos, i) => (
+          <mesh key={i} position={pos}>
+            <sphereGeometry args={[0.012, 6, 6]} />
+            <meshStandardMaterial color="#ddc078" roughness={0.8} />
+          </mesh>
+        ))}
+      </group>
+      <Html position={[-0.6, 0.28, -0.3]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Drying Agent</span>
+      </Html>
+
+      {/* Tool holder strip on interior back wall */}
       <mesh position={[-0.4, 0.7, -0.92]}>
         <boxGeometry args={[0.5, 0.04, 0.025]} />
         <meshStandardMaterial color="#444448" roughness={0.5} metalness={0.4} />
       </mesh>
-      {/* Hanging tools — small spatulas */}
+      {/* Hanging tools -- small spatulas */}
       {([-0.55, -0.42, -0.28] as number[]).map((x, i) => (
         <mesh key={i} position={[x, 0.62, -0.91]}>
           <boxGeometry args={[0.007, 0.12, 0.005]} />
@@ -333,19 +393,19 @@ export default function GloveBox() {
         </mesh>
       ))}
 
-      {/* ── Enhanced glove ports — thicker rubber torus ── */}
-      {/* Left glove — inner rubber disc */}
+      {/* Enhanced glove ports -- thicker rubber torus */}
+      {/* Left glove -- inner rubber disc */}
       <mesh position={[-0.42, 0.48, 0.13]}>
         <cylinderGeometry args={[0.11, 0.13, 0.04, 20]} />
         <meshStandardMaterial color="#1a1a1a" roughness={0.95} />
       </mesh>
-      {/* Right glove — inner rubber disc */}
+      {/* Right glove -- inner rubber disc */}
       <mesh position={[0.42, 0.48, 0.13]}>
         <cylinderGeometry args={[0.11, 0.13, 0.04, 20]} />
         <meshStandardMaterial color="#1a1a1a" roughness={0.95} />
       </mesh>
 
-      {/* ── Antechamber door details ── */}
+      {/* Antechamber door details */}
       {/* Inner door porthole window */}
       <mesh position={[1.3, 0.51, -0.4]}>
         <cylinderGeometry args={[0.08, 0.08, 0.005, 16]} />

@@ -5,7 +5,7 @@ import { useStationTool } from "./useStationTool";
 import InteractiveTool from "./InteractiveTool";
 
 export default function InstrumentRoom() {
-  const { selectedItem, openStructureViewer, setActiveRightTab, showNotification } = useStationTool();
+  const { selectedItem, selectedBenchItem, updateBenchItemContents, openStructureViewer, setActiveRightTab, showNotification } = useStationTool();
 
   const handleMassSpec = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
@@ -53,6 +53,55 @@ export default function InstrumentRoom() {
     showNotification(`NMR spectrum -- analyzing ${formula} (coming soon)`);
   };
 
+  const handleCentrifuge = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container first");
+      return;
+    }
+    if (selectedItem.contents.length === 0) {
+      showNotification("Container is empty");
+      return;
+    }
+    const solids = selectedItem.contents.filter((s) => s.phase === "s");
+    const others = selectedItem.contents.filter((s) => s.phase !== "s");
+    if (solids.length === 0) {
+      showNotification("No solids to separate -- centrifuge had no effect");
+      return;
+    }
+    // Move solids to end (bottom) of contents array, mark as precipitated
+    updateBenchItemContents(selectedBenchItem, [...others, ...solids]);
+    showNotification(`Centrifuged -- separated ${solids.map((s) => s.formula).join(", ")} from liquid`);
+  };
+
+  const handleMicroscope = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || selectedItem.contents.length === 0) {
+      showNotification("Select a container with contents first");
+      return;
+    }
+    const solids = selectedItem.contents.filter((s) => s.phase === "s");
+    if (solids.length === 0) {
+      showNotification("No solid crystals to examine");
+      return;
+    }
+    const crystal = solids[0];
+    const crystalInfo: Record<string, string> = {
+      NaCl: "Cubic (halite) -- face-centered cubic lattice",
+      KCl: "Cubic (sylvite) -- face-centered cubic lattice",
+      CuSO4: "Triclinic -- blue vitriol crystals",
+      Fe: "Body-centered cubic (BCC) -- metallic",
+      Cu: "Face-centered cubic (FCC) -- metallic copper",
+      Al: "Face-centered cubic (FCC) -- metallic aluminum",
+      Zn: "Hexagonal close-packed (HCP) -- metallic zinc",
+      Na: "Body-centered cubic (BCC) -- soft metal",
+      I2: "Orthorhombic -- purple-black crystals",
+      K: "Body-centered cubic (BCC) -- soft metal",
+    };
+    const info = crystalInfo[crystal.formula] ?? "Crystal structure data not available";
+    showNotification(`Microscope: ${crystal.formula} -- ${info}`);
+  };
+
   return (
     <StationShell wallColor="#2d3142" showShelf={false}>
       {/* Long counter along back wall */}
@@ -67,7 +116,7 @@ export default function InstrumentRoom() {
         <meshStandardMaterial color="#2a2f4a" roughness={0.4} metalness={0.3} />
       </mesh>
 
-      {/* ── Instrument 1: Mass spectrometer (large box, left) ── */}
+      {/* Instrument 1: Mass spectrometer (large box, left) */}
       <InteractiveTool
         name="Mass Spectrometer"
         description="Click to analyze mass spectrum of selected substance"
@@ -104,7 +153,7 @@ export default function InstrumentRoom() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Instrument 2: HPLC / chromatograph (medium, center-left) ── */}
+      {/* Instrument 2: HPLC / chromatograph (medium, center-left) */}
       <InteractiveTool
         name="HPLC"
         description="Click to run chromatography on selected substance"
@@ -134,7 +183,7 @@ export default function InstrumentRoom() {
         ))}
       </InteractiveTool>
 
-      {/* ── Instrument 3: UV/Vis spectrophotometer (medium, center-right) ── */}
+      {/* Instrument 3: UV/Vis spectrophotometer (medium, center-right) */}
       <InteractiveTool
         name="UV-Vis Spectrophotometer"
         description="Click to measure UV-Vis spectrum"
@@ -162,7 +211,7 @@ export default function InstrumentRoom() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Instrument 4: NMR / large analyzer (right, tall) ── */}
+      {/* Instrument 4: NMR / large analyzer (right, tall) */}
       <InteractiveTool
         name="NMR Spectrometer"
         description="Click to analyze NMR spectrum (coming soon)"
@@ -196,7 +245,7 @@ export default function InstrumentRoom() {
         ))}
       </InteractiveTool>
 
-      {/* ── Computer workstation ── */}
+      {/* Computer workstation */}
       <Html position={[0.05, 0.72, 0.6]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Data Workstation</span>
       </Html>
@@ -242,7 +291,7 @@ export default function InstrumentRoom() {
         <meshStandardMaterial color="#161b2e" roughness={0.8} />
       </mesh>
 
-      {/* ── Analytical balance (enclosed glass case) ── */}
+      {/* Analytical balance (enclosed glass case) */}
       <group position={[-1.4, 0.1, 0.2]}>
         {/* Base */}
         <mesh castShadow>
@@ -278,7 +327,7 @@ export default function InstrumentRoom() {
         <span style={LABEL_STYLE}>Analytical Balance</span>
       </Html>
 
-      {/* ── pH meter with probe ── */}
+      {/* pH meter with probe */}
       <group position={[-0.4, 0.08, 0.35]}>
         {/* Meter body */}
         <mesh castShadow>
@@ -317,8 +366,14 @@ export default function InstrumentRoom() {
         <span style={LABEL_STYLE}>pH Meter</span>
       </Html>
 
-      {/* ── Centrifuge ── */}
-      <group position={[0.55, 0.1, 0.25]}>
+      {/* Centrifuge -- now interactive */}
+      <InteractiveTool
+        name="Centrifuge"
+        description="Click to centrifuge -- separates solids from liquids"
+        onClick={handleCentrifuge}
+        position={[0.55, 0.1, 0.25]}
+        labelOffset={[0, 0.4, 0]}
+      >
         {/* Body */}
         <mesh castShadow>
           <cylinderGeometry args={[0.14, 0.16, 0.22, 20]} />
@@ -349,13 +404,16 @@ export default function InstrumentRoom() {
           <cylinderGeometry args={[0.01, 0.01, 0.01, 8]} />
           <meshStandardMaterial color="#44cc44" emissive="#22aa22" emissiveIntensity={0.4} roughness={0.4} />
         </mesh>
-      </group>
-      <Html position={[0.55, 0.44, 0.25]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Centrifuge</span>
-      </Html>
+      </InteractiveTool>
 
-      {/* ── Microscope ── */}
-      <group position={[1.45, 0.06, 0.3]}>
+      {/* Microscope -- now interactive */}
+      <InteractiveTool
+        name="Microscope"
+        description="Click to examine crystal structure of solid"
+        onClick={handleMicroscope}
+        position={[1.45, 0.06, 0.3]}
+        labelOffset={[0, 0.7, 0]}
+      >
         {/* Heavy base */}
         <mesh castShadow>
           <boxGeometry args={[0.18, 0.04, 0.2]} />
@@ -372,7 +430,7 @@ export default function InstrumentRoom() {
           <meshStandardMaterial color="#333338" roughness={0.4} metalness={0.4} />
         </mesh>
         {/* Objective turret */}
-        <mesh position={[0.0, 0.36, 0]} >
+        <mesh position={[0.0, 0.36, 0]}>
           <cylinderGeometry args={[0.025, 0.025, 0.05, 10]} />
           <meshStandardMaterial color="#444448" roughness={0.3} metalness={0.5} />
         </mesh>
@@ -402,12 +460,9 @@ export default function InstrumentRoom() {
           <cylinderGeometry args={[0.02, 0.02, 0.02, 12]} />
           <meshStandardMaterial color="#555558" metalness={0.5} roughness={0.3} />
         </mesh>
-      </group>
-      <Html position={[1.45, 0.72, 0.3]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Microscope</span>
-      </Html>
+      </InteractiveTool>
 
-      {/* ── Vortex mixer ── */}
+      {/* Vortex mixer */}
       <group position={[1.05, 0.08, 0.55]}>
         {/* Body */}
         <mesh castShadow>
@@ -434,8 +489,7 @@ export default function InstrumentRoom() {
         <span style={LABEL_STYLE}>Vortex Mixer</span>
       </Html>
 
-      {/* ── Small printer next to each major instrument ── */}
-      {/* Printer (compact box, beside Mass Spec) */}
+      {/* Small printer next to each major instrument */}
       <group position={[-1.4, 0.06, 0.55]}>
         <mesh castShadow>
           <boxGeometry args={[0.24, 0.1, 0.18]} />
@@ -452,6 +506,63 @@ export default function InstrumentRoom() {
           <meshStandardMaterial color="#00ff44" emissive="#00ff44" emissiveIntensity={1.0} />
         </mesh>
       </group>
+
+      {/* Sample preparation area (cutting board surface) */}
+      <group position={[-0.8, 0.08, 0.7]}>
+        {/* Prep board */}
+        <mesh castShadow>
+          <boxGeometry args={[0.3, 0.02, 0.2]} />
+          <meshStandardMaterial color="#e8dcc8" roughness={0.8} />
+        </mesh>
+        {/* Edge trim */}
+        <mesh position={[0, 0.0, -0.1]}>
+          <boxGeometry args={[0.3, 0.02, 0.01]} />
+          <meshStandardMaterial color="#c0b090" roughness={0.7} />
+        </mesh>
+        {/* Razor blade */}
+        <mesh position={[0.08, 0.02, 0.04]} rotation={[-Math.PI / 2, 0, 0.3]}>
+          <boxGeometry args={[0.04, 0.08, 0.002]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.8} roughness={0.2} />
+        </mesh>
+        {/* Mortar (small bowl) */}
+        <mesh position={[-0.08, 0.04, 0.02]}>
+          <cylinderGeometry args={[0.03, 0.035, 0.05, 12]} />
+          <meshStandardMaterial color="#a09888" roughness={0.7} />
+        </mesh>
+        {/* Pestle */}
+        <mesh position={[-0.06, 0.07, 0.02]} rotation={[0, 0, 0.4]}>
+          <cylinderGeometry args={[0.006, 0.01, 0.08, 8]} />
+          <meshStandardMaterial color="#b0a898" roughness={0.6} />
+        </mesh>
+      </group>
+      <Html position={[-0.8, 0.22, 0.7]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Sample Prep</span>
+      </Html>
+
+      {/* Reagent bottles on counter */}
+      <group position={[1.5, 0.1, -0.7]}>
+        {([[-0.08, "#4488cc"], [0, "#cc6644"], [0.08, "#44aa66"]] as [number, string][]).map(([x, color], i) => (
+          <group key={i} position={[x, 0, 0]}>
+            <mesh castShadow>
+              <cylinderGeometry args={[0.022, 0.025, 0.1, 10]} />
+              <meshStandardMaterial color={color} roughness={0.4} metalness={0.1} />
+            </mesh>
+            {/* Cap */}
+            <mesh position={[0, 0.058, 0]}>
+              <cylinderGeometry args={[0.016, 0.02, 0.02, 8]} />
+              <meshStandardMaterial color="#ffffff" roughness={0.5} />
+            </mesh>
+            {/* Label */}
+            <mesh position={[0, -0.01, 0.026]}>
+              <boxGeometry args={[0.025, 0.03, 0.002]} />
+              <meshStandardMaterial color="#ffffff" roughness={0.8} />
+            </mesh>
+          </group>
+        ))}
+      </group>
+      <Html position={[1.5, 0.28, -0.7]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Reagents</span>
+      </Html>
     </StationShell>
   );
 }

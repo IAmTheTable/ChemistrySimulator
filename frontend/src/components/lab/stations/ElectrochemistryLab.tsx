@@ -23,6 +23,13 @@ const PH_MAP: Record<string, number> = {
   "Na2CO3": 11.5, NaHCO3: 8.3,
 };
 
+// Standard reduction potentials (V) for common metals
+const REDUCTION_POTENTIALS: Record<string, number> = {
+  Li: -3.04, K: -2.93, Ca: -2.87, Na: -2.71, Mg: -2.37, Al: -1.66,
+  Zn: -0.76, Fe: -0.44, Ni: -0.26, Sn: -0.14, Pb: -0.13, H2: 0.0,
+  Cu: 0.34, Ag: 0.80, Pt: 1.20, Au: 1.50,
+};
+
 export default function ElectrochemistryLab() {
   const { selectedItem, selectedBenchItem, updateBenchItemContents, showNotification } = useStationTool();
   const [powerOn, setPowerOn] = useState(false);
@@ -76,16 +83,43 @@ export default function ElectrochemistryLab() {
     showNotification(powerOn ? "Power supply OFF" : "Power supply ON");
   };
 
+  const handleVoltmeter = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container with metal electrodes first");
+      return;
+    }
+    // Look for metal contents to form a galvanic pair
+    const metals = selectedItem.contents.filter(
+      (s) => s.phase === "s" && REDUCTION_POTENTIALS[s.formula] !== undefined
+    );
+    if (metals.length >= 2) {
+      const e1 = REDUCTION_POTENTIALS[metals[0].formula];
+      const e2 = REDUCTION_POTENTIALS[metals[1].formula];
+      const voltage = Math.abs(e1 - e2);
+      showNotification(
+        `Voltmeter: ${metals[0].formula} / ${metals[1].formula} -- E\u00B0cell = ${voltage.toFixed(2)} V`
+      );
+    } else if (metals.length === 1) {
+      const e1 = REDUCTION_POTENTIALS[metals[0].formula];
+      showNotification(
+        `Voltmeter: ${metals[0].formula} vs SHE -- E\u00B0 = ${e1.toFixed(2)} V`
+      );
+    } else {
+      showNotification("Voltmeter: No metal electrodes found -- 0.00 V");
+    }
+  };
+
   return (
     <StationShell wallColor="#2a3028">
-      {/* ── Electrolysis cell (central) ── */}
+      {/* Electrolysis cell (central) */}
       <InteractiveTool
         name="Electrolysis Cell"
         description="Click to electrolyze ionic solution"
         onClick={handleElectrolysis}
         labelOffset={[0, 0.6, 0]}
       >
-        {/* Cell body — transparent box */}
+        {/* Cell body -- transparent box */}
         <mesh position={[0, 0.2, 0]}>
           <boxGeometry args={[0.55, 0.32, 0.35]} />
           <meshPhysicalMaterial
@@ -111,12 +145,12 @@ export default function ElectrochemistryLab() {
             roughness={0.1}
           />
         </mesh>
-        {/* Electrode rod — anode (left, dark) */}
+        {/* Electrode rod -- anode (left, dark) */}
         <mesh position={[-0.15, 0.32, 0]} castShadow>
           <cylinderGeometry args={[0.018, 0.018, 0.45, 10]} />
           <meshStandardMaterial color="#1a1a1a" roughness={0.5} metalness={0.7} />
         </mesh>
-        {/* Electrode rod — cathode (right, silver) */}
+        {/* Electrode rod -- cathode (right, silver) */}
         <mesh position={[0.15, 0.32, 0]} castShadow>
           <cylinderGeometry args={[0.018, 0.018, 0.45, 10]} />
           <meshStandardMaterial color="#c0c0c0" roughness={0.3} metalness={0.85} />
@@ -130,7 +164,7 @@ export default function ElectrochemistryLab() {
         ))}
       </InteractiveTool>
 
-      {/* ── Power supply box ── */}
+      {/* Power supply box */}
       <InteractiveTool
         name="DC Power Supply"
         description="Click to toggle power on/off"
@@ -170,7 +204,7 @@ export default function ElectrochemistryLab() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Wire connections (thin cylinders) ── */}
+      {/* Wire connections (thin cylinders) */}
       {/* Red wire from power supply to anode */}
       <mesh position={[0.47, 0.42, 0.15]} rotation={[0.1, -0.7, 0.3]} castShadow>
         <cylinderGeometry args={[0.006, 0.006, 1.05, 6]} />
@@ -182,7 +216,7 @@ export default function ElectrochemistryLab() {
         <meshStandardMaterial color="#111111" roughness={0.7} />
       </mesh>
 
-      {/* ── pH meter ── */}
+      {/* pH meter */}
       <InteractiveTool
         name="pH Meter"
         description="Click to measure pH of selected solution"
@@ -212,7 +246,7 @@ export default function ElectrochemistryLab() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Burette on clamp stand ── */}
+      {/* Burette on clamp stand */}
       <Html position={[-1.3, 0.95, -0.3]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Burette</span>
       </Html>
@@ -271,14 +305,14 @@ export default function ElectrochemistryLab() {
         />
       </mesh>
 
-      {/* ── Galvanic cell setup — two beakers + salt bridge ── */}
+      {/* Galvanic cell setup -- two beakers + salt bridge */}
       {/* Left half-cell beaker */}
       <group position={[-0.6, 0.06, 0.65]}>
         <mesh castShadow>
           <cylinderGeometry args={[0.065, 0.07, 0.16, 14]} />
           <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.28} roughness={0.05} transmission={0.78} />
         </mesh>
-        {/* Solution (ZnSO4 — blue-ish) */}
+        {/* Solution (ZnSO4 -- blue-ish) */}
         <mesh position={[0, -0.02, 0]}>
           <cylinderGeometry args={[0.058, 0.062, 0.1, 14]} />
           <meshStandardMaterial color="#aaccee" transparent opacity={0.5} roughness={0.1} />
@@ -301,7 +335,7 @@ export default function ElectrochemistryLab() {
           <cylinderGeometry args={[0.065, 0.07, 0.16, 14]} />
           <meshPhysicalMaterial color="#c8e8ff" transparent opacity={0.28} roughness={0.05} transmission={0.78} />
         </mesh>
-        {/* Solution (CuSO4 — blue) */}
+        {/* Solution (CuSO4 -- blue) */}
         <mesh position={[0, -0.02, 0]}>
           <cylinderGeometry args={[0.058, 0.062, 0.1, 14]} />
           <meshStandardMaterial color="#2255cc" transparent opacity={0.45} roughness={0.1} />
@@ -318,7 +352,7 @@ export default function ElectrochemistryLab() {
         </mesh>
       </group>
 
-      {/* Salt bridge — U-tube over both beakers */}
+      {/* Salt bridge -- U-tube over both beakers */}
       {/* Left arm */}
       <mesh position={[-0.54, 0.28, 0.65]} rotation={[0.5, 0, 0]}>
         <cylinderGeometry args={[0.009, 0.009, 0.22, 8]} />
@@ -343,9 +377,14 @@ export default function ElectrochemistryLab() {
         <span style={LABEL_STYLE}>Galvanic Cell + Salt Bridge</span>
       </Html>
 
-      {/* ── Ammeter/Voltmeter display boxes ── */}
-      {/* Voltmeter */}
-      <group position={[-0.25, 0.12, 0.95]}>
+      {/* Voltmeter -- now interactive */}
+      <InteractiveTool
+        name="Voltmeter"
+        description="Click to read voltage between electrodes"
+        onClick={handleVoltmeter}
+        position={[-0.25, 0.12, 0.95]}
+        labelOffset={[0, 0.3, 0]}
+      >
         <mesh castShadow>
           <boxGeometry args={[0.18, 0.14, 0.1]} />
           <meshStandardMaterial color="#2a2a2a" roughness={0.4} metalness={0.4} />
@@ -369,10 +408,7 @@ export default function ElectrochemistryLab() {
           <cylinderGeometry args={[0.007, 0.007, 0.025, 8]} />
           <meshStandardMaterial color="#111111" metalness={0.5} roughness={0.3} />
         </mesh>
-      </group>
-      <Html position={[-0.25, 0.38, 0.95]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Voltmeter</span>
-      </Html>
+      </InteractiveTool>
 
       {/* Ammeter */}
       <group position={[0.3, 0.12, 0.95]}>
@@ -399,7 +435,7 @@ export default function ElectrochemistryLab() {
         <span style={LABEL_STYLE}>Ammeter</span>
       </Html>
 
-      {/* ── Alligator clip wires connecting instruments to galvanic cell ── */}
+      {/* Alligator clip wires connecting instruments to galvanic cell */}
       {/* Red wire from voltmeter to Zn electrode */}
       <mesh position={[-0.44, 0.28, 0.78]} rotation={[0.4, 0.3, 0.1]}>
         <cylinderGeometry args={[0.005, 0.005, 0.36, 6]} />
@@ -410,7 +446,7 @@ export default function ElectrochemistryLab() {
         <cylinderGeometry args={[0.005, 0.005, 0.32, 6]} />
         <meshStandardMaterial color="#111111" roughness={0.7} />
       </mesh>
-      {/* Alligator clip (red) — small flattened cylinder */}
+      {/* Alligator clip (red) -- small flattened cylinder */}
       <mesh position={[-0.56, 0.22, 0.68]} rotation={[0, 0.3, 0.2]}>
         <boxGeometry args={[0.025, 0.01, 0.01]} />
         <meshStandardMaterial color="#cc2200" roughness={0.4} metalness={0.4} />
@@ -421,7 +457,7 @@ export default function ElectrochemistryLab() {
         <meshStandardMaterial color="#111111" roughness={0.4} metalness={0.4} />
       </mesh>
 
-      {/* ── Electrode holder/stand for reference electrode ── */}
+      {/* Electrode holder/stand for reference electrode */}
       <group position={[0.5, 0.06, -1.07]}>
         {/* Stand vertical rod */}
         <mesh position={[0.08, 0.25, 0]}>
@@ -456,6 +492,64 @@ export default function ElectrochemistryLab() {
       </group>
       <Html position={[0.5, 0.62, -1.07]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Reference Electrode</span>
+      </Html>
+
+      {/* Electrode cleaning solution bottle */}
+      <group position={[1.4, 0.06, -0.8]}>
+        <mesh castShadow>
+          <cylinderGeometry args={[0.035, 0.04, 0.14, 12]} />
+          <meshStandardMaterial color="#336699" roughness={0.4} metalness={0.1} />
+        </mesh>
+        {/* Cap */}
+        <mesh position={[0, 0.08, 0]}>
+          <cylinderGeometry args={[0.025, 0.03, 0.03, 10]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.5} />
+        </mesh>
+        {/* Label */}
+        <mesh position={[0, -0.01, 0.041]}>
+          <boxGeometry args={[0.04, 0.05, 0.002]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.8} />
+        </mesh>
+        {/* Label text strip */}
+        <mesh position={[0, -0.01, 0.043]}>
+          <boxGeometry args={[0.03, 0.01, 0.002]} />
+          <meshStandardMaterial color="#336699" roughness={0.7} />
+        </mesh>
+      </group>
+      <Html position={[1.4, 0.28, -0.8]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Electrode Cleaner</span>
+      </Html>
+
+      {/* Magnetic stirrer on bench */}
+      <group position={[1.4, 0.06, 0.7]}>
+        {/* Stirrer base */}
+        <mesh castShadow>
+          <boxGeometry args={[0.22, 0.06, 0.18]} />
+          <meshStandardMaterial color="#e8e0d0" roughness={0.5} metalness={0.2} />
+        </mesh>
+        {/* Top plate */}
+        <mesh position={[0, 0.035, 0]}>
+          <boxGeometry args={[0.2, 0.01, 0.16]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.4} roughness={0.3} />
+        </mesh>
+        {/* Speed dial */}
+        <mesh position={[0.08, 0.02, -0.09]}>
+          <cylinderGeometry args={[0.018, 0.018, 0.015, 10]} />
+          <meshStandardMaterial color="#333333" roughness={0.4} metalness={0.5} />
+        </mesh>
+        {/* Indicator LED */}
+        <mesh position={[-0.08, 0.035, -0.085]}>
+          <sphereGeometry args={[0.006, 6, 6]} />
+          <meshStandardMaterial color="#00ff44" emissive="#00ff44" emissiveIntensity={1.0} />
+        </mesh>
+        {/* Stir bar on plate */}
+        <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0.5]}>
+          <cylinderGeometry args={[0.004, 0.004, 0.04, 6]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.3} />
+        </mesh>
+      </group>
+      <Html position={[1.4, 0.22, 0.7]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Magnetic Stirrer</span>
       </Html>
     </StationShell>
   );

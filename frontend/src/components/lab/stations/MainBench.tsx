@@ -44,16 +44,37 @@ export default function MainBench() {
     showNotification(`Analytical Balance -- Mass: ${totalMass.toFixed(2)} g`);
   };
 
+  const handleSink = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container first");
+      return;
+    }
+    updateBenchItemContents(selectedBenchItem, selectedItem.contents, 25);
+    showNotification(`Rinsed ${selectedItem.type} -- cooled to 25\u00B0C`);
+  };
+
+  const handleWashBottle = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (!selectedItem || !selectedBenchItem) {
+      showNotification("Select a container first");
+      return;
+    }
+    const newContents = [...selectedItem.contents, { formula: "H2O", amount_ml: 10, phase: "l", color: "#e8f4f8" }];
+    updateBenchItemContents(selectedBenchItem, newContents);
+    showNotification("Added 10mL distilled water");
+  };
+
   return (
     <StationShell>
-      {/* ── Test tube rack — detailed with tube slots ── */}
+      {/* Test tube rack -- detailed with tube slots */}
       <group position={[-1.2, 0.42, -1.05]}>
         {/* Rack body */}
         <mesh>
           <boxGeometry args={[0.42, 0.08, 0.15]} />
           <meshStandardMaterial color="#78716c" roughness={0.6} />
         </mesh>
-        {/* Individual tube holes — 5 cylinders */}
+        {/* Individual tube holes -- 5 cylinders */}
         {([-0.16, -0.08, 0, 0.08, 0.16] as number[]).map((x, i) => (
           <mesh key={i} position={[x, 0.06, 0]}>
             <cylinderGeometry args={[0.016, 0.016, 0.06, 10]} />
@@ -72,7 +93,7 @@ export default function MainBench() {
         <span style={LABEL_STYLE}>Test Tube Rack</span>
       </Html>
 
-      {/* ── Ring stand with adjustable ring and wire gauze ── */}
+      {/* Ring stand with adjustable ring and wire gauze */}
       <group position={[0.5, 0.0, -0.8]}>
         {/* Vertical rod */}
         <mesh position={[0, 0.55, 0]} castShadow>
@@ -117,8 +138,14 @@ export default function MainBench() {
         <span style={LABEL_STYLE}>Ring Stand</span>
       </Html>
 
-      {/* ── Sink with faucet — at right end ── */}
-      <group position={[1.55, 0.06, -0.6]}>
+      {/* Sink with faucet -- interactive */}
+      <InteractiveTool
+        name="Sink"
+        description="Click to rinse selected container to room temp"
+        onClick={handleSink}
+        position={[1.55, 0.06, -0.6]}
+        labelOffset={[0, 0.35, 0]}
+      >
         {/* Sink basin */}
         <mesh castShadow>
           <boxGeometry args={[0.45, 0.12, 0.38]} />
@@ -158,13 +185,16 @@ export default function MainBench() {
           <cylinderGeometry args={[0.014, 0.014, 0.02, 8]} />
           <meshStandardMaterial color="#3366cc" metalness={0.5} roughness={0.3} />
         </mesh>
-      </group>
-      <Html position={[1.55, 0.28, -0.6]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Sink</span>
-      </Html>
+      </InteractiveTool>
 
-      {/* ── Wash bottle — squeeze bottle shape ── */}
-      <group position={[1.1, 0.06, 0.2]}>
+      {/* Wash bottle -- interactive */}
+      <InteractiveTool
+        name="Wash Bottle"
+        description="Click to add 10mL distilled water"
+        onClick={handleWashBottle}
+        position={[1.1, 0.06, 0.2]}
+        labelOffset={[0, 0.35, 0]}
+      >
         {/* Body */}
         <mesh castShadow>
           <cylinderGeometry args={[0.038, 0.042, 0.22, 12]} />
@@ -180,9 +210,14 @@ export default function MainBench() {
           <cylinderGeometry args={[0.005, 0.007, 0.1, 8]} />
           <meshStandardMaterial color="#cccccc" roughness={0.4} />
         </mesh>
-      </group>
+        {/* "DI Water" label strip */}
+        <mesh position={[0, 0.0, 0.043]}>
+          <boxGeometry args={[0.05, 0.04, 0.002]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.8} />
+        </mesh>
+      </InteractiveTool>
 
-      {/* ── Spatula rack — horizontal bars ── */}
+      {/* Spatula rack -- horizontal bars */}
       <group position={[-0.3, 0.38, -1.1]}>
         {/* Rack back plate */}
         <mesh>
@@ -205,7 +240,7 @@ export default function MainBench() {
         ))}
       </group>
 
-      {/* ── Lab notebook / clipboard on bench ── */}
+      {/* Lab notebook / clipboard on bench */}
       <group position={[0.0, 0.075, 0.6]}>
         {/* Clipboard backing */}
         <mesh rotation={[-Math.PI / 2, 0, 0.15]}>
@@ -232,7 +267,7 @@ export default function MainBench() {
         <span style={LABEL_STYLE}>Lab Notebook</span>
       </Html>
 
-      {/* ── Paper towel dispenser on back wall ── */}
+      {/* Paper towel dispenser on back wall */}
       <group position={[-0.7, 0.85, -1.22]}>
         {/* Box body */}
         <mesh castShadow>
@@ -254,10 +289,63 @@ export default function MainBench() {
         <span style={LABEL_STYLE}>Paper Towels</span>
       </Html>
 
-      {/* ── Bunsen burner — detailed ── */}
+      {/* Lab timer / stopwatch on wall */}
+      <group position={[0.4, 0.88, -1.22]}>
+        {/* Timer body */}
+        <mesh castShadow>
+          <boxGeometry args={[0.12, 0.08, 0.03]} />
+          <meshStandardMaterial color="#1a1a22" roughness={0.4} metalness={0.3} />
+        </mesh>
+        {/* Digital display */}
+        <mesh position={[0, 0.01, 0.016]}>
+          <boxGeometry args={[0.08, 0.035, 0.005]} />
+          <meshStandardMaterial color="#001100" emissive="#00ff66" emissiveIntensity={0.9} roughness={0.2} />
+        </mesh>
+        {/* Buttons */}
+        {([-0.03, 0, 0.03] as number[]).map((x, i) => (
+          <mesh key={i} position={[x, -0.025, 0.016]}>
+            <boxGeometry args={[0.018, 0.012, 0.005]} />
+            <meshStandardMaterial color="#334455" roughness={0.5} />
+          </mesh>
+        ))}
+      </group>
+      <Html position={[0.4, 1.02, -1.22]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Lab Timer</span>
+      </Html>
+
+      {/* Utility outlets on back wall */}
+      {([0.9, 1.1] as number[]).map((x, i) => (
+        <group key={i} position={[x, 0.7, -1.22]}>
+          {/* Outlet plate */}
+          <mesh>
+            <boxGeometry args={[0.06, 0.09, 0.01]} />
+            <meshStandardMaterial color="#e8e4dc" roughness={0.6} />
+          </mesh>
+          {/* Socket holes */}
+          <mesh position={[0, 0.015, 0.006]}>
+            <boxGeometry args={[0.012, 0.025, 0.003]} />
+            <meshStandardMaterial color="#333333" roughness={0.7} />
+          </mesh>
+          <mesh position={[0, -0.015, 0.006]}>
+            <boxGeometry args={[0.012, 0.025, 0.003]} />
+            <meshStandardMaterial color="#333333" roughness={0.7} />
+          </mesh>
+          {/* Screw heads */}
+          <mesh position={[0, 0.038, 0.006]}>
+            <cylinderGeometry args={[0.004, 0.004, 0.003, 6]} />
+            <meshStandardMaterial color="#aaaaaa" metalness={0.7} roughness={0.3} />
+          </mesh>
+          <mesh position={[0, -0.038, 0.006]}>
+            <cylinderGeometry args={[0.004, 0.004, 0.003, 6]} />
+            <meshStandardMaterial color="#aaaaaa" metalness={0.7} roughness={0.3} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* Bunsen burner -- detailed */}
       <InteractiveTool
         name="Bunsen Burner"
-        description="Click to heat selected container +50°C"
+        description="Click to heat selected container +50\u00B0C"
         onClick={handleBunsenBurner}
         position={[1.5, 0, 0.5]}
         labelOffset={[0, 0.5, 0]}
@@ -298,7 +386,7 @@ export default function MainBench() {
         )}
       </InteractiveTool>
 
-      {/* ── Analytical balance — enclosed glass housing ── */}
+      {/* Analytical balance -- enclosed glass housing */}
       <InteractiveTool
         name="Analytical Balance"
         description="Click to weigh selected container"
@@ -355,4 +443,3 @@ export default function MainBench() {
     </StationShell>
   );
 }
-

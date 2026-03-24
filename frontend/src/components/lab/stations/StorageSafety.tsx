@@ -59,9 +59,24 @@ export default function StorageSafety() {
     showNotification("Chemical Cabinet -- Use the Lab tab to add substances from inventory");
   };
 
+  const handleFirstAidKit = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    showNotification("First Aid: 1) Burns: cool with water 15 min. 2) Spills on skin: rinse immediately. 3) Ingestion: do NOT induce vomiting, call poison control. 4) Eye contact: flush 15 min.");
+  };
+
+  const handleAcidCabinet = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    showNotification("Acid Cabinet: HCl, H2SO4, HNO3, H3PO4, HF, CH3COOH, C6H8O7 -- Use Lab tab to add to containers");
+  };
+
+  const handleFlammableCabinet = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    showNotification("Flammable Cabinet: C2H5OH (ethanol), CH3OH (methanol), C3H8O (isopropanol), C6H6 (benzene), CH3COCH3 (acetone)");
+  };
+
   return (
     <StationShell wallColor="#2a2820" showShelf={false}>
-      {/* ── Chemical storage cabinet ── */}
+      {/* Chemical storage cabinet */}
       <InteractiveTool
         name="Chemical Cabinet"
         description="Click to browse available substances"
@@ -104,7 +119,7 @@ export default function StorageSafety() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Safety shower ── */}
+      {/* Safety shower */}
       <InteractiveTool
         name="Emergency Shower"
         description="Click to repair all damaged containers"
@@ -137,7 +152,7 @@ export default function StorageSafety() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Eye wash station ── */}
+      {/* Eye wash station */}
       <InteractiveTool
         name="Eye Wash Station"
         description="Click to repair damaged containers"
@@ -172,7 +187,7 @@ export default function StorageSafety() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Fire extinguisher ── */}
+      {/* Fire extinguisher */}
       <InteractiveTool
         name="Fire Extinguisher"
         description="Click to clear all fire effects"
@@ -202,7 +217,7 @@ export default function StorageSafety() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Waste containers ── */}
+      {/* Waste containers */}
       <Html position={[0.5, 0.48, 0.8]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>Chemical Waste</span>
       </Html>
@@ -234,7 +249,7 @@ export default function StorageSafety() {
         <meshStandardMaterial color="#aaaaaa" roughness={0.5} />
       </mesh>
 
-      {/* ── SDS reference terminal ── */}
+      {/* SDS reference terminal */}
       <InteractiveTool
         name="SDS Terminal"
         description="Click to view safety data for selected substance"
@@ -280,7 +295,7 @@ export default function StorageSafety() {
         </mesh>
       </InteractiveTool>
 
-      {/* ── Spill cleanup kit (yellow bucket) ── */}
+      {/* Spill cleanup kit (yellow bucket) */}
       <group position={[-1.55, 0.06, 0.7]}>
         {/* Kit box */}
         <mesh castShadow>
@@ -301,8 +316,14 @@ export default function StorageSafety() {
         <span style={LABEL_STYLE}>Spill Kit</span>
       </Html>
 
-      {/* ── Acid cabinet (yellow) ── */}
-      <group position={[-0.5, 0.42, -0.9]}>
+      {/* Acid cabinet (yellow) -- now interactive */}
+      <InteractiveTool
+        name="Acid Cabinet"
+        description="Click to access acid storage"
+        onClick={handleAcidCabinet}
+        position={[-0.5, 0.42, -0.9]}
+        labelOffset={[0, 0.55, 0]}
+      >
         <mesh castShadow>
           <boxGeometry args={[0.5, 0.8, 0.38]} />
           <meshStandardMaterial color="#ccbb00" roughness={0.5} metalness={0.2} />
@@ -329,13 +350,16 @@ export default function StorageSafety() {
             <meshStandardMaterial color="#aa9900" roughness={0.7} />
           </mesh>
         ))}
-      </group>
-      <Html position={[-0.5, 0.96, -0.9]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Acid Cabinet</span>
-      </Html>
+      </InteractiveTool>
 
-      {/* ── Flammable cabinet (red) ── */}
-      <group position={[0.3, 0.42, -0.9]}>
+      {/* Flammable cabinet (red) -- now interactive */}
+      <InteractiveTool
+        name="Flammable Cabinet"
+        description="Click to access flammable storage"
+        onClick={handleFlammableCabinet}
+        position={[0.3, 0.42, -0.9]}
+        labelOffset={[0, 0.55, 0]}
+      >
         <mesh castShadow>
           <boxGeometry args={[0.5, 0.8, 0.38]} />
           <meshStandardMaterial color="#cc2200" roughness={0.5} metalness={0.2} />
@@ -360,12 +384,9 @@ export default function StorageSafety() {
           <boxGeometry args={[0.46, 0.04, 0.003]} />
           <meshStandardMaterial color="#ffaa00" roughness={0.6} />
         </mesh>
-      </group>
-      <Html position={[0.3, 0.96, -0.9]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>Flammable Cabinet</span>
-      </Html>
+      </InteractiveTool>
 
-      {/* ── Chemical shelving (multi-tier) ── */}
+      {/* Chemical shelving (multi-tier) */}
       <group position={[1.55, 0.5, -0.85]}>
         {/* Back panel */}
         <mesh>
@@ -406,19 +427,25 @@ export default function StorageSafety() {
         <span style={LABEL_STYLE}>Chemical Shelving</span>
       </Html>
 
-      {/* ── First aid kit (white box with red cross) ── */}
-      <group position={[0.85, 0.72, -1.12]}>
+      {/* First aid kit (white box with red cross) -- now interactive */}
+      <InteractiveTool
+        name="First Aid Kit"
+        description="Click for first aid instructions"
+        onClick={handleFirstAidKit}
+        position={[0.85, 0.72, -1.12]}
+        labelOffset={[0, 0.25, 0]}
+      >
         {/* Box */}
         <mesh castShadow>
           <boxGeometry args={[0.24, 0.18, 0.1]} />
           <meshStandardMaterial color="#eeeeee" roughness={0.5} />
         </mesh>
-        {/* Red cross — vertical bar */}
+        {/* Red cross -- vertical bar */}
         <mesh position={[0, 0, -0.051]}>
           <boxGeometry args={[0.04, 0.12, 0.003]} />
           <meshStandardMaterial color="#cc2200" roughness={0.4} />
         </mesh>
-        {/* Red cross — horizontal bar */}
+        {/* Red cross -- horizontal bar */}
         <mesh position={[0, 0, -0.051]}>
           <boxGeometry args={[0.12, 0.04, 0.003]} />
           <meshStandardMaterial color="#cc2200" roughness={0.4} />
@@ -428,12 +455,9 @@ export default function StorageSafety() {
           <boxGeometry args={[0.045, 0.015, 0.005]} />
           <meshStandardMaterial color="#aaaaaa" metalness={0.6} roughness={0.3} />
         </mesh>
-      </group>
-      <Html position={[0.85, 0.98, -1.12]} center distanceFactor={10}>
-        <span style={LABEL_STYLE}>First Aid Kit</span>
-      </Html>
+      </InteractiveTool>
 
-      {/* ── Sharps container (small red box) ── */}
+      {/* Sharps container (small red box) */}
       <group position={[-0.3, 0.06, 0.4]}>
         {/* Body */}
         <mesh castShadow>
@@ -460,7 +484,7 @@ export default function StorageSafety() {
         <span style={LABEL_STYLE}>Sharps Container</span>
       </Html>
 
-      {/* ── MSDS binder on shelf ── */}
+      {/* MSDS binder on shelf */}
       <group position={[-0.5, 0.72, -1.12]}>
         {/* Binder body */}
         <mesh castShadow>
@@ -482,7 +506,7 @@ export default function StorageSafety() {
         <span style={LABEL_STYLE}>SDS Binder</span>
       </Html>
 
-      {/* ── PPE shelf (goggles, gloves on hooks) ── */}
+      {/* PPE shelf (goggles, gloves on hooks) */}
       <group position={[1.55, 0.8, -0.5]}>
         {/* Shelf plank */}
         <mesh>
@@ -517,6 +541,80 @@ export default function StorageSafety() {
       </group>
       <Html position={[1.55, 1.02, -0.5]} center distanceFactor={10}>
         <span style={LABEL_STYLE}>PPE Station</span>
+      </Html>
+
+      {/* Safety poster on wall */}
+      <group position={[-1.55, 0.85, -1.12]}>
+        {/* Poster backing */}
+        <mesh>
+          <boxGeometry args={[0.3, 0.4, 0.01]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.7} />
+        </mesh>
+        {/* Header strip (red) */}
+        <mesh position={[0, 0.16, 0.006]}>
+          <boxGeometry args={[0.26, 0.05, 0.003]} />
+          <meshStandardMaterial color="#cc2200" roughness={0.5} />
+        </mesh>
+        {/* Content lines */}
+        {([-0.02, -0.06, -0.1, -0.14] as number[]).map((y, i) => (
+          <mesh key={i} position={[0, y, 0.006]}>
+            <boxGeometry args={[0.22, 0.015, 0.003]} />
+            <meshStandardMaterial color="#333333" roughness={0.7} />
+          </mesh>
+        ))}
+        {/* GHS diamond symbols (small colored squares) */}
+        {([[-0.08, 0.06, "#ff6600"], [0, 0.06, "#cc2200"], [0.08, 0.06, "#0066cc"]] as [number, number, string][]).map(
+          ([x, y, color], i) => (
+            <mesh key={i} position={[x, y, 0.006]} rotation={[0, 0, Math.PI / 4]}>
+              <boxGeometry args={[0.03, 0.03, 0.003]} />
+              <meshStandardMaterial color={color} roughness={0.5} />
+            </mesh>
+          )
+        )}
+      </group>
+      <Html position={[-1.55, 1.18, -1.12]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Safety Poster</span>
+      </Html>
+
+      {/* Emergency phone on wall */}
+      <group position={[1.55, 0.55, -1.12]}>
+        {/* Phone body */}
+        <mesh castShadow>
+          <boxGeometry args={[0.1, 0.16, 0.05]} />
+          <meshStandardMaterial color="#cc2200" roughness={0.5} />
+        </mesh>
+        {/* Handset cradle */}
+        <mesh position={[0, 0.04, -0.026]}>
+          <boxGeometry args={[0.07, 0.02, 0.02]} />
+          <meshStandardMaterial color="#aa1100" roughness={0.5} />
+        </mesh>
+        {/* Handset */}
+        <mesh position={[0, 0.05, -0.03]}>
+          <boxGeometry args={[0.06, 0.01, 0.04]} />
+          <meshStandardMaterial color="#222222" roughness={0.5} />
+        </mesh>
+        {/* Dial/button pad */}
+        <mesh position={[0, -0.03, -0.026]}>
+          <boxGeometry args={[0.06, 0.06, 0.005]} />
+          <meshStandardMaterial color="#333333" roughness={0.6} />
+        </mesh>
+        {/* Number buttons */}
+        {([[-0.015, -0.015], [0, -0.015], [0.015, -0.015], [-0.015, -0.03], [0, -0.03], [0.015, -0.03]] as [number, number][]).map(
+          ([x, y], i) => (
+            <mesh key={i} position={[x, y, -0.027]}>
+              <boxGeometry args={[0.01, 0.01, 0.003]} />
+              <meshStandardMaterial color="#555555" roughness={0.5} />
+            </mesh>
+          )
+        )}
+        {/* "EMERGENCY" label */}
+        <mesh position={[0, 0.07, -0.026]}>
+          <boxGeometry args={[0.08, 0.015, 0.003]} />
+          <meshStandardMaterial color="#ffcc00" roughness={0.6} />
+        </mesh>
+      </group>
+      <Html position={[1.55, 0.78, -1.12]} center distanceFactor={10}>
+        <span style={LABEL_STYLE}>Emergency Phone</span>
       </Html>
     </StationShell>
   );
