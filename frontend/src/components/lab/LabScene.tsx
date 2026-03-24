@@ -4,6 +4,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Grid, Environment } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { useLabStore } from "../../stores/labStore";
+import { EQUIPMENT_Y_OFFSETS } from "./equipment/equipmentUtils";
 import MainBench from "./stations/MainBench";
 import FumeHood from "./stations/FumeHood";
 import InstrumentRoom from "./stations/InstrumentRoom";
@@ -78,6 +79,10 @@ function BenchSurface() {
   const placingEquipment = useLabStore((s) => s.placingEquipment);
   const pouringFrom = useLabStore((s) => s.pouringFrom);
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
+  const draggingItem = useLabStore((s) => s.draggingItem);
+  const moveBenchItem = useLabStore((s) => s.moveBenchItem);
+  const stopDragItem = useLabStore((s) => s.stopDragItem);
+  const benchItems = useLabStore((s) => s.benchItems);
 
   const handleClick = (_e: ThreeEvent<MouseEvent>) => {
     if (!placingEquipment && !pouringFrom) {
@@ -86,11 +91,29 @@ function BenchSurface() {
     }
   };
 
+  const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
+    if (!draggingItem) return;
+    const item = benchItems.find((i) => i.id === draggingItem);
+    if (!item) return;
+    const yOffset = EQUIPMENT_Y_OFFSETS[item.type] ?? 0.20;
+    moveBenchItem(draggingItem, [
+      Math.round(e.point.x * 10) / 10,
+      yOffset,
+      Math.round(e.point.z * 10) / 10,
+    ]);
+  };
+
+  const handlePointerUp = () => {
+    if (draggingItem) stopDragItem();
+  };
+
   return (
     <mesh
       position={[0, 0, 0]}
       receiveShadow
       onClick={handleClick}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
     >
       <boxGeometry args={[4, 0.1, 2.5]} />
       <meshStandardMaterial
@@ -117,7 +140,7 @@ function CameraControls() {
   // WASD keyboard controls
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return;
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLTextAreaElement || (e.target as HTMLElement)?.isContentEditable) return;
       keys.current.add(e.key.toLowerCase());
     };
     const onKeyUp = (e: KeyboardEvent) => {
