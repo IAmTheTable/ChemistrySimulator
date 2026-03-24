@@ -86,91 +86,99 @@ const SOLUBILITY: Record<string, Record<string, number>> = {
 
 const LIQUID_COOLING_FACTOR = 0.6;
 
-// Thermal decomposition: formula -> { minTemp, products, description }
+// Thermal decomposition with stoichiometry
+// reactantMW: molar mass of reactant (g/mol)
+// products include coefficient and productMW for mass-accurate calculations
 const THERMAL_DECOMPOSITIONS: Record<string, {
   minTemp: number;
-  products: { formula: string; phase: string; color: string }[];
+  reactantMW: number;
+  products: { formula: string; phase: string; color: string; coeff: number; mw: number }[];
   description: string;
 }> = {
-  // Sugar caramelization then charring
-  "C6H12O6": { minTemp: 170, products: [
-    { formula: "C", phase: "s", color: "#333333" },
-    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  // C6H12O6 → 6C + 6H2O (MW: 180.16 → 6×12 + 6×18)
+  "C6H12O6": { minTemp: 170, reactantMW: 180.16, products: [
+    { formula: "C", phase: "s", color: "#333333", coeff: 6, mw: 12.01 },
+    { formula: "H2O", phase: "g", color: "#e8f4f8", coeff: 6, mw: 18.015 },
   ], description: "Glucose decomposes — caramelization then charring" },
-  "C12H22O11": { minTemp: 186, products: [
-    { formula: "C", phase: "s", color: "#1a1a1a" },
-    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  // C12H22O11 → 12C + 11H2O (MW: 342.3 → 12×12 + 11×18)
+  "C12H22O11": { minTemp: 186, reactantMW: 342.3, products: [
+    { formula: "C", phase: "s", color: "#1a1a1a", coeff: 12, mw: 12.01 },
+    { formula: "H2O", phase: "g", color: "#e8f4f8", coeff: 11, mw: 18.015 },
   ], description: "Sucrose decomposes — caramelization then charring to carbon and water" },
 
-  // Carbonates
-  "CaCO3": { minTemp: 840, products: [
-    { formula: "CaO", phase: "s", color: "#f0f0f0" },
-    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  // CaCO3 → CaO + CO2 (MW: 100.09 → 56.08 + 44.01)
+  "CaCO3": { minTemp: 840, reactantMW: 100.09, products: [
+    { formula: "CaO", phase: "s", color: "#f0f0f0", coeff: 1, mw: 56.08 },
+    { formula: "CO2", phase: "g", color: "#d0d0d0", coeff: 1, mw: 44.01 },
   ], description: "Calcium carbonate thermally decomposes to quicklime and CO2" },
-  "NaHCO3": { minTemp: 270, products: [
-    { formula: "Na2CO3", phase: "s", color: "#f0f0f0" },
-    { formula: "H2O", phase: "g", color: "#e8f4f8" },
-    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  // 2NaHCO3 → Na2CO3 + H2O + CO2 (MW: 2×84.01=168.02 → 105.99 + 18.015 + 44.01)
+  "NaHCO3": { minTemp: 270, reactantMW: 84.01, products: [
+    { formula: "Na2CO3", phase: "s", color: "#f0f0f0", coeff: 0.5, mw: 105.99 },
+    { formula: "H2O", phase: "g", color: "#e8f4f8", coeff: 0.5, mw: 18.015 },
+    { formula: "CO2", phase: "g", color: "#d0d0d0", coeff: 0.5, mw: 44.01 },
   ], description: "Baking soda decomposes on heating" },
-  "MgCO3": { minTemp: 540, products: [
-    { formula: "MgO", phase: "s", color: "#f0f0f0" },
-    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  // MgCO3 → MgO + CO2 (MW: 84.31 → 40.30 + 44.01)
+  "MgCO3": { minTemp: 540, reactantMW: 84.31, products: [
+    { formula: "MgO", phase: "s", color: "#f0f0f0", coeff: 1, mw: 40.30 },
+    { formula: "CO2", phase: "g", color: "#d0d0d0", coeff: 1, mw: 44.01 },
   ], description: "Magnesium carbonate thermally decomposes" },
 
-  // Hydroxides
-  "Cu(OH)2": { minTemp: 185, products: [
-    { formula: "CuO", phase: "s", color: "#1a1a1a" },
-    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  // Cu(OH)2 → CuO + H2O (MW: 97.56 → 79.55 + 18.015)
+  "Cu(OH)2": { minTemp: 185, reactantMW: 97.56, products: [
+    { formula: "CuO", phase: "s", color: "#1a1a1a", coeff: 1, mw: 79.55 },
+    { formula: "H2O", phase: "g", color: "#e8f4f8", coeff: 1, mw: 18.015 },
   ], description: "Copper hydroxide decomposes to black copper oxide" },
-  "Ca(OH)2": { minTemp: 580, products: [
-    { formula: "CaO", phase: "s", color: "#f0f0f0" },
-    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  // Ca(OH)2 → CaO + H2O (MW: 74.09 → 56.08 + 18.015)
+  "Ca(OH)2": { minTemp: 580, reactantMW: 74.09, products: [
+    { formula: "CaO", phase: "s", color: "#f0f0f0", coeff: 1, mw: 56.08 },
+    { formula: "H2O", phase: "g", color: "#e8f4f8", coeff: 1, mw: 18.015 },
   ], description: "Calcium hydroxide decomposes" },
 
-  // Nitrates
-  "KNO3": { minTemp: 400, products: [
-    { formula: "KNO2", phase: "s", color: "#f0f0f0" },
-    { formula: "O2", phase: "g", color: "#e0e0e0" },
+  // 2KNO3 → 2KNO2 + O2 (MW: 101.1 → 85.1 + 16)
+  "KNO3": { minTemp: 400, reactantMW: 101.1, products: [
+    { formula: "KNO2", phase: "s", color: "#f0f0f0", coeff: 1, mw: 85.1 },
+    { formula: "O2", phase: "g", color: "#e0e0e0", coeff: 0.5, mw: 32.0 },
   ], description: "Potassium nitrate decomposes releasing oxygen" },
-  "NH4NO3": { minTemp: 250, products: [
-    { formula: "N2O", phase: "g", color: "#e0e0e0" },
-    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  // NH4NO3 → N2O + 2H2O (MW: 80.04 → 44.01 + 36.03)
+  "NH4NO3": { minTemp: 250, reactantMW: 80.04, products: [
+    { formula: "N2O", phase: "g", color: "#e0e0e0", coeff: 1, mw: 44.01 },
+    { formula: "H2O", phase: "g", color: "#e8f4f8", coeff: 2, mw: 18.015 },
   ], description: "Ammonium nitrate decomposes — can be explosive at high temperature!" },
 
-  // Chlorates
-  "KClO3": { minTemp: 400, products: [
-    { formula: "KCl", phase: "s", color: "#f0f0f0" },
-    { formula: "O2", phase: "g", color: "#e0e0e0" },
+  // 2KClO3 → 2KCl + 3O2 (MW: 122.55 → 74.55 + 48)
+  "KClO3": { minTemp: 400, reactantMW: 122.55, products: [
+    { formula: "KCl", phase: "s", color: "#f0f0f0", coeff: 1, mw: 74.55 },
+    { formula: "O2", phase: "g", color: "#e0e0e0", coeff: 1.5, mw: 32.0 },
   ], description: "Potassium chlorate decomposes releasing oxygen gas" },
 
-  // Peroxides
-  "H2O2": { minTemp: 60, products: [
-    { formula: "H2O", phase: "l", color: "#e8f4f8" },
-    { formula: "O2", phase: "g", color: "#e0e0e0" },
+  // 2H2O2 → 2H2O + O2 (MW: 34.01 → 18.015 + 16)
+  "H2O2": { minTemp: 60, reactantMW: 34.01, products: [
+    { formula: "H2O", phase: "l", color: "#e8f4f8", coeff: 1, mw: 18.015 },
+    { formula: "O2", phase: "g", color: "#e0e0e0", coeff: 0.5, mw: 32.0 },
   ], description: "Hydrogen peroxide decomposes to water and oxygen" },
 
-  // Metal hydrides and others
-  "NH4Cl": { minTemp: 338, products: [
-    { formula: "NH3", phase: "g", color: "#e8e8ff" },
-    { formula: "HCl", phase: "g", color: "#e0e0e0" },
+  // NH4Cl → NH3 + HCl (MW: 53.49 → 17.03 + 36.46)
+  "NH4Cl": { minTemp: 338, reactantMW: 53.49, products: [
+    { formula: "NH3", phase: "g", color: "#e8e8ff", coeff: 1, mw: 17.03 },
+    { formula: "HCl", phase: "g", color: "#e0e0e0", coeff: 1, mw: 36.46 },
   ], description: "Ammonium chloride sublimes, dissociating into ammonia and HCl gas" },
 
-  // Organic decomposition
-  "CH3COOH": { minTemp: 440, products: [
-    { formula: "CH4", phase: "g", color: "#e0e0e0" },
-    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  // CH3COOH → CH4 + CO2 (MW: 60.05 → 16.04 + 44.01)
+  "CH3COOH": { minTemp: 440, reactantMW: 60.05, products: [
+    { formula: "CH4", phase: "g", color: "#e0e0e0", coeff: 1, mw: 16.04 },
+    { formula: "CO2", phase: "g", color: "#d0d0d0", coeff: 1, mw: 44.01 },
   ], description: "Acetic acid thermally decomposes" },
 
-  // Urea
-  "CH4N2O": { minTemp: 133, products: [
-    { formula: "NH3", phase: "g", color: "#e8e8ff" },
-    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  // CH4N2O → 2NH3 + CO2 (simplified, MW: 60.06 → 34.06 + 44.01)
+  "CH4N2O": { minTemp: 133, reactantMW: 60.06, products: [
+    { formula: "NH3", phase: "g", color: "#e8e8ff", coeff: 2, mw: 17.03 },
+    { formula: "CO2", phase: "g", color: "#d0d0d0", coeff: 1, mw: 44.01 },
   ], description: "Urea decomposes releasing ammonia" },
 
-  // Hydrated copper sulfate
-  "CuSO4": { minTemp: 110, products: [
-    { formula: "CuSO4", phase: "s", color: "#f0f0f0" }, // anhydrous = white!
-    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  // CuSO4·5H2O → CuSO4 + 5H2O (MW: 249.69 → 159.61 + 90.08)
+  "CuSO4": { minTemp: 110, reactantMW: 249.69, products: [
+    { formula: "CuSO4", phase: "s", color: "#f0f0f0", coeff: 1, mw: 159.61 },
+    { formula: "H2O", phase: "g", color: "#e8f4f8", coeff: 5, mw: 18.015 },
   ], description: "Copper sulfate loses water of crystallization — turns from blue to white" },
 };
 
@@ -338,15 +346,22 @@ export function usePhysicsSimulation() {
               const amount = s.amount_ml;
               const originalFormula = s.formula;
               const originalPhase = s.phase;
-              newContents.splice(idx, 1); // remove original
-              // Add products, splitting volume among them
-              const perProduct = amount / decomp.products.length;
+              newContents.splice(idx, 1);
+              // Stoichiometric mass calculation:
+              // Convert reactant mL to grams using density, then to moles,
+              // then compute product masses from stoichiometry
+              const reactantDensity = DENSITIES[originalFormula] ?? 1.0;
+              const reactantMassG = amount * reactantDensity;
+              const molesReactant = reactantMassG / decomp.reactantMW;
               for (const p of decomp.products) {
+                const productMassG = molesReactant * p.coeff * p.mw;
+                const productDensity = DENSITIES[p.formula] ?? 1.0;
+                const productVolML = productMassG / productDensity;
                 const existing = newContents.find(c => c.formula === p.formula && c.phase === p.phase);
                 if (existing) {
-                  existing.amount_ml += perProduct;
+                  existing.amount_ml += productVolML;
                 } else {
-                  newContents.push({ formula: p.formula, amount_ml: perProduct, phase: p.phase, color: p.color });
+                  newContents.push({ formula: p.formula, amount_ml: Math.round(productVolML * 100) / 100, phase: p.phase, color: p.color });
                 }
               }
               // Add visual effects
@@ -364,7 +379,11 @@ export function usePhysicsSimulation() {
                 reaction_type: "decomposition",
                 source: "predicted",
                 reactants: [{ formula: originalFormula, amount, phase: originalPhase }],
-                products: decomp.products.map(p => ({ formula: p.formula, amount: amount / decomp.products.length, phase: p.phase, color: p.color })),
+                products: decomp.products.map(p => {
+                  const pMass = molesReactant * p.coeff * p.mw;
+                  const pDensity = DENSITIES[p.formula] ?? 1.0;
+                  return { formula: p.formula, amount: Math.round((pMass / pDensity) * 100) / 100, phase: p.phase, color: p.color };
+                }),
                 limiting_reagent: null,
                 yield_percent: 100,
                 delta_h: null,
