@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import * as THREE from "three";
 import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import type { ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Grid, Environment } from "@react-three/drei";
@@ -159,14 +160,29 @@ function CameraControls() {
     const speed = 3 * delta;
     const target = controlsRef.current.target;
 
-    if (keys.current.has("w")) { camera.position.z -= speed; target.z -= speed; }
-    if (keys.current.has("s")) { camera.position.z += speed; target.z += speed; }
-    if (keys.current.has("a")) { camera.position.x -= speed; target.x -= speed; }
-    if (keys.current.has("d")) { camera.position.x += speed; target.x += speed; }
-    if (keys.current.has("q")) { camera.position.y += speed; target.y += speed; }
-    if (keys.current.has("e")) { camera.position.y -= speed; target.y -= speed; }
+    // Camera-relative directions projected onto XZ plane
+    const forward = new THREE.Vector3();
+    camera.getWorldDirection(forward);
+    forward.y = 0;
+    forward.normalize();
 
-    controlsRef.current.update();
+    const right = new THREE.Vector3();
+    right.crossVectors(forward, camera.up).normalize();
+
+    const move = new THREE.Vector3();
+    if (keys.current.has("w")) move.add(forward);
+    if (keys.current.has("s")) move.sub(forward);
+    if (keys.current.has("d")) move.add(right);
+    if (keys.current.has("a")) move.sub(right);
+    if (keys.current.has("q")) move.y += 1;
+    if (keys.current.has("e")) move.y -= 1;
+
+    if (move.lengthSq() > 0) {
+      move.normalize().multiplyScalar(speed);
+      camera.position.add(move);
+      target.add(move);
+      controlsRef.current.update();
+    }
   });
 
   return (
