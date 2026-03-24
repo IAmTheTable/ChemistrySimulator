@@ -32,12 +32,48 @@ export interface BondAngleInfo {
   angle_degrees: number;
 }
 
+export interface VSEPRInfo {
+  atom_index: number;
+  atom_symbol: string;
+  geometry: string;
+  bonding_pairs: number;
+  lone_pairs: number;
+  electron_domains: number;
+}
+
+export interface HybridizationInfo {
+  atom_index: number;
+  atom_symbol: string;
+  hybridization: string;
+}
+
+export interface PolarityInfo {
+  is_polar: boolean;
+  dipole_magnitude: number;
+  bond_character: string;
+}
+
+export interface SymmetryInfo {
+  num_heavy_atoms: number;
+  atom_composition: Record<string, number>;
+  likely_symmetric: boolean;
+}
+
 export interface GeometryResult {
   bond_lengths: BondLengthInfo[];
   bond_angles: BondAngleInfo[];
   dihedral_angles: { atom_indices: number[]; dihedral_degrees: number }[];
   geometry: string;
+  vsepr?: VSEPRInfo[];
+  hybridization?: HybridizationInfo[];
+  polarity?: PolarityInfo;
+  symmetry?: SymmetryInfo;
   energy: number;
+  num_atoms?: number;
+  num_bonds?: number;
+  num_rotatable_bonds?: number;
+  ring_count?: number;
+  aromatic?: boolean;
 }
 
 export interface EnergyResult {

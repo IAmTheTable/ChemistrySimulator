@@ -55,6 +55,53 @@ class TestGeometryOptimizer:
         assert len(result["bond_lengths"]) == 4  # 4 C-H bonds
         assert result["geometry"] == "tetrahedral"
 
+    def test_optimize_returns_vsepr(self):
+        result = self.optimizer.optimize("O")  # water
+        assert "vsepr" in result
+        assert isinstance(result["vsepr"], list)
+        assert len(result["vsepr"]) >= 1
+        o_vsepr = result["vsepr"][0]
+        assert o_vsepr["atom_symbol"] == "O"
+        assert o_vsepr["geometry"] == "bent"
+        assert o_vsepr["bonding_pairs"] == 2
+        assert o_vsepr["lone_pairs"] == 2
+
+    def test_optimize_returns_hybridization(self):
+        result = self.optimizer.optimize("O")
+        assert "hybridization" in result
+        assert isinstance(result["hybridization"], list)
+        assert len(result["hybridization"]) >= 1
+        hyb = result["hybridization"][0]
+        assert "hybridization" in hyb
+        assert hyb["hybridization"] in ("s", "sp", "sp2", "sp3", "sp3d", "sp3d2", "unknown")
+
+    def test_optimize_returns_polarity(self):
+        result = self.optimizer.optimize("O")
+        assert "polarity" in result
+        assert isinstance(result["polarity"]["is_polar"], bool)
+        assert isinstance(result["polarity"]["dipole_magnitude"], float)
+        assert "bond_character" in result["polarity"]
+
+    def test_optimize_returns_symmetry(self):
+        result = self.optimizer.optimize("O")
+        assert "symmetry" in result
+        assert "num_heavy_atoms" in result["symmetry"]
+        assert "atom_composition" in result["symmetry"]
+
+    def test_optimize_returns_structural_descriptors(self):
+        result = self.optimizer.optimize("C")
+        assert "num_atoms" in result
+        assert "num_bonds" in result
+        assert "num_rotatable_bonds" in result
+        assert "ring_count" in result
+        assert "aromatic" in result
+        assert isinstance(result["aromatic"], bool)
+
+    def test_optimize_benzene_aromatic(self):
+        result = self.optimizer.optimize("c1ccccc1")
+        assert result["aromatic"] is True
+        assert result["ring_count"] >= 1
+
     def test_optimize_invalid_smiles_raises(self):
         with pytest.raises(ValueError):
             self.optimizer.optimize("INVALID_XYZ")
@@ -129,6 +176,12 @@ class TestQuantumAPI:
         assert "bond_angles" in data
         assert "geometry" in data
         assert "energy" in data
+        assert "vsepr" in data
+        assert "hybridization" in data
+        assert "polarity" in data
+        assert "symmetry" in data
+        assert "num_atoms" in data
+        assert "num_bonds" in data
 
     def test_optimize_invalid_smiles(self, client):
         response = client.post("/api/quantum/optimize", json={"smiles": "INVALID_XYZ"})

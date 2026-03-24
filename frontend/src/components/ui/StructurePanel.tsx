@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useLabStore } from "../../stores/labStore";
 import { useCommonStructure, useOrbitals } from "../../api/structures";
 import { useAnalysis } from "../../api/quantum";
-import type { BondLengthInfo, BondAngleInfo } from "../../api/quantum";
+import type { BondLengthInfo, BondAngleInfo, VSEPRInfo, HybridizationInfo } from "../../api/quantum";
 import MoleculeViewer from "../viewer/MoleculeViewer";
 
 /** Show unique bond lengths (deduplicate by atom pair type) */
@@ -65,6 +65,46 @@ function BondAnglesTable({ angles }: { angles: BondAngleInfo[] }) {
             <span>{ba.atoms}</span>
             <span>{ba.angle_degrees.toFixed(1)} deg</span>
           </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Show VSEPR geometry per heavy atom */
+function VSEPRTable({ vsepr }: { vsepr: VSEPRInfo[] }) {
+  if (vsepr.length === 0) return null;
+  return (
+    <div>
+      <div className="text-[10px] font-semibold text-gray-400 mb-0.5">VSEPR Geometry</div>
+      <div className="space-y-px">
+        {vsepr.map((v, i) => (
+          <div key={i} className="flex justify-between text-[10px] text-gray-500 font-mono">
+            <span>{v.atom_symbol}({v.atom_index})</span>
+            <span className="capitalize text-gray-300">
+              {v.geometry}
+              <span className="text-gray-600 ml-1">
+                {v.bonding_pairs}bp+{v.lone_pairs}lp
+              </span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Show hybridization per heavy atom */
+function HybridizationTable({ hybridization }: { hybridization: HybridizationInfo[] }) {
+  if (hybridization.length === 0) return null;
+  return (
+    <div>
+      <div className="text-[10px] font-semibold text-gray-400 mb-0.5">Hybridization</div>
+      <div className="flex flex-wrap gap-x-3 gap-y-px">
+        {hybridization.map((h, i) => (
+          <span key={i} className="text-[10px] text-gray-500 font-mono">
+            {h.atom_symbol}: <span className="text-gray-300">{h.hybridization}</span>
+          </span>
         ))}
       </div>
     </div>
@@ -190,9 +230,51 @@ export default function StructurePanel() {
         {/* Geometry info */}
         {geometryData && (
           <>
-            <div className="text-[10px] font-mono">
-              Geometry: <span className="text-gray-300 capitalize">{geometryData.geometry}</span>
+            <div className="text-[10px] font-mono flex items-center gap-2">
+              <span>
+                Geometry: <span className="text-gray-300 capitalize">{geometryData.geometry}</span>
+              </span>
+              {geometryData.polarity && (
+                <span
+                  className={`px-1.5 py-0.5 rounded text-[9px] font-semibold ${
+                    geometryData.polarity.is_polar
+                      ? "bg-yellow-900/50 text-yellow-400"
+                      : "bg-gray-800 text-gray-500"
+                  }`}
+                >
+                  {geometryData.polarity.is_polar ? "Polar" : "Nonpolar"}
+                </span>
+              )}
+              {geometryData.aromatic && (
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-purple-900/50 text-purple-400">
+                  Aromatic
+                </span>
+              )}
             </div>
+
+            {/* Structural descriptors */}
+            <div className="flex flex-wrap gap-x-3 text-[10px] text-gray-500 font-mono">
+              {geometryData.num_atoms != null && <span>Atoms: {geometryData.num_atoms}</span>}
+              {geometryData.num_bonds != null && <span>Bonds: {geometryData.num_bonds}</span>}
+              {(geometryData.ring_count ?? 0) > 0 && <span>Rings: {geometryData.ring_count}</span>}
+              {(geometryData.num_rotatable_bonds ?? 0) > 0 && (
+                <span>Rotatable: {geometryData.num_rotatable_bonds}</span>
+              )}
+            </div>
+
+            {geometryData.polarity && geometryData.polarity.bond_character && (
+              <div className="text-[10px] text-gray-500 font-mono">
+                Bond character: <span className="text-gray-300">{geometryData.polarity.bond_character}</span>
+                {geometryData.polarity.dipole_magnitude > 0 && (
+                  <span className="ml-2 text-gray-600">
+                    (dipole: {geometryData.polarity.dipole_magnitude.toFixed(2)})
+                  </span>
+                )}
+              </div>
+            )}
+
+            {geometryData.vsepr && <VSEPRTable vsepr={geometryData.vsepr} />}
+            {geometryData.hybridization && <HybridizationTable hybridization={geometryData.hybridization} />}
             <BondLengthsTable lengths={geometryData.bond_lengths} />
             <BondAnglesTable angles={geometryData.bond_angles} />
           </>
