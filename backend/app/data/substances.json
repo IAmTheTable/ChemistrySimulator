@@ -1206,5 +1206,21 @@
     "color": "#f0f0f0",
     "molar_mass": 171.34,
     "hazard_class": "toxic"
+  },
+  {
+    "formula": "H2SO5",
+    "name": "Peroxymonosulfuric Acid (Caro's Acid)",
+    "phase": "l",
+    "color": "#e8e8e8",
+    "molar_mass": 114.08,
+    "hazard_class": "extremely_corrosive"
+  },
+  {
+    "formula": "N2H4",
+    "name": "Hydrazine",
+    "phase": "l",
+    "color": "#e0e0e0",
+    "molar_mass": 32.05,
+    "hazard_class": "toxic"
   }
 ]

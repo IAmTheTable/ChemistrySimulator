@@ -17,6 +17,22 @@ from app.models.reaction import ReactionResult, ReactionEffects
 
 CONDITIONS_NOT_MET = "conditions_not_met"
 
+# Known non-reactions with explanations (checked before mixture fallback)
+KNOWN_NON_REACTIONS: dict[frozenset, str] = {
+    frozenset(["Au", "HCl"]): "Gold is below hydrogen in the activity series and cannot be oxidized by HCl",
+    frozenset(["Au", "H2SO4"]): "Gold requires aqua regia (HCl + HNO3 mixture) to dissolve",
+    frozenset(["Au", "HNO3"]): "Gold is resistant to nitric acid alone. Requires aqua regia",
+    frozenset(["Pt", "HCl"]): "Platinum is a noble metal resistant to single acids",
+    frozenset(["Ag", "H2SO4"]): "Silver does not react with dilute sulfuric acid",
+    frozenset(["Cu", "HCl"]): "Copper is below hydrogen in the activity series",
+    frozenset(["NaCl", "KNO3"]): "Both products (NaNO3, KCl) are soluble — no driving force",
+    frozenset(["He", "O2"]): "Helium is a noble gas and chemically inert",
+    frozenset(["Ne", "O2"]): "Neon is a noble gas and chemically inert",
+    frozenset(["Ar", "O2"]): "Argon is a noble gas and chemically inert",
+    frozenset(["N2", "O2"]): "N2 and O2 don't react at room temperature. Requires >2000°C or lightning",
+    frozenset(["H2O", "NaCl"]): "NaCl dissolves in water but no chemical reaction occurs",
+}
+
 # Phase symbol labels for state notation
 _PHASE_SYMBOLS: dict[str, str] = {
     "s": "(s)",
@@ -108,11 +124,18 @@ class ReactionEngine:
             result = self._apply_environment_notes(result, atmosphere, pressure, temperature)
             return result
 
-        # 4. General mixture fallback — substances mixed but no chemical change
+        # 4. Check known non-reactions before mixture fallback
+        if len(formulas) >= 2:
+            formula_set = frozenset(formulas)
+            non_reaction_reason = KNOWN_NON_REACTIONS.get(formula_set)
+            if non_reaction_reason:
+                return self._build_known_non_reaction_result(reactants, non_reaction_reason)
+
+        # 5. General mixture fallback — substances mixed but no chemical change
         if len(formulas) >= 2:
             return self._build_mixture_result(formulas, reactants)
 
-        # 5. No reaction
+        # 6. No reaction
         return self._build_no_reaction_result(reactants)
 
     @staticmethod
@@ -134,6 +157,11 @@ class ReactionEngine:
         required_catalyst = required.get("catalyst")
         if required_catalyst and catalyst != required_catalyst:
             return False, f"Requires {required_catalyst} catalyst to proceed."
+
+        # Check concentration requirement (note only — concentration not tracked yet)
+        min_conc = required.get("min_concentration")
+        if min_conc and isinstance(min_conc, (int, float)):
+            pass  # Future: check actual concentration
 
         return True, ""
 
@@ -355,6 +383,25 @@ class ReactionEngine:
             effects=ReactionEffects(),
         )
 
+    @staticmethod
+    def _build_known_non_reaction_result(
+        reactants: list[dict],
+        reason: str,
+    ) -> ReactionResult:
+        """Build a ReactionResult for a well-known non-reaction with an explanation."""
+        return ReactionResult(
+            equation="No reaction",
+            reaction_type=NO_REACTION,
+            source="curated",
+            reactants=reactants,
+            products=[],
+            effects=ReactionEffects(),
+            description=reason,
+            observations=[f"No reaction: {reason}"],
+            safety_notes=[],
+            balanced_with_states="",
+        )
+
     # ------------------------------------------------------------------
     # Environment / atmosphere helpers
     # ------------------------------------------------------------------
@@ -450,10 +497,22 @@ class ReactionEngine:
                 f"Gas volume significantly reduced at {pressure} atm"
             )
 
-        # ── Low temperature: kinetics note ─────────────────────────────
+        # ── Temperature-dependent rate notes ───────────────────────────
         if temperature < 0:
             extra_desc_parts.append(
                 f"Reaction kinetics slowed at {temperature}\u00b0C."
+            )
+        elif temperature < 10:
+            extra_desc_parts.append(
+                "Reaction proceeds slowly due to low temperature."
+            )
+        elif temperature > 200:
+            extra_desc_parts.append(
+                "Reaction may become uncontrollable at this temperature."
+            )
+        elif temperature > 80:
+            extra_desc_parts.append(
+                "Reaction proceeds rapidly at elevated temperature."
             )
 
         # ── High temperature + decomposition: accelerated ──────────────

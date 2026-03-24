@@ -212,6 +212,7 @@ _COMMON_NAMES: dict[str, str] = {
     "NaOH": "Sodium Hydroxide (Lye)",
     "KOH": "Potassium Hydroxide",
     "Ca(OH)2": "Calcium Hydroxide (Slaked Lime)",
+    "MgCl2": "Magnesium Chloride",
     "Mg(OH)2": "Magnesium Hydroxide (Milk of Magnesia)",
     "Al(OH)3": "Aluminum Hydroxide",
     "Fe(OH)3": "Iron(III) Hydroxide",
@@ -238,6 +239,11 @@ _COMMON_NAMES: dict[str, str] = {
     "C4H6O6": "Tartaric Acid",
     "H2C2O4": "Oxalic Acid",
     "C9H8O4": "Aspirin (Acetylsalicylic Acid)",
+    "H2SO5": "Peroxymonosulfuric Acid (Caro's Acid)",
+    # Special compounds
+    "NaClO": "Sodium Hypochlorite (Bleach)",
+    "N2H4": "Hydrazine",
+    "CH3COONa": "Sodium Acetate",
     # Simple hydrocarbons
     "CH4": "Methane",
     "C2H6": "Ethane",

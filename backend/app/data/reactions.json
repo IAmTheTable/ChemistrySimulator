@@ -14857,5 +14857,134 @@
       "sounds": [],
       "safety": []
     }
+  },
+  {
+    "reactants": ["H2SO4", "H2O2"],
+    "products": ["H2SO5", "H2O"],
+    "equation": "H2SO4 + H2O2 -> H2SO5 + H2O",
+    "reaction_type": "synthesis",
+    "delta_h": -200,
+    "products_detail": [
+      {"formula": "H2SO5", "phase": "l", "color": "#e8e8e8"},
+      {"formula": "H2O", "phase": "l", "color": "#e8f4f8"}
+    ],
+    "conditions": {"temperature": 25},
+    "effects": {
+      "color": {"from": "#e0e0e0", "to": "#f0f0f0", "speed": "fast"},
+      "gas": {"type": "O2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["sparks"],
+      "sounds": ["fizz_vigorous", "sizzle"],
+      "safety": ["extremely_corrosive", "strong_oxidizer", "exothermic"]
+    }
+  },
+  {
+    "reactants": ["NaClO", "NH3"],
+    "products": ["N2H4", "NaCl", "H2O"],
+    "equation": "NaClO + 2NH3 -> N2H4 + NaCl + H2O",
+    "reaction_type": "redox",
+    "delta_h": -80,
+    "products_detail": [
+      {"formula": "N2H4", "phase": "aq", "color": "#e0e0e0"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25},
+    "effects": {
+      "color": {"from": "#ffffcc", "to": "#e0e0e0", "speed": "fast"},
+      "gas": {"type": "N2H4", "rate": "slow"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["toxic_gas"],
+      "sounds": [],
+      "safety": ["toxic", "dangerous_combination", "chloramine_gas"]
+    }
+  },
+  {
+    "reactants": ["NaClO", "HCl"],
+    "products": ["Cl2", "NaCl", "H2O"],
+    "equation": "NaClO + 2HCl -> Cl2 + NaCl + H2O",
+    "reaction_type": "redox",
+    "delta_h": -90,
+    "products_detail": [
+      {"formula": "Cl2", "phase": "g", "color": "#c8ff80"},
+      {"formula": "NaCl", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25},
+    "effects": {
+      "color": {"from": "#ffffcc", "to": "#c8ff80", "speed": "fast"},
+      "gas": {"type": "Cl2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["toxic_gas"],
+      "sounds": ["fizz_vigorous"],
+      "safety": ["toxic_chlorine_gas", "dangerous_combination", "never_mix_bleach_acid"]
+    }
+  },
+  {
+    "reactants": ["Ag", "O2", "H2S"],
+    "products": ["Ag2S", "H2O"],
+    "equation": "4Ag + O2 + 2H2S -> 2Ag2S + 2H2O",
+    "reaction_type": "redox",
+    "delta_h": -280,
+    "products_detail": [
+      {"formula": "Ag2S", "phase": "s", "color": "#222222"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25},
+    "effects": {
+      "color": {"from": "#c0c0c0", "to": "#222222", "speed": "slow"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": {"formula": "Ag2S", "color": "#222222"},
+      "special": ["tarnishing"],
+      "sounds": [],
+      "safety": ["H2S_toxic"]
+    }
+  },
+  {
+    "reactants": ["Mg(OH)2", "H2SO4"],
+    "products": ["MgSO4", "H2O"],
+    "equation": "Mg(OH)2 + H2SO4 -> MgSO4 + 2H2O",
+    "reaction_type": "acid_base",
+    "delta_h": -110,
+    "products_detail": [
+      {"formula": "MgSO4", "phase": "aq", "color": "#f0f0f0"},
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"}
+    ],
+    "conditions": {"temperature": 25},
+    "effects": {
+      "color": {"from": "#ffffff", "to": "#f0f0f0", "speed": "fast"},
+      "gas": null,
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": [],
+      "sounds": ["bubble_gentle"],
+      "safety": ["corrosive"]
+    }
+  },
+  {
+    "reactants": ["H2O2", "KI"],
+    "products": ["H2O", "O2", "KI"],
+    "equation": "H2O2 + KI -> H2O + O2 + KI (KI catalyst)",
+    "reaction_type": "decomposition",
+    "delta_h": -98.2,
+    "products_detail": [
+      {"formula": "H2O", "phase": "l", "color": "#cce5ff"},
+      {"formula": "O2", "phase": "g", "color": null},
+      {"formula": "KI", "phase": "aq", "color": "#f0f0f0"}
+    ],
+    "conditions": {"temperature": 25},
+    "effects": {
+      "color": {"from": "#e6f0ff", "to": "#cce5ff", "speed": "fast"},
+      "gas": {"type": "O2", "rate": "vigorous"},
+      "heat": "exothermic",
+      "precipitate": null,
+      "special": ["foam", "rapid_bubbling", "elephant_toothpaste", "catalytic"],
+      "sounds": ["fizz_vigorous", "whoosh"],
+      "safety": ["oxidizer", "iodine_stain"]
+    }
   }
 ]

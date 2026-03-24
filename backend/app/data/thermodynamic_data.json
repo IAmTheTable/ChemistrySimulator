@@ -1082,5 +1082,13 @@
   "C6H5NH2": {
     "delta_hf": 31.6,
     "delta_sf": 191.4
+  },
+  "H2SO5": {
+    "delta_hf": -740.0,
+    "delta_sf": 150.0
+  },
+  "N2H4": {
+    "delta_hf": 50.6,
+    "delta_sf": 121.2
   }
 }
