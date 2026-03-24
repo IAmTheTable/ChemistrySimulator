@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLabStore } from "../stores/labStore";
+import type { ReactionLogEntry } from "../types/reaction";
 
 const TICK_INTERVAL = 1000;
 const AMBIENT_THRESHOLD = 0.5; // °C — close enough to ambient to snap
@@ -84,6 +85,106 @@ const SOLUBILITY: Record<string, Record<string, number>> = {
 };
 
 const LIQUID_COOLING_FACTOR = 0.6;
+
+// Thermal decomposition: formula -> { minTemp, products, description }
+const THERMAL_DECOMPOSITIONS: Record<string, {
+  minTemp: number;
+  products: { formula: string; phase: string; color: string }[];
+  description: string;
+}> = {
+  // Sugar caramelization then charring
+  "C6H12O6": { minTemp: 170, products: [
+    { formula: "C", phase: "s", color: "#333333" },
+    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  ], description: "Glucose decomposes — caramelization then charring" },
+  "C12H22O11": { minTemp: 186, products: [
+    { formula: "C", phase: "s", color: "#1a1a1a" },
+    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  ], description: "Sucrose decomposes — caramelization then charring to carbon and water" },
+
+  // Carbonates
+  "CaCO3": { minTemp: 840, products: [
+    { formula: "CaO", phase: "s", color: "#f0f0f0" },
+    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  ], description: "Calcium carbonate thermally decomposes to quicklime and CO2" },
+  "NaHCO3": { minTemp: 270, products: [
+    { formula: "Na2CO3", phase: "s", color: "#f0f0f0" },
+    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  ], description: "Baking soda decomposes on heating" },
+  "MgCO3": { minTemp: 540, products: [
+    { formula: "MgO", phase: "s", color: "#f0f0f0" },
+    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  ], description: "Magnesium carbonate thermally decomposes" },
+
+  // Hydroxides
+  "Cu(OH)2": { minTemp: 185, products: [
+    { formula: "CuO", phase: "s", color: "#1a1a1a" },
+    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  ], description: "Copper hydroxide decomposes to black copper oxide" },
+  "Ca(OH)2": { minTemp: 580, products: [
+    { formula: "CaO", phase: "s", color: "#f0f0f0" },
+    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  ], description: "Calcium hydroxide decomposes" },
+
+  // Nitrates
+  "KNO3": { minTemp: 400, products: [
+    { formula: "KNO2", phase: "s", color: "#f0f0f0" },
+    { formula: "O2", phase: "g", color: "#e0e0e0" },
+  ], description: "Potassium nitrate decomposes releasing oxygen" },
+  "NH4NO3": { minTemp: 250, products: [
+    { formula: "N2O", phase: "g", color: "#e0e0e0" },
+    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  ], description: "Ammonium nitrate decomposes — can be explosive at high temperature!" },
+
+  // Chlorates
+  "KClO3": { minTemp: 400, products: [
+    { formula: "KCl", phase: "s", color: "#f0f0f0" },
+    { formula: "O2", phase: "g", color: "#e0e0e0" },
+  ], description: "Potassium chlorate decomposes releasing oxygen gas" },
+
+  // Peroxides
+  "H2O2": { minTemp: 60, products: [
+    { formula: "H2O", phase: "l", color: "#e8f4f8" },
+    { formula: "O2", phase: "g", color: "#e0e0e0" },
+  ], description: "Hydrogen peroxide decomposes to water and oxygen" },
+
+  // Metal hydrides and others
+  "NH4Cl": { minTemp: 338, products: [
+    { formula: "NH3", phase: "g", color: "#e8e8ff" },
+    { formula: "HCl", phase: "g", color: "#e0e0e0" },
+  ], description: "Ammonium chloride sublimes, dissociating into ammonia and HCl gas" },
+
+  // Organic decomposition
+  "CH3COOH": { minTemp: 440, products: [
+    { formula: "CH4", phase: "g", color: "#e0e0e0" },
+    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  ], description: "Acetic acid thermally decomposes" },
+
+  // Urea
+  "CH4N2O": { minTemp: 133, products: [
+    { formula: "NH3", phase: "g", color: "#e8e8ff" },
+    { formula: "CO2", phase: "g", color: "#d0d0d0" },
+  ], description: "Urea decomposes releasing ammonia" },
+
+  // Hydrated copper sulfate
+  "CuSO4": { minTemp: 110, products: [
+    { formula: "CuSO4", phase: "s", color: "#f0f0f0" }, // anhydrous = white!
+    { formula: "H2O", phase: "g", color: "#e8f4f8" },
+  ], description: "Copper sulfate loses water of crystallization — turns from blue to white" },
+};
+
+// Gradual color change on heating (caramelization, dehydration, etc.)
+const COLOR_CHANGES: Record<string, {
+  startTemp: number;
+  endTemp: number;
+  startColor: string;
+  endColor: string;
+}> = {
+  "C6H12O6": { startTemp: 150, endTemp: 190, startColor: "#f5f5dc", endColor: "#8b4513" },
+  "C12H22O11": { startTemp: 160, endTemp: 200, startColor: "#fffaf0", endColor: "#654321" },
+  "CuSO4": { startTemp: 90, endTemp: 130, startColor: "#4169e1", endColor: "#f0f0f0" },
+};
 
 export function usePhysicsSimulation() {
   useEffect(() => {
@@ -204,23 +305,115 @@ export function usePhysicsSimulation() {
 
         if (newContents.length !== item.contents.length) contentsChanged = true;
 
-        // Update effects only if boiling state changed
-        let newEffects = item.activeEffects;
+        // Color change on heating (caramelization, dehydration, etc.)
+        for (const s of newContents) {
+          const colorChange = COLOR_CHANGES[s.formula];
+          if (colorChange && newTemp >= colorChange.startTemp && newTemp < colorChange.endTemp) {
+            const t = (newTemp - colorChange.startTemp) / (colorChange.endTemp - colorChange.startTemp);
+            const startR = parseInt(colorChange.startColor.slice(1, 3), 16);
+            const startG = parseInt(colorChange.startColor.slice(3, 5), 16);
+            const startB = parseInt(colorChange.startColor.slice(5, 7), 16);
+            const endR = parseInt(colorChange.endColor.slice(1, 3), 16);
+            const endG = parseInt(colorChange.endColor.slice(3, 5), 16);
+            const endB = parseInt(colorChange.endColor.slice(5, 7), 16);
+            const r = Math.round(startR + (endR - startR) * t);
+            const g = Math.round(startG + (endG - startG) * t);
+            const b = Math.round(startB + (endB - startB) * t);
+            const newColor = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+            if (s.color !== newColor) {
+              s.color = newColor;
+              contentsChanged = true;
+            }
+          }
+        }
+
+        // Thermal decomposition check
+        const newEffectsArr: string[] = [...item.activeEffects];
+        for (const s of newContents) {
+          const decomp = THERMAL_DECOMPOSITIONS[s.formula];
+          if (decomp && newTemp >= decomp.minTemp && s.amount_ml > 0) {
+            contentsChanged = true;
+            const idx = newContents.indexOf(s);
+            if (idx >= 0) {
+              const amount = s.amount_ml;
+              const originalFormula = s.formula;
+              const originalPhase = s.phase;
+              newContents.splice(idx, 1); // remove original
+              // Add products, splitting volume among them
+              const perProduct = amount / decomp.products.length;
+              for (const p of decomp.products) {
+                const existing = newContents.find(c => c.formula === p.formula && c.phase === p.phase);
+                if (existing) {
+                  existing.amount_ml += perProduct;
+                } else {
+                  newContents.push({ formula: p.formula, amount_ml: perProduct, phase: p.phase, color: p.color });
+                }
+              }
+              // Add visual effects
+              if (!newEffectsArr.includes("steam")) newEffectsArr.push("steam");
+              if (decomp.products.some(p => p.phase === "g") && !newEffectsArr.includes("gas_release")) {
+                newEffectsArr.push("gas_release");
+              }
+              // Show notification
+              useLabStore.getState().showNotification(decomp.description);
+              // Add to reaction log
+              const logEntry: ReactionLogEntry = {
+                id: `decomp-${Date.now()}`,
+                timestamp: new Date(),
+                equation: `${originalFormula} → ${decomp.products.map(p => p.formula).join(" + ")} (thermal)`,
+                reaction_type: "decomposition",
+                source: "predicted",
+                reactants: [{ formula: originalFormula, amount, phase: originalPhase }],
+                products: decomp.products.map(p => ({ formula: p.formula, amount: amount / decomp.products.length, phase: p.phase, color: p.color })),
+                limiting_reagent: null,
+                yield_percent: 100,
+                delta_h: null,
+                delta_s: null,
+                delta_g: null,
+                spontaneous: true,
+                temp_change: 0,
+                effects: {
+                  color: null,
+                  gas: decomp.products.some(p => p.phase === "g")
+                    ? { type: decomp.products.find(p => p.phase === "g")!.formula, rate: "moderate" }
+                    : null,
+                  heat: "endothermic",
+                  precipitate: null,
+                  special: [],
+                  sounds: ["sizzle"],
+                  safety: [],
+                },
+                description: decomp.description,
+                observations: [decomp.description],
+                safety_notes: [],
+                balanced_with_states: "",
+              };
+              useLabStore.getState().addReactionLogEntry(logEntry);
+              break; // only decompose one substance per tick
+            }
+          }
+        }
+
+        // Update effects — start from newEffectsArr which may already include decomposition effects
+        let newEffects = newEffectsArr;
+        const decompAddedSteam = newEffectsArr.includes("steam") && !item.activeEffects.includes("steam");
+        const decompAddedGasRelease = newEffectsArr.includes("gas_release") && !item.activeEffects.includes("gas_release");
+
         const hadSteam = item.activeEffects.includes("steam");
-        if (isBoiling && !hadSteam) {
+        if (isBoiling && !newEffects.includes("steam")) {
           newEffects = [...newEffects, "steam"];
           contentsChanged = true;
-        } else if (!isBoiling && hadSteam) {
+        } else if (!isBoiling && !decompAddedSteam && hadSteam) {
           newEffects = newEffects.filter(e => e !== "steam");
           contentsChanged = true;
         }
 
         // Update gas_release effect
         const hadGasRelease = item.activeEffects.includes("gas_release");
-        if (isReleasingGas && !hadGasRelease) {
+        if (isReleasingGas && !newEffects.includes("gas_release")) {
           newEffects = [...newEffects, "gas_release"];
           contentsChanged = true;
-        } else if (!isReleasingGas && hadGasRelease) {
+        } else if (!isReleasingGas && !decompAddedGasRelease && hadGasRelease) {
           newEffects = newEffects.filter(e => e !== "gas_release");
           contentsChanged = true;
         }
