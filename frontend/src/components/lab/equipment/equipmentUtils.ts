@@ -103,4 +103,5 @@ export const EQUIPMENT_Y_OFFSETS: Record<string, number> = {
   funnel: 0.15,
   pipette: 0.22,
   "clamp-stand": 0.35,
+  "vacuum-filter": 0.20,
 };

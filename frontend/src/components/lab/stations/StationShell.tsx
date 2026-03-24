@@ -13,6 +13,7 @@ import Crucible from "../equipment/Crucible";
 import Funnel from "../equipment/Funnel";
 import Pipette from "../equipment/Pipette";
 import ClampStand from "../equipment/ClampStand";
+import VacuumFilter from "../equipment/VacuumFilter";
 
 export const LABEL_STYLE: React.CSSProperties = {
   color: "#9ca3af",
@@ -36,6 +37,7 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   funnel: Funnel,
   pipette: Pipette,
   "clamp-stand": ClampStand,
+  "vacuum-filter": VacuumFilter,
 };
 
 function WorkSurface() {
@@ -100,6 +102,7 @@ export default function StationShell({
 function DynamicItems() {
   const benchItems = useLabStore((s) => s.benchItems);
   const selectedBenchItem = useLabStore((s) => s.selectedBenchItem);
+  const connections = useLabStore((s) => s.connections);
   const selectBenchItem = useLabStore((s) => s.selectBenchItem);
   const openContextMenu = useLabStore((s) => s.openContextMenu);
   const combineContainers = useLabStore((s) => s.combineContainers);
@@ -188,12 +191,14 @@ function DynamicItems() {
 
         const Component = COMPONENT_MAP[item.type];
         if (!Component) return null;
+        const isConnected = connections.some((c) => c.targetId === item.id);
         return (
           <group key={item.id}>
             <Component
               position={item.position}
               selected={isSelected}
               damaged={item.damaged}
+              connected={isConnected}
               onClick={onItemClick}
               onDoubleClick={onItemDoubleClick}
               onContextMenu={onCtxMenu}

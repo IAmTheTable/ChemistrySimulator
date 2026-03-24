@@ -4,9 +4,12 @@ import { Html } from "@react-three/drei";
 import StationShell, { LABEL_STYLE } from "./StationShell";
 import { useStationTool } from "./useStationTool";
 import InteractiveTool from "./InteractiveTool";
+import { useLabStore } from "../../../stores/labStore";
 
 export default function FumeHood() {
   const { selectedItem, selectedBenchItem, updateBenchItemContents, showNotification } = useStationTool();
+  const connectEquipment = useLabStore((s) => s.connectEquipment);
+  const connections = useLabStore((s) => s.connections);
   const [sashOpen, setSashOpen] = useState(true);
 
   const handleDistillation = (e: ThreeEvent<MouseEvent>) => {
@@ -50,6 +53,22 @@ export default function FumeHood() {
       showNotification("Select a container first");
       return;
     }
+
+    // If selected item is a vacuum filter, connect it to the vacuum line
+    if (selectedItem.type === "vacuum-filter") {
+      const alreadyConnected = connections.some(
+        (c) => c.targetId === selectedBenchItem && c.type === "vacuum"
+      );
+      if (alreadyConnected) {
+        showNotification("Vacuum filter already connected to vacuum line");
+      } else {
+        connectEquipment("vacuum-line", selectedBenchItem, "vacuum");
+        showNotification("Vacuum line connected to filter flask");
+      }
+      return;
+    }
+
+    // Default behaviour: extract gas from any container
     const gasContents = selectedItem.contents.filter((s) => s.phase === "g");
     if (gasContents.length === 0) {
       showNotification("No gas phase contents to extract");

@@ -12,6 +12,7 @@ const EQUIPMENT = [
   { type: "funnel", label: "Funnel" },
   { type: "pipette", label: "Pipette" },
   { type: "clamp-stand", label: "Clamp Stand" },
+  { type: "vacuum-filter", label: "Vacuum Filter" },
 ];
 
 export default function EquipmentPalette() {

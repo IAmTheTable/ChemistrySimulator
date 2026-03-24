@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useLabStore } from "../../stores/labStore";
+import type { BenchItem } from "../../stores/labStore";
 
 /**
  * DOM-level context menu overlay for lab containers.
@@ -20,6 +21,9 @@ export default function ContainerContextMenu() {
   const startPouring = useLabStore((s) => s.startPouring);
   const combineContainers = useLabStore((s) => s.combineContainers);
   const benchItems = useLabStore((s) => s.benchItems);
+  const connections = useLabStore((s) => s.connections);
+  const addBenchItem = useLabStore((s) => s.addBenchItem);
+  const showNotification = useLabStore((s) => s.showNotification);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close when clicking outside
@@ -67,6 +71,57 @@ export default function ContainerContextMenu() {
   };
 
   const item = benchItems.find((b) => b.id === itemId);
+
+  // Vacuum filtration — separate solid from liquid
+  const isVacuumFilterConnected =
+    item?.type === "vacuum-filter" &&
+    connections.some((c) => c.targetId === itemId && c.type === "vacuum");
+
+  const handleVacuumFilter = () => {
+    if (!item) { closeContextMenu(); return; }
+    const solids = item.contents.filter((s) => s.phase === "s");
+    const liquids = item.contents.filter((s) => s.phase === "l" || s.phase === "aq");
+    const gases = item.contents.filter((s) => s.phase === "g");
+
+    if (item.contents.length === 0) {
+      showNotification("Vacuum filter is empty");
+      closeContextMenu();
+      return;
+    }
+
+    if (solids.length === 0 && liquids.length === 0) {
+      showNotification("Nothing to separate by filtration");
+      closeContextMenu();
+      return;
+    }
+
+    // Keep only solids in the funnel
+    updateBenchItemContents(itemId, solids);
+
+    // Place filtrate into a new collection flask nearby
+    if (liquids.length > 0 || gases.length > 0) {
+      const filtrate = [...liquids, ...gases];
+      const [px, _py, pz] = item.position;
+      addBenchItem({
+        id: `erlenmeyer-filtrate-${Date.now()}`,
+        type: "erlenmeyer",
+        position: [px + 0.35, 0.14, pz],
+        contents: filtrate,
+        temperature: item.temperature,
+        activeEffects: [],
+        damaged: false,
+      } as BenchItem);
+      const solidNames = solids.map((s) => s.formula).join(", ") || "nothing";
+      const filtrateNames = filtrate.map((s) => s.formula).join(", ");
+      showNotification(
+        `Vacuum filtration complete — solid retained: ${solidNames} | filtrate collected: ${filtrateNames}`
+      );
+    } else {
+      const solidNames = solids.map((s) => s.formula).join(", ");
+      showNotification(`Vacuum filtration complete — solid retained on filter paper: ${solidNames}`);
+    }
+    closeContextMenu();
+  };
 
   const handleHeat = () => {
     if (item) {
@@ -155,6 +210,18 @@ export default function ContainerContextMenu() {
       >
         Remove
       </button>
+
+      {isVacuumFilterConnected && (
+        <>
+          <div className="my-1 h-px bg-gray-700" />
+          <button
+            onClick={handleVacuumFilter}
+            className="w-full text-left flex items-center px-2 py-1.5 rounded text-cyan-400 hover:bg-gray-700 transition-colors"
+          >
+            Run Vacuum Filtration
+          </button>
+        </>
+      )}
 
       <div className="my-1 h-px bg-gray-700" />
 

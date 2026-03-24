@@ -110,6 +110,11 @@ interface LabState {
   notification: string | null;
   showNotification: (msg: string) => void;
   clearNotification: () => void;
+
+  // Equipment connections
+  connections: { sourceId: string; targetId: string; type: string }[];
+  connectEquipment: (sourceId: string, targetId: string, type: string) => void;
+  disconnectEquipment: (sourceId: string, targetId: string) => void;
 }
 
 export const useLabStore = create<LabState>()((set) => ({
@@ -136,6 +141,7 @@ export const useLabStore = create<LabState>()((set) => ({
   activeBottomTab: "inspector",
   hoveredItem: null,
   notification: null,
+  connections: [],
 
   selectElement: (atomicNumber) => set({ selectedElement: atomicNumber, selectedBenchItem: null }),
   setStation: (station) => set({ activeStation: station }),
@@ -231,6 +237,21 @@ export const useLabStore = create<LabState>()((set) => ({
     setTimeout(() => set({ notification: null }), 4000);
   },
   clearNotification: () => set({ notification: null }),
+  connectEquipment: (sourceId, targetId, type) =>
+    set((state) => ({
+      connections: [
+        ...state.connections.filter(
+          (c) => !(c.sourceId === sourceId && c.targetId === targetId && c.type === type)
+        ),
+        { sourceId, targetId, type },
+      ],
+    })),
+  disconnectEquipment: (sourceId, targetId) =>
+    set((state) => ({
+      connections: state.connections.filter(
+        (c) => !(c.sourceId === sourceId && c.targetId === targetId)
+      ),
+    })),
   combineContainers: async (sourceId: string, targetId: string) => {
     const state = useLabStore.getState();
     const source = state.benchItems.find((i) => i.id === sourceId);
