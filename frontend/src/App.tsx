@@ -96,16 +96,16 @@ export default function App() {
             </div>
 
             {/* Inspector/Structure — fills remaining space right of table */}
-            <div className="flex-1 min-w-0 overflow-hidden">
-              <Tabs.Root value={activeBottomTab} onValueChange={setActiveBottomTab} className="flex flex-col h-full">
+            <div className="flex-1 min-w-0 min-h-0 flex flex-col overflow-hidden">
+              <Tabs.Root value={activeBottomTab} onValueChange={setActiveBottomTab} className="flex flex-col min-h-0 h-full">
                 <Tabs.List className="flex border-b border-gray-800 shrink-0">
                   <Tabs.Trigger value="inspector" className={TAB_CLASS}>Inspector</Tabs.Trigger>
                   <Tabs.Trigger value="structure" className={TAB_CLASS}>Structure</Tabs.Trigger>
                 </Tabs.List>
-                <Tabs.Content value="inspector" className="flex-1 px-3 py-2 overflow-y-auto">
+                <Tabs.Content value="inspector" className="flex-1 min-h-0 px-3 py-2 overflow-y-auto">
                   <ElementInspector />
                 </Tabs.Content>
-                <Tabs.Content value="structure" className="flex-1 px-3 py-2 flex flex-col min-h-0">
+                <Tabs.Content value="structure" className="flex-1 min-h-0 px-3 py-2 flex flex-col">
                   <StructurePanel />
                 </Tabs.Content>
               </Tabs.Root>
